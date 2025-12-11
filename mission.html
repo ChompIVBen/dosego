@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DoseGO — Mission Statement</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#295664;
+    --panel:#0f1417;
+    --card:#0f1720;
+    --muted:#9aa3ad;
+    --accent-blue:rgb(38, 140, 172);
+    --accent-red:#8110cc;
+    --promoted-gold:linear-gradient(90deg,#ffd86b,#f9a825);
+    --glass: rgba(255,255,255,0.03);
+    --radius:14px;
+  }
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#050607 0%,var(--bg) 100%);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:#e9eef6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1100px;margin:28px auto;padding:24px;}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+  h1{margin:0;font-size:1.5rem;color:var(--accent-red);font-weight:800}
+  .subtitle{color:var(--muted);font-size:0.95rem}
+  /* top controls */
+  .topgrid{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:14px}
+  .control{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));border-radius:12px;padding:10px 12px;border:1px solid var(--glass);display:flex;align-items:center;gap:10px;min-width:150px}
+  .control input[type="text"], .control input[type="date"]{background:transparent;border:0;outline:none;color:#e9eef6;font-size:15px;min-width:140px}
+  .label{color:var(--muted);font-size:13px}
+  .btn{background:var(--accent-blue);color:white;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}
+  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+  .btn:hover{filter:brightness(.95)}
+  .info{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);color:var(--muted);margin-bottom:12px}
+  .info strong{color:#fff}
+  .privacy{font-size:13px;color:var(--muted);margin-top:6px}
+  /* main */
+  .main{display:grid;grid-template-columns:1fr;gap:18px}
+  /* promoted + lists */
+  #promotedTitle,#clinicTitle{color:#fff;font-weight:700;margin:6px 0 10px}
+  #promotedSection,#results{display:flex;flex-direction:column;gap:12px}
+  /* cards */
+  .card{background:var(--card);padding:14px;border-radius:12px;border:1px solid var(--glass);box-shadow:0 8px 28px rgba(0,0,0,0.6);cursor:pointer;transition:transform .22s,box-shadow .22s,background .18s;overflow:hidden}
+  .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.7)}
+  .card.expanded{transform:translateY(-8px) scale(1.01);box-shadow:0 30px 70px rgba(0,0,0,0.75);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+  .card h3{margin:0;color:#fff;font-size:1.05rem}
+  .subtitle-muted{color:var(--muted);margin-top:6px;font-size:13px}
+  .meta{color:var(--muted);margin-top:6px;font-size:14px}
+  .actions{display:flex;gap:8px;margin-top:12px;align-items:center}
+  .selectBtn{background:var(--accent-blue);color:white;padding:8px 12px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+  .selectBtn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+  .promotedBadge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:800;margin-bottom:8px;background:var(--promoted-gold);color:#111}
+  /* expanded area */
+  .expanded-area{max-height:0;opacity:0;margin-top:0;transition:all .28s cubic-bezier(.2,.9,.3,1);overflow:hidden}
+  .card.expanded .expanded-area{max-height:560px;opacity:1;margin-top:12px}
+  .expanded-row{display:flex;gap:16px;flex-wrap:wrap}
+  .expanded-col{flex:1;min-width:200px}
+  /* autocomplete */
+  .autocomplete{position:relative;min-width:260px}
+  .autocomplete-list{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--panel);border:1px solid var(--glass);border-radius:10px;max-height:300px;overflow:auto;z-index:999;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+  .autocomplete-item{padding:10px 12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed rgba(255,255,255,0.02)}
+  .autocomplete-item:hover{background:rgba(255,255,255,0.02)}
+  .autocomplete-item .small{color:var(--muted);font-size:13px}
+  /* modal for email (simple) */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:2000}
+  .modal{background:var(--panel);padding:18px;border-radius:12px;max-width:900px;width:92%;border:1px solid var(--glass)}
+  .modal h2{margin:0 0 10px 0;color:var(--accent-red)}
+  .modal textarea{width:100%;height:220px;padding:12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#fff}
+  .modal .row{display:flex;gap:10px;align-items:center;margin-top:10px}
+  .small-muted{color:var(--muted);font-size:13px}
+  /* responsive */
+
+
+  /* ---------------- Mobile Optimizations ---------------- */
+@media (max-width:640px){
+
+  header{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  h1{
+    font-size:1.35rem;
+  }
+
+  .topgrid{
+    flex-direction:column;
+    gap:14px;
+  }
+
+  .card{
+    padding:16px;
+  }
+
+  .expanded-row{
+    flex-direction:column;
+  }
+
+  .actions{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .selectBtn, .btn{
+    width:100%;
+    text-align:center;
+  }
+
+  .modal{
+    width:95%;
+    padding:16px;
+  }
+  /* ---------------- Mobile Optimizations ---------------- */
+@media (max-width:640px){
+
+  html, body {
+    overflow-x: hidden;
+  }
+
+  header{
+    flex-direction:column;
+    align-items:flex-start;
+    width:100%;
+  }
+
+  h1{
+    font-size:1.28rem; /* scaled slightly but still same style */
+  }
+
+  .wrap{
+    padding:16px;
+  }
+
+  .topgrid{
+    flex-direction:column;
+    gap:14px;
+    width:100%;
+  }
+
+  .control{
+    width:100%;
+    min-width:0;
+  }
+
+  .control input[type="text"],
+  .control input[type="date"]{
+    min-width:0;
+    width:100%;
+  }
+
+  .autocomplete{
+    width:100%;
+    min-width:0;
+  }
+
+  .autocomplete-list{
+    left:0;
+    right:0;
+    width:100%;
+    max-height:260px;
+  }
+
+  .card{
+    padding:16px;
+    transform:none !important;   /* prevents jumpiness on small screens */
+  }
+
+  .card:hover{
+    transform:none; /* mobile users don’t hover */
+  }
+
+  .expanded-row{
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .expanded-col{
+    width:100%;
+    min-width:0;
+  }
+
+  .actions{
+    flex-direction:column;
+    align-items:stretch;
+    gap:10px;
+  }
+
+  .selectBtn, .btn{
+    width:100%;
+    text-align:center;
+  }
+
+  .modal{
+    width:95%;
+    padding:16px;
+    max-height:90vh;
+    overflow-y:auto;
+  }
+
+  .modal textarea{
+    height:180px;
+  }
+}
+
+}
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>DoseGO — Mission Statement</h1>
+      </div>
+    </header>
+
+  
+    
+    <div style="margin:20px">
+                <button id="home" class="btn">Back Home</button>
+</div>
+      <main>
+        <section class="card">
+          <h2>DoseGO's Mission</h2>
+          <p class="muted small">DoseGO is a public health initiative that restores freedom of movement to people 
+            receiving methadone treatment, recognizing mobility, autonomy, and social connection as essential
+             determinants of health. Many individuals decline or disengage from methadone care due to the rigid, 
+             daily clinic requirements often described as “liquid handcuffs,” which prevent participation in weddings,
+              funerals, family milestones, work opportunities, and travel. Grounded in harm-reduction principles and 
+              informed by research such as the Rat Park study, DoseGO challenges the idea that recovery must come at 
+              the cost of a meaningful life. Instead, it reframes methadone treatment as something that should support 
+              stability, dignity, and connection. By simplifying travel coordination and reducing logistical and 
+              administrative barriers, DoseGO addresses a systemic gap in treatment infrastructure—one that
+               disproportionately affects low-income individuals and those with limited flexibility—so that
+                continuity of care and freedom do not have to be mutually exclusive.
+    
+           <br> <br><strong>DoseGO's future goals:</strong>
+            <p>
+                DoseGO’s long-term goal is to modernize how methadone clinics and patients coordinate care by
+                 strengthening clinic-patient communication, reducing paperwork errors, and increasing transparency
+                  throughout the travel dosing process. While the current platform empowers patients to initiate
+                   requests with confidence through an itinerary builder and clinic-ready communication scripts,
+                    future iterations aim to integrate clinic workflows directly—providing real-time request tracking, 
+                    approval status updates, dosing confirmations, and cost visibility in one accessible interface. 
+                    By reducing administrative friction on both sides, DoseGO seeks to normalize mobility within
+                     methadone care and encourage broader institutional recognition that patient freedom supports,
+                      rather than undermines, recovery. Ultimately, DoseGO envisions a treatment landscape where 
+                      geographic freedom is not treated as an exception, but as a standard component of compassionate,
+                       effective, and equitable public health practice.
+            </p>
+        </section>
+      </main>
+      <aside>
+        <div class="card">
+          <h2 class="small">Promote Your Clinic</h2>
+          <p class="muted small">If your clinic would like to be promoted state-wide in DoseGO's search, email: <a class="mail" href="mailto:benwiest2002@gmail.com">benwiest2002@gmail.com</a></p>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <script>
+/* ---------- home button ---------- */
+document.getElementById('home').addEventListener('click', ()=>{
+  window.location.href = 'index.html';
+
+});
+  </script>
+</body>
+          <span class="label small-muted">Patent Pending (U.S. Provisional Application No. 63/938,389) © 2025 Benjamin Wiest. All rights reserved.</span>
+</html>

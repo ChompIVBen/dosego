@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DoseGO — Guest Dosing: Instructions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#295664;
+    --panel:#0f1417;
+    --card:#0f1720;
+    --muted:#9aa3ad;
+    --accent-blue:rgb(38, 140, 172);
+    --accent-red:#8110cc;
+    --promoted-gold:linear-gradient(90deg,#ffd86b,#f9a825);
+    --glass: rgba(255,255,255,0.03);
+    --radius:14px;
+  }
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#050607 0%,var(--bg) 100%);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:#e9eef6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1100px;margin:28px auto;padding:24px;}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+  h1{margin:0;font-size:1.5rem;color:var(--accent-red);font-weight:800}
+  .subtitle{color:var(--muted);font-size:0.95rem}
+  /* top controls */
+  .topgrid{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:14px}
+  .control{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));border-radius:12px;padding:10px 12px;border:1px solid var(--glass);display:flex;align-items:center;gap:10px;min-width:150px}
+  .control input[type="text"], .control input[type="date"]{background:transparent;border:0;outline:none;color:#e9eef6;font-size:15px;min-width:140px}
+  .label{color:var(--muted);font-size:13px}
+  .btn{background:var(--accent-blue);color:white;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}
+  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+  .btn:hover{filter:brightness(.95)}
+  .info{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);color:var(--muted);margin-bottom:12px}
+  .info strong{color:#fff}
+  .privacy{font-size:13px;color:var(--muted);margin-top:6px}
+  /* main */
+  .main{display:grid;grid-template-columns:1fr;gap:18px}
+  /* promoted + lists */
+  #promotedTitle,#clinicTitle{color:#fff;font-weight:700;margin:6px 0 10px}
+  #promotedSection,#results{display:flex;flex-direction:column;gap:12px}
+  /* cards */
+  .card{background:var(--card);padding:14px;border-radius:12px;border:1px solid var(--glass);box-shadow:0 8px 28px rgba(0,0,0,0.6);cursor:pointer;transition:transform .22s,box-shadow .22s,background .18s;overflow:hidden}
+  .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.7)}
+  .card.expanded{transform:translateY(-8px) scale(1.01);box-shadow:0 30px 70px rgba(0,0,0,0.75);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+  .card h3{margin:0;color:#fff;font-size:1.05rem}
+  .subtitle-muted{color:var(--muted);margin-top:6px;font-size:13px}
+  .meta{color:var(--muted);margin-top:6px;font-size:14px}
+  .actions{display:flex;gap:8px;margin-top:12px;align-items:center}
+  .selectBtn{background:var(--accent-blue);color:white;padding:8px 12px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+  .selectBtn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+  .promotedBadge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:800;margin-bottom:8px;background:var(--promoted-gold);color:#111}
+  /* expanded area */
+  .expanded-area{max-height:0;opacity:0;margin-top:0;transition:all .28s cubic-bezier(.2,.9,.3,1);overflow:hidden}
+  .card.expanded .expanded-area{max-height:560px;opacity:1;margin-top:12px}
+  .expanded-row{display:flex;gap:16px;flex-wrap:wrap}
+  .expanded-col{flex:1;min-width:200px}
+  /* autocomplete */
+  .autocomplete{position:relative;min-width:260px}
+  .autocomplete-list{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--panel);border:1px solid var(--glass);border-radius:10px;max-height:300px;overflow:auto;z-index:999;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+  .autocomplete-item{padding:10px 12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed rgba(255,255,255,0.02)}
+  .autocomplete-item:hover{background:rgba(255,255,255,0.02)}
+  .autocomplete-item .small{color:var(--muted);font-size:13px}
+  /* modal for email (simple) */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:2000}
+  .modal{background:var(--panel);padding:18px;border-radius:12px;max-width:900px;width:92%;border:1px solid var(--glass)}
+  .modal h2{margin:0 0 10px 0;color:var(--accent-red)}
+  .modal textarea{width:100%;height:220px;padding:12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#fff}
+  .modal .row{display:flex;gap:10px;align-items:center;margin-top:10px}
+  .small-muted{color:var(--muted);font-size:13px}
+  /* responsive */
+
+
+  /* ---------------- Mobile Optimizations ---------------- */
+@media (max-width:640px){
+
+  header{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  h1{
+    font-size:1.35rem;
+  }
+
+  .topgrid{
+    flex-direction:column;
+    gap:14px;
+  }
+
+  .card{
+    padding:16px;
+  }
+
+  .expanded-row{
+    flex-direction:column;
+  }
+
+  .actions{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .selectBtn, .btn{
+    width:100%;
+    text-align:center;
+  }
+
+  .modal{
+    width:95%;
+    padding:16px;
+  }
+  /* ---------------- Mobile Optimizations ---------------- */
+@media (max-width:640px){
+
+  html, body {
+    overflow-x: hidden;
+  }
+
+  header{
+    flex-direction:column;
+    align-items:flex-start;
+    width:100%;
+  }
+
+  h1{
+    font-size:1.28rem; /* scaled slightly but still same style */
+  }
+
+  .wrap{
+    padding:16px;
+  }
+
+  .topgrid{
+    flex-direction:column;
+    gap:14px;
+    width:100%;
+  }
+
+  .control{
+    width:100%;
+    min-width:0;
+  }
+
+  .control input[type="text"],
+  .control input[type="date"]{
+    min-width:0;
+    width:100%;
+  }
+
+  .autocomplete{
+    width:100%;
+    min-width:0;
+  }
+
+  .autocomplete-list{
+    left:0;
+    right:0;
+    width:100%;
+    max-height:260px;
+  }
+
+  .card{
+    padding:16px;
+    transform:none !important;   /* prevents jumpiness on small screens */
+  }
+
+  .card:hover{
+    transform:none; /* mobile users don’t hover */
+  }
+
+  .expanded-row{
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .expanded-col{
+    width:100%;
+    min-width:0;
+  }
+
+  .actions{
+    flex-direction:column;
+    align-items:stretch;
+    gap:10px;
+  }
+
+  .selectBtn, .btn{
+    width:100%;
+    text-align:center;
+  }
+
+  .modal{
+    width:95%;
+    padding:16px;
+    max-height:90vh;
+    overflow-y:auto;
+  }
+
+  .modal textarea{
+    height:180px;
+  }
+}
+
+}
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>DoseGO — Guest Dosing: Instuctions</h1>
+      </div>
+    </header>
+
+    <div class="card">
+      <p><em>Please </em>mention "DoseGO”. Ask if your clinics would like to be promoted state-wide in DoseGO's search. Tell them to email: <a class="mail" href="mailto:benwiest2002@gmail.com">benwiest2002@gmail.com</a>.</p>
+    </div>
+    
+    <div style="margin:20px">
+                <button id="home" class="btn">Back Home</button>
+</div>
+      <main>
+        <section class="card">
+          <h2>1. Make a Home-Clinic Appointment (ASAP)</h2>
+          <p class="muted small">Bring your itinerary (printed or on your phone). If possible, make this visit 1–2 weeks before travel.</p>
+          <ul>
+            <li><strong>Say to staff:</strong> “I have a travel itinerary and need guest dosing arranged. Can we start the guest dosing request now?”</li>
+            <li>Ask: “Do you need any forms? Will you contact the clinics on my route? Will I need to pay anything?”</li>
+            <li>Get the name and phone of the staff handling it and sign required consent/forms.</li>
+            <li>Ask for a copy of every signed form for your travel packet.</li>
+            <li>Ask: “Will I pay my home clinic, or will the guest clinics charge me?”</li>
+            <li>If guest clinics collect payment, ask how much per day/dose and which payment methods they accept.</li>
+            <li>If home clinic collects payment, get a receipt.</li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h2>2. Guest-Dosing Confirmation Packet (from your home clinic)</h2>
+          <p class="muted small">Request a final packet containing at minimum:</p>
+          <ul>
+            <li>Confirmation that home clinic authorized guest dosing.</li>
+            <li>List of guest clinics that accepted, with dates/times approved.</li>
+            <li>Contact name & phone at each guest clinic (if available).</li>
+            <li>Any special instructions (arrival time, urine screen rules, etc.).</li>
+          </ul>
+          <p><strong>Reccomended: Get both a paper copy and a digital copy on your phone.</strong></p>
+        </section>
+
+        <section class="card">
+          <h2>3. Confirm Clinic Hours</h2>
+          <p class="muted small">Call each guest clinic to confirm dosing start/stop times (many stop by late morning). Also ask about holidays/weekends.</p>
+        </section>
+
+        <section class="card">
+          <h2>4. Prepare Your Travel Packet</h2>
+          <ul class="checklist">
+            <li>Government photo ID</li>
+            <li>Guest-dosing packet (from home clinic, step 3 above)</li>
+            <li>Printed itinerary with clinic addresses & phone numbers</li>
+            <li>Payment method (cash/credit/debit)</li>
+            <li>Any clinic-specific forms</li>
+            <li>Emergency contacts</li>
+            <li>Small notebook to record dosing date/time and staff name</li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h2>5. At the Guest Clinic</h2>
+          <p class="muted">Arrive 15–30 minutes early.</p>
+          <ul>
+            <li>Tell front desk: “I’m a guest dosing patient authorized by [home clinic name].” Show your paperwork.</li>
+            <li>If asked to sign an acknowledgement, sign and request a receipt or note the staff name.</li>
+            <li>Record the exact time you received the dose and the staff member’s name in your notebook.</li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h2>6. If Plans Change or You Miss a Date</h2>
+          <p class="muted">Call your <strong>home clinic first</strong>. Then call the guest clinic only if home clinic instructs.</p>
+          <ul>
+            <li>Do not attempt walk-in dosing without authorization.</li>
+            <li>If stranded, ask home clinic about weekend/holiday coverage or temporary exceptions.</li>
+            <li>What to say: “Hi, this is [NAME]. My travel plans changed and I need to adjust my dosing date. What should I do to remain authorized?”</li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h2>7. After the Trip: Confirm Return & Follow Up</h2>
+          <ul>
+            <li>Let home clinic know you’re back (call or stop by).</li>
+            <li>Bring receipts and paperwork from guest clinics.</li>
+          </ul>
+        </section>
+
+        <section class="card emphasis">
+          <h2>Contingency & Safety Reminders</h2>
+          <ul>
+            <li>Keep phone numbers for home & guest clinics accessible.</li>
+            <li>Carry extra ID and a backup copy of paperwork on your phone.</li>
+            <li>Never skip notifying your home clinic about plan changes.</li>
+            <li>If you feel unwell after dosing, contact the clinic or seek urgent care if it’s an emergency.</li>
+          </ul>
+        </section>
+      </main>
+      <aside>
+        <div class="card">
+          <h2 class="small">Promote Your Clinic</h2>
+          <p class="muted small">If your clinic would like to be promoted state-wide in DoseGO's search, email: <a class="mail" href="mailto:benwiest2002@gmail.com">benwiest2002@gmail.com</a></p>
+        </div>
+                <button id="download" class="btn">Download how-to as PDF</button>
+
+      </aside>
+    </div>
+  </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <script>
+
+/* ---------- How-to button ---------- */
+document.getElementById('home').addEventListener('click', ()=>{
+  window.location.href = 'index.html';
+
+});
+
+//Download button: 
+document.getElementById('download').addEventListener('click', ()=>{
+downloadPDF();
+});
+
+
+    function downloadPDF(){
+const element = document.documentElement;
+const opt = {
+margin: 0.5,
+filename: 'DoseGO-Guest-Dosing-Guide.pdf',
+html2canvas: { scale: 2 },
+jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+};
+html2pdf().from(element).set(opt).save();
+}
+  </script>
+</body>
+          <span class="label small-muted">Patent Pending (U.S. Provisional Application No. 63/938,389) © 2025 Benjamin Wiest. All rights reserved.</span>
+</html>
