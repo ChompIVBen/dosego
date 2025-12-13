@@ -186,7 +186,7 @@ input[type="date"]{
   );
   border-radius: 12px;
   padding: 10px 12px;
-  border: 3px solid rgba(255,255,255,0.32);
+  border: 3px solid rgba(141, 141, 141, 0.8);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -252,6 +252,7 @@ input[type="date"]{
     width:100%;
     text-align:center;
     margin-bottom:5px;
+    font-size: 15px;
   }
 
   .modal{
