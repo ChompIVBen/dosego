@@ -175,8 +175,12 @@ input[type="date"]{
   .control{
     width:100%;
     min-width:0;
-  }
+    border-width: 2px;
 
+  }
+.control:focus-within{
+  border-width: 3px;
+}
   .control input[type="text"],
   .control input[type="date"]{
     min-width:0;
