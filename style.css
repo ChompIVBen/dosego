@@ -175,12 +175,14 @@ input[type="date"]{
   .control{
     width:100%;
     min-width:0;
+    border: 2px solid rgba(255, 255, 255, 0.14);
   }
 
   .control input[type="text"],
   .control input[type="date"]{
     min-width:0;
     width:100%;
+    border: 2px solid rgba(255, 255, 255, 0.14);
   }
 
   .autocomplete{
