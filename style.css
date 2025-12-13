@@ -143,6 +143,10 @@ input[type="date"]{
     text-align:center;
   }
 
+  .btn{
+    margin-bottom: 5px;
+  }
+
   .modal{
     width:95%;
     padding:16px;
