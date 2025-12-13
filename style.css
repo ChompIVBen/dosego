@@ -101,8 +101,6 @@
     width:95%;
     padding:16px;
   }
-  /* ---------------- Mobile Optimizations ---------------- */
-@media (max-width:640px){
 
   html, body {
     overflow-x: hidden;
@@ -191,6 +189,5 @@
   .modal textarea{
     height:180px;
   }
-}
 
 }
