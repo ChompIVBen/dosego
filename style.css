@@ -175,7 +175,7 @@ input[type="date"]{
   .control{
     width:100%;
     min-width:0;
-    border: 8px;
+    border: 3px;
 
   }
 .control:focus-within{
