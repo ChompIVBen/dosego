@@ -61,6 +61,46 @@
   .small-muted{color:var(--muted);font-size:13px}
   /* responsive */
 
+.control{
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.01),
+    rgba(255,255,255,0.00)
+  );
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 150px;
+}
+
+.control:focus-within{
+  border-color: var(--accent-blue);
+}
+
+.control input[type="text"],
+.control input[type="date"]{
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e9eef6;
+  font-size: 15px;
+  width: 100%;
+  padding: 6px 0;
+
+  -webkit-appearance: auto;
+  appearance: auto;
+  color-scheme: dark;
+}
+
+input[type="date"]{
+  -webkit-appearance: auto;
+  appearance: auto;
+  background-color: transparent;
+  color: #e9eef6;
+}
 
   /* ---------------- Mobile Optimizations ---------------- */
 @media (max-width:640px){
