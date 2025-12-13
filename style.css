@@ -179,11 +179,11 @@ input[type="date"]{
   .control{
     width:100%;
     min-width:0;
-    border: 3px;
+  border: 3px solid rgba(255,255,255,0.14);
 
   }
 .control:focus-within{
-  border: 3px;
+  border-color: var(--accent-blue);
 }
   .control input[type="text"],
   .control input[type="date"]{
