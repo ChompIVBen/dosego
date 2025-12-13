@@ -176,20 +176,40 @@ input[type="date"]{
     width:100%;
   }
 
-  .control{
-    width:100%;
-    min-width:0;
+.control{
+  position: relative;
+  box-sizing: border-box;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.01),
+    rgba(255,255,255,0.00)
+  );
+  border-radius: 12px;
+  padding: 10px 12px;
   border: 3px solid rgba(255,255,255,0.14);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
 
-  }
 .control:focus-within{
   border-color: var(--accent-blue);
 }
-  .control input[type="text"],
-  .control input[type="date"]{
-    min-width:0;
-    width:100%;
-  }
+
+.control input{
+  background-color: transparent !important;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  width: 100%;
+  color: #e9eef6;
+  font-size: 16px;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
 
   .autocomplete{
     width:100%;
