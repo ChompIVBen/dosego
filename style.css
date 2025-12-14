@@ -267,11 +267,17 @@ input[type="date"]{
     width:100%;
     text-align:center;
     margin-bottom:5px;
-    font-size: 15px;
+    font-size: 16px;
   }
 
   .modal textarea{
     height:180px;
+  }
+
+    textarea,
+  input,
+  button {
+    font-size: 16px;
   }
 
 }
