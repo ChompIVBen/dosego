@@ -62,7 +62,17 @@ html, body{
   .autocomplete-item .small{color:var(--muted);font-size:13px}
   /* modal for email (simple) */
   .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:2000}
-  .modal{background:var(--panel);padding:18px;border-radius:12px;max-width:900px;width:92%;border:1px solid var(--glass)}
+.modal{
+  background: var(--panel);
+  padding: 20px;
+  border-radius: 0;
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  border: none;
+  overflow-y: auto;
+}
   .modal h2{margin:0 0 10px 0;color:var(--accent-red)}
   .modal textarea{width:100%;height:220px;padding:12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#fff}
   .modal .row{display:flex;gap:10px;align-items:center;margin-top:10px}
@@ -155,10 +165,7 @@ input[type="date"]{
     margin-bottom: 5px;
   }
 
-  .modal{
-    width:95%;
-    padding:16px;
-  }
+
 
   html, body {
     overflow-x: hidden;
@@ -261,13 +268,6 @@ input[type="date"]{
     text-align:center;
     margin-bottom:5px;
     font-size: 15px;
-  }
-
-  .modal{
-    width:95%;
-    padding:16px;
-    max-height:90vh;
-    overflow-y:auto;
   }
 
   .modal textarea{

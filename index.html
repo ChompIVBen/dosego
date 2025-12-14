@@ -2205,7 +2205,7 @@ Program Name,DBA,Street,City,State,Zipcode,Phone,Certification,FullCertification
 
   <!-- EMAIL MODAL -->
   <div id="emailModal" style="display:none" class="modal-backdrop" aria-hidden="true">
-    <div class="modal" role="dialog" style="height:100%;" aria-modal="true" aria-labelledby="emailTitle">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="emailTitle">
       <h2>Screenshot this - DoseGO</h2>
       <!--<div class="small-muted">Edit subject/body, then open your email client to send.</div> -->
       <div style="margin-top:10px">
@@ -2506,7 +2506,9 @@ document.getElementById('copyEmail').addEventListener('click', ()=>{
 });
 document.getElementById('openMail').addEventListener('click', ()=>{
   const subject = encodeURIComponent(emailSubject.value || '');
-  const body = encodeURIComponent(emailBody.value || '');
+const body = encodeURIComponent(
+  (emailBody.value || '').replace(/\n/g, '\r\n')
+);
   window.location.href = `mailto:?subject=${subject}&body=${body}`;
 });
 document.getElementById('closeModal').addEventListener('click', ()=> { emailModal.style.display='none'; emailModal.setAttribute('aria-hidden','true'); });
