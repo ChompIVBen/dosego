@@ -2311,7 +2311,7 @@ function onCityInput(e){
       cityInput.value = `${m.city}, ${m.state}`;
       selectedCity = m.city; selectedState = m.state;
       closeAutocomplete();
-      renderPromoted(m.state);
+      renderPromoted(m.city);
       renderClinics(m.city, m.state);
       updateInfoDisplay();
     });
@@ -2326,15 +2326,15 @@ function closeAutocomplete(){
 }
 document.addEventListener('click', e=> { if(!e.target.closest('.autocomplete')) closeAutocomplete(); });
 
-/* ---------- Render promoted (state) ---------- */
-function renderPromoted(state){
+/* ---------- Render promoted (city) ---------- */
+function renderPromoted(city){
   const section = document.getElementById('promotedSection');
   section.innerHTML = '';
-  if(!state) return;
-  const stateU = state.toUpperCase();
-  const matches = promoted.filter(p => ((p.State||p.state||'').toUpperCase() === stateU));
+  if(!city) return;
+  const cityU = city.toUpperCase();
+  const matches = promoted.filter(p => ((p.City||p.city||'').toUpperCase() === cityU));
   if(matches.length === 0) return;
-  const title = document.createElement('div'); title.id = 'promotedTitle'; title.textContent = `Promoted Clinics in *all of* ${stateU}`;
+  const title = document.createElement('div'); title.id = 'promotedTitle'; title.textContent = `Promoted Clinics`;
   section.appendChild(title);
   matches.forEach((c, idx)=>{
     const card = buildClinicCard(c, true, `promoted-${idx}`);
@@ -2566,7 +2566,7 @@ function init(){
       const c = parts[0].trim();
       const s = parts[1].trim().toUpperCase();
       const found = cityList.find(x => x.city.toLowerCase() === c.toLowerCase() && x.state.startsWith(s));
-      if(found){ selectedCity = found.city; selectedState = found.state; renderPromoted(found.state); renderClinics(found.city, found.state); updateInfoDisplay(); }
+      if(found){ selectedCity = found.city; selectedState = found.state; renderPromoted(found.city); renderClinics(found.city, found.state); updateInfoDisplay(); }
       else alert('City not found — please select a suggestion from the list.');
     }
   });
