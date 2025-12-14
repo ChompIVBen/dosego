@@ -52,7 +52,6 @@
       </div>
 
       <div style="display:flex;gap:8px;align-items:center">
-        <button id="generateBtn" class="btn">Generate Itinerary</button>
         <button id="clearBtn" class="btn ghost">Clear</button>
       </div>
     </div>
@@ -2458,8 +2457,39 @@ function updateInfoDisplay(){
   const el = document.getElementById('infoDisplay');
   if(itinerary.length === 0){ el.textContent = 'No clinics selected yet.'; return; }
   const rows = itinerary.map((it, i)=> `${i+1}) ${it.city}, ${it.state} — ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''} (${it.start} → ${it.end})`);
-  el.innerHTML = `<strong>Itinerary (${itinerary.length})</strong><div style="margin-top:8px;color:var(--muted);font-size:0.95rem">${rows.join('<br>')}</div>`;
+
+  el.innerHTML = `
+    <strong>Itinerary (${itinerary.length})</strong>
+    <div style="margin-top:8px;color:var(--muted);font-size:0.95rem">
+      ${rows.join('<br>')}
+    </div>
+    <button id="generateBtn" class="btn" style="margin-top:12px">
+      Generate Full Itinerary
+    </button>
+  `;
 }
+
+/* ---------- Generate button (delegated) ---------- */
+document.addEventListener('click', (e) => {
+  if (e.target && e.target.id === 'generateBtn') {
+
+    if (itinerary.length === 0) {
+      alert('Add at least one clinic to the itinerary before generating.');
+      return;
+    }
+
+    const text = buildGuestDosingText();
+    const name =
+      (document.getElementById('patientName').value || '').trim() || 'request';
+
+    emailSubject.value = `Guest dosing request for ${name}`;
+    emailBody.value = text;
+    emailModal.style.display = 'flex';
+    emailModal.setAttribute('aria-hidden', 'false');
+  }
+});
+
+
 function flash(msg){
   const el = document.createElement('div'); el.style.cssText='position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,var(--accent-blue),#0033aa);color:white;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);font-weight:700;z-index:2000'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),1100);
 }
@@ -2520,18 +2550,6 @@ document.getElementById('downloadPacket').addEventListener('click', ()=>{
     const text = buildGuestDosingText();
   const name = (document.getElementById('patientName').value||'').trim() || 'request';
   downloadFile(`GuestDosingRequest-${name.replace(/\s+/g,'')}.txt`, text);
-});
-
-
-/* ---------- Generate button ---------- */
-document.getElementById('generateBtn').addEventListener('click', ()=>{
-  if(itinerary.length === 0){ alert('Add at least one clinic to the itinerary before generating.'); return; }
-  const text = buildGuestDosingText();
-  const name = (document.getElementById('patientName').value||'').trim() || 'request';
-  emailSubject.value = `Guest dosing request for ${name}`;
-  emailBody.value = text;
-  emailModal.style.display = 'flex';
-  emailModal.setAttribute('aria-hidden','false');
 });
 
 /* ---------- Clear button ---------- */
