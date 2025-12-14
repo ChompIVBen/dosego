@@ -2481,7 +2481,9 @@ function generateDateList(start, end){
 /* ---------- Build combined guest dosing text ---------- */
 function buildGuestDosingText(){
   if(itinerary.length === 0) return '';
-  const name = itinerary[0].patientName || (document.getElementById('patientName').value||'').trim();
+const name =
+  (document.getElementById('patientName').value || '').trim() ||
+  'Patient';
   let out = `Guest Dosing Request — ${name}\n\nPlease review and approve guest dosing for the following clinics and dates.\n\n`;
   itinerary.forEach((it, idx)=>{
     out += `---\n${idx+1}) City: ${it.city}, ${it.state}\nClinic: ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''}\nAddress: ${it.clinic.Street || ''}, ${it.clinic.City || ''}, ${it.clinic.State || ''} ${it.clinic.Zipcode || it.clinic.Zip || ''}\nPhone: ${it.clinic.Phone || ''}\nRequested dates: ${it.start} → ${it.end}\nSchedule:\n${generateDateList(it.start, it.end)}\n\n`;
