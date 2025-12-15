@@ -1,5 +1,5 @@
   :root{
-    --bg:#295664;
+    --bg:#08101a;
     --panel:#0f1417;
     --card:#0f1720;
     --muted:#9aa3ad;
@@ -12,7 +12,7 @@
 html, body{
   min-height: 100%;
   margin: 0;
-  background: linear-gradient(180deg, #050607 0%, var(--bg) 100%);
+  background: linear-gradient(180deg, #0b4455 0%, var(--bg) 100%);
   background-attachment: fixed;
   font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
   color: #e9eef6;
@@ -136,6 +136,8 @@ input[type="date"]{
 @media (max-width:640px){
   html, body{
     background-attachment: scroll;
+        overflow-x: hidden;
+
   }
   .card,
   .card:hover,
@@ -180,10 +182,6 @@ input[type="date"]{
   }
 
 
-
-  html, body {
-    overflow-x: hidden;
-  }
 
   header{
     flex-direction:column;
