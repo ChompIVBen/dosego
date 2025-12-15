@@ -4,10 +4,15 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1"/>
 <title>DoseGO — Guest Dosing Request</title>
+  <link rel="icon" href="icon.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 <link href="style.css" rel="stylesheet">
+  <meta name="description" content="DoseGO: Guest-dosing itinerary builder for travel on methadone.">
+  <meta name="keywords" content="dosego, dose, go, methadone, clinic, guest dose, dosing, travel">
+
 </head>
 <body>
   <div class="wrap">
@@ -2518,7 +2523,7 @@ function buildGuestDosingText(){
 const name =
   (document.getElementById('patientName').value || '').trim() ||
   'Patient';
-  let out = `Guest Dosing Request — ${name}\n\nHome clinic: Please review and approve guest dosing for the following clinics and dates along with providing the patient with needed documentation and payment notices. This request was created using DoseGo.\n\n`;
+  let out = `Guest Dosing Request — ${name}\n\nHome clinic: Please review and approve guest dosing for the following clinics and dates. Provide the patient with needed documentation and payment notices. This request was created using DoseGO.\n\n`;
   itinerary.forEach((it, idx)=>{
     out += `---\n${idx+1}) City: ${it.city}, ${it.state}\nClinic: ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''}\nAddress: ${it.clinic.Street || ''}, ${it.clinic.City || ''}, ${it.clinic.State || ''} ${it.clinic.Zipcode || it.clinic.Zip || ''}\nPhone: ${it.clinic.Phone || ''}\nRequested dates: ${it.start} → ${it.end}\nSchedule:\n${generateDateList(it.start, it.end)}\n\n`;
   });
