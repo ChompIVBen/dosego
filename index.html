@@ -2480,7 +2480,7 @@ document.addEventListener('click', (e) => {
 
     const text = buildGuestDosingText();
     const name =
-      (document.getElementById('patientName').value || '').trim() || 'request';
+      (document.getElementById('patientName').value || '').trim() || 'Patient';
 
     emailSubject.value = `Guest dosing request for ${name}`;
     emailBody.value = text;
