@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1"/>
-<title>DoseGO — Guest Dosing Request</title>
+<title>dosego.org — Guest Dosing Request</title>
   <link rel="icon" href="icon.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 <link href="style.css" rel="stylesheet">
-  <meta name="description" content="DoseGO: Guest-dosing itinerary builder for travel on methadone.">
-  <meta name="keywords" content="dosego, dose, go, methadone, clinic, guest dose, dosing, travel">
+  <meta name="description" content="dosego.org: Guest-dosing itinerary builder for travel on methadone.">
+  <meta name="keywords" content="dosego.org, dose, go, methadone, clinic, guest dose, dosing, travel">
 
 </head>
 <body>
   <div class="wrap">
     <header>
       <div>
-        <h1>DoseGO</h1>
+        <h1>dosego.org</h1>
       </div>
-      <div class="small-muted">For patient planning — DoseGO does not store information, your name and request are <strong>never</strong> saved.</div>
+      <div class="small-muted">For patient planning — dosego.org does not store information, your name and request are <strong>never</strong> saved.</div>
 
     </header>
 
@@ -2214,7 +2214,7 @@ Program Name,DBA,Street,City,State,Zipcode,Phone,Certification,FullCertification
   <!-- EMAIL MODAL -->
   <div id="emailModal" style="display:none" class="modal-backdrop" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="emailTitle">
-      <h2>DoseGO</h2>
+      <h2>dosego.org</h2>
       <!--<div class="small-muted">Edit subject/body, then open your email client to send.</div> -->
       <div style="margin-top:10px">
         <input id="emailSubject" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff" />
@@ -2523,7 +2523,7 @@ function buildGuestDosingText(){
 const name =
   (document.getElementById('patientName').value || '').trim() ||
   'Patient';
-  let out = `Guest Dosing Request — ${name}\n\nHome clinic: Please review and approve guest dosing for the following clinics and dates. Provide the patient with needed documentation and payment notices. This request was created using DoseGO.\n\n`;
+  let out = `Guest Dosing Request — ${name}\n\nHome clinic: Please review and approve guest dosing for the following clinics and dates. Provide the patient with needed documentation and payment notices. This request was created using dosego.org.\n\n`;
   itinerary.forEach((it, idx)=>{
     out += `---\n${idx+1}) City: ${it.city}, ${it.state}\nClinic: ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''}\nAddress: ${it.clinic.Street || ''}, ${it.clinic.City || ''}, ${it.clinic.State || ''} ${it.clinic.Zipcode || it.clinic.Zip || ''}\nPhone: ${it.clinic.Phone || ''}\nRequested dates: ${it.start} → ${it.end}\nSchedule:\n${generateDateList(it.start, it.end)}\n\n`;
   });
@@ -2610,25 +2610,6 @@ function init(){
 
 init();
 </script>
-
-<aside>
-    <div style="transform:scale(0.8); transform-origin:top left;">
-
-  <div class="card"
-       style="
-         margin-top:25px;
-         padding:8px 10px;
-         box-shadow:0 4px 10px rgba(0,0,0,0.35);
-         border-radius:10px;
-       ">
-    <h2 class="small" style="margin:0 0 4px 0;">Promote Your Clinic</h2>
-    <p class="muted small" style="margin:0;">
-      If your clinic would like to be promoted in DoseGO's search, email:
-      <a class="mail" href="mailto:benwiest2002@gmail.com">benwiest2002@gmail.com</a>
-    </p>
-  </div>
-    </div>
-</aside>
         <div style="
   margin-top:auto;
   text-align:center;
