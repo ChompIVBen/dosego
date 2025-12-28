@@ -20,12 +20,12 @@
       <div>
         <h1>dosego.org</h1>
       </div>
-      <div class="small-muted">For patient planning — dosego.org does not store information, your name and request are <strong>never</strong> saved.</div>
+      <div class="small-muted">MAT Traveler Companion - For patient planning — dosego.org <strong>never</strong> saves or stores your information or request.</div>
 
     </header>
 
     <div class="info">
-<strong>Guest-dosing itinerary builder - MAT Traveler Companion App</strong>
+<strong>Itinerary builder</strong>
     <!-- TOP INPUTS -->
     <div class="topgrid" aria-label="controls" style="padding-top: 12px;">
       <div class="control" style="min-width:210px" onclick="this.querySelector('input').focus()"
@@ -2474,6 +2474,8 @@ function addToItinerary(clinicObj){
 /* ---------- Info update ---------- */
 function updateInfoDisplay(){
   const el = document.getElementById('infoDisplay');
+    el.scrollTop = 0;
+
   if(itinerary.length === 0){ el.textContent = 'No clinics selected yet.'; return; }
   const rows = itinerary.map((it, i)=> `${i+1}) ${it.city}, ${it.state} — ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''} (${it.start} → ${it.end})`);
 
