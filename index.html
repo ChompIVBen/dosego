@@ -2322,7 +2322,7 @@ function onCityInput(e){
       cityInput.value = `${m.city}, ${m.state}`;
       selectedCity = m.city; selectedState = m.state;
       closeAutocomplete();
-      renderPromoted(m.city);
+      renderPromoted(m.city, m.state);
       renderClinics(m.city, m.state);
       updateInfoDisplay();
     });
@@ -2338,12 +2338,18 @@ function closeAutocomplete(){
 document.addEventListener('click', e=> { if(!e.target.closest('.autocomplete')) closeAutocomplete(); });
 
 /* ---------- Render promoted (city) ---------- */
-function renderPromoted(city){
+function renderPromoted(city, state){
   const section = document.getElementById('promotedSection');
   section.innerHTML = '';
   if(!city) return;
   const cityU = city.toUpperCase();
-  const matches = promoted.filter(p => ((p.City||p.city||'').toUpperCase() === cityU));
+  const stateU = state.toUpperCase();
+
+const matches = promoted.filter(p =>
+  (p.City || p.city || '').toUpperCase() === cityU &&
+  (p.State || p.state || '').toUpperCase() === stateU
+);
+
   if(matches.length === 0) return;
   const title = document.createElement('div'); title.id = 'promotedTitle'; title.textContent = `Promoted Clinics`;
   section.appendChild(title);
@@ -2603,7 +2609,7 @@ function init(){
       const c = parts[0].trim();
       const s = parts[1].trim().toUpperCase();
       const found = cityList.find(x => x.city.toLowerCase() === c.toLowerCase() && x.state.startsWith(s));
-      if(found){ selectedCity = found.city; selectedState = found.state; renderPromoted(found.city); renderClinics(found.city, found.state); updateInfoDisplay(); }
+      if(found){ selectedCity = found.city; selectedState = found.state; renderPromoted(found.city, found.state); renderClinics(found.city, found.state); updateInfoDisplay(); }
       else alert('City not found — please select a suggestion from the list.');
     }
   });
