@@ -2486,8 +2486,9 @@ function updateInfoDisplay(){
       Generate Full Itinerary
     </button>
   `;
-      el.scrollTop = 0;
-
+requestAnimationFrame(() => {
+  window.scrollTo({ top: 0, behavior: 'auto' });
+});
 }
 
 /* ---------- Generate button (delegated) ---------- */
