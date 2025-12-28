@@ -2460,6 +2460,9 @@ function addToItinerary(clinicObj){
   itinerary.push({ patientName: name, city: selectedCity, state: selectedState, start, end, clinic: clinicObj });
   updateInfoDisplay();
   flash('Added to itinerary');
+  document.getElementById('cityInput').value=''; document.getElementById('topStartDate').value=''; document.getElementById('topEndDate').value='';
+  document.getElementById('promotedSection').innerHTML=''; document.getElementById('results').innerHTML=''; document.getElementById('expandedClinic').style.display='none';
+  updateInfoDisplay();
 }
 
 /* ---------- Info update ---------- */
