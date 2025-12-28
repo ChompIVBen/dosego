@@ -2474,8 +2474,6 @@ function addToItinerary(clinicObj){
 /* ---------- Info update ---------- */
 function updateInfoDisplay(){
   const el = document.getElementById('infoDisplay');
-    el.scrollTop = 0;
-
   if(itinerary.length === 0){ el.textContent = 'No clinics selected yet.'; return; }
   const rows = itinerary.map((it, i)=> `${i+1}) ${it.city}, ${it.state} — ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''} (${it.start} → ${it.end})`);
 
@@ -2488,6 +2486,8 @@ function updateInfoDisplay(){
       Generate Full Itinerary
     </button>
   `;
+      el.scrollTop = 0;
+
 }
 
 /* ---------- Generate button (delegated) ---------- */
