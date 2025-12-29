@@ -20,15 +20,15 @@
     <header>
       <div>
         <h1>dosego.org</h1>
-      </div>
-      <div class="small-muted">MAT Travel Companion - Guest Dosing Itinerary Builder — dosego.org <strong>never</strong> saves or stores your information or request.</div>
+      </div><br>
+      <h1 style="font-size: 17px; color:rgba(255, 255, 255, 0.904)">MAT Travel Companion - Guest Dosing Itinerary Builder</h1>
 
     </header>
 
     <div class="info">
     <!-- TOP INPUTS -->
     <div class="topgrid" aria-label="controls" style="padding-top: 12px;">
-      <div class="control" style="min-width:210px" onclick="this.querySelector('input').focus()"
+      <div class="control" style="min-width:210px; display:none;" onclick="this.querySelector('input').focus()"
 >
         <div style="display:flex;flex-direction:column">
           <span class="label small-muted">Patient name</span>
@@ -39,7 +39,7 @@
       <div class="autocomplete control" style="min-width:300px" onclick="this.querySelector('input').focus()"
 >
         <div style="display:flex;flex-direction:column;gap:6px;width:100%">
-          <span class="label small-muted">Destination (pick from dropdown)</span>
+          <span class="label small-muted">Destination</span>
           <input style="width:100%; flex:1;" id="cityInput" type="text" placeholder="Start typing: e.g. Madison, WI" autocomplete="off" />
         </div>
       </div>
@@ -47,7 +47,7 @@
       <div class="control" style="min-width:170px" onclick="this.querySelector('input').focus()"
 >
         <div style="display:flex;flex-direction:column">
-          <span class="label small-muted">Start</span>
+          <span class="label small-muted">First Dose Date At Clinic</span>
           <input style="width:100%; flex:1;" id="topStartDate" type="date">
         </div>
       </div>
@@ -55,7 +55,7 @@
       <div class="control" style="min-width:170px" onclick="this.querySelector('input').focus()"
 >
         <div style="display:flex;flex-direction:column">
-          <span class="label small-muted">End</span>
+          <span class="label small-muted">Final Dose Date At Clinic</span>
           <input style="width:100%; flex:1;" id="topEndDate" type="date">
         </div>
       </div>
@@ -64,7 +64,7 @@
       </div>
     </div>
 
-    <div id="infoDisplay" style="margin:12px 0;color:var(--muted)">No clinics selected yet.</div>
+    <div id="infoDisplay" style="margin:12px 0;color:var(--muted)"></div>
 
     <main class="main">
       <section id="promotedSection"></section>
@@ -2202,7 +2202,7 @@ VICTA,VICTA,"110 Elmwood Ave.",Providence,RI,2907,"(401) 300-5757",Certified,05/
     </textarea>
 
   </div>
-           <div>    <button id="howTo" class="btn">Detailed Guest Dosing Instructions</button>
+           <div>    <button id="howTo" class="btn">Important Guest Dosing Instructions</button>
               <button id="resources" class="btn">Support Resources</button> </div>
 
       <!-- <div class="small-muted">Clinic Directory Updated: 12/6/2025</div>  -->
@@ -2479,7 +2479,7 @@ function addToItinerary(clinicObj){
 /* ---------- Info update ---------- */
 function updateInfoDisplay(){
   const el = document.getElementById('infoDisplay');
-  if(itinerary.length === 0){ el.textContent = 'No clinics selected yet.'; return; }
+  if(itinerary.length === 0){ el.textContent = ''; return; }
   const rows = itinerary.map((it, i)=> `${i+1}) ${it.city}, ${it.state} — ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''} (${it.start} → ${it.end})`);
 
   el.innerHTML = `
@@ -2504,7 +2504,7 @@ document.addEventListener('click', (e) => {
 
     const text = buildGuestDosingText();
     const name =
-      (document.getElementById('patientName').value || '').trim() || 'Patient';
+      (document.getElementById('patientName').value || '').trim() || '(Patient Name)';
 
     emailSubject.value = `Guest dosing request for ${name}`;
     emailBody.value = text;
@@ -2537,10 +2537,10 @@ function buildGuestDosingText(){
   if(itinerary.length === 0) return '';
 const name =
   (document.getElementById('patientName').value || '').trim() ||
-  'Patient';
-  let out = `Guest Dosing Request — ${name}\nPatient contact: (provide to home clinic)\n\n`;
+  '(Patient Name)';
+  let out = `Guest Dosing Request — ${name}\nPatient contact: (provide to home clinic)\n\nItinerary: (year/mm/dd)\n`;
   itinerary.forEach((it, idx)=>{
-    out += `---\n${idx+1}) City: ${it.city}, ${it.state}\nClinic: ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''}\nAddress: ${it.clinic.Street || ''}, ${it.clinic.City || ''}, ${it.clinic.State || ''} ${it.clinic.Zipcode || it.clinic.Zip || ''}\nPhone: ${it.clinic.Phone || ''}\nRequested dates: ${it.start} → ${it.end}\nSchedule:\n${generateDateList(it.start, it.end)}\n\n`;
+    out += `---\nRequested dates: ${it.start} → ${it.end}\nClinic: ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''}\nAddress: ${it.clinic.Street || ''}, ${it.clinic.City || ''}, ${it.clinic.State || ''} ${it.clinic.Zipcode || it.clinic.Zip || ''}\nPhone: ${it.clinic.Phone || ''}\n\n`;
   });
   out += `---\n\nThis request was created using dosego.org.\n`;
   return out;
