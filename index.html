@@ -21,7 +21,7 @@
       <div>
         <h1>dosego.org</h1>
       </div><br>
-      <h1 style="font-size: 17px; color:rgba(255, 255, 255, 0.904)">MAT Travel Companion - Guest Dosing Itinerary Builder</h1>
+      <h1 style="font-size: 17px; color:rgba(255, 255, 255, 0.904)">MAT Travel Companion - Guest Dosing Request Itinerary Builder</h1>
 
     </header>
 
@@ -39,7 +39,7 @@
       <div class="autocomplete control" style="min-width:300px" onclick="this.querySelector('input').focus()"
 >
         <div style="display:flex;flex-direction:column;gap:6px;width:100%">
-          <span class="label small-muted">Destination</span>
+          <span class="label small-muted">Destination (Search again for Multi-City)</span>
           <input style="width:100%; flex:1;" id="cityInput" type="text" placeholder="Start typing: e.g. Madison, WI" autocomplete="off" />
         </div>
       </div>
@@ -2538,7 +2538,7 @@ function buildGuestDosingText(){
 const name =
   (document.getElementById('patientName').value || '').trim() ||
   '(Patient Name)';
-  let out = `Guest Dosing Request — ${name}\nPatient contact: (provide to home clinic)\n\nItinerary: (year/mm/dd)\n`;
+  let out = `Guest Dosing Request — ${name}\nPatient contact: (provide to home clinic)\n\nItinerary:   (year/mm/dd)\n`;
   itinerary.forEach((it, idx)=>{
     out += `---\nRequested dates: ${it.start} → ${it.end}\nClinic: ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''}\nAddress: ${it.clinic.Street || ''}, ${it.clinic.City || ''}, ${it.clinic.State || ''} ${it.clinic.Zipcode || it.clinic.Zip || ''}\nPhone: ${it.clinic.Phone || ''}\n\n`;
   });
