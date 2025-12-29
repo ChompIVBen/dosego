@@ -2218,11 +2218,11 @@ Program Name,DBA,Street,City,State,Zipcode,Phone,Certification,FullCertification
 </h2>
       <!--<div class="small-muted">Edit subject/body, then open your email client to send.</div> -->
       <div style="margin-top:10px">
-        <input id="emailSubject" style="width:100%;padding:8px;border-radius:8px;display:none;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff" />
+        <input id="emailSubject" style="width:100%;padding:8px;border-radius:8px;display:none;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#ffff" />
       </div> 
       
       <div style="margin-top:10px; height:70%">
-        <textarea readonly style="height:100%;white-space:pre-wrap; cursor:default;background:#0b4455; color:#e9eef6; font-family:Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif; font-size:16px;" id="emailBody"></textarea>
+        <textarea  readonly  style="height:100%;white-space:pre-wrap; resize: none; cursor:default;background:#0b4455; color:#e9eef6; font-family:Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif; font-size:16px;" id="emailBody"></textarea>
       </div>
 
 
@@ -2540,7 +2540,7 @@ function buildGuestDosingText(){
 const name =
   (document.getElementById('patientName').value || '').trim() ||
   'Patient';
-  let out = `Guest Dosing Request — ${name}\n\nPatient contact: (provide to home clinic)\n\n`;
+  let out = `Guest Dosing Request — ${name}\nPatient contact: (provide to home clinic)\n\n`;
   itinerary.forEach((it, idx)=>{
     out += `---\n${idx+1}) City: ${it.city}, ${it.state}\nClinic: ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''}\nAddress: ${it.clinic.Street || ''}, ${it.clinic.City || ''}, ${it.clinic.State || ''} ${it.clinic.Zipcode || it.clinic.Zip || ''}\nPhone: ${it.clinic.Phone || ''}\nRequested dates: ${it.start} → ${it.end}\nSchedule:\n${generateDateList(it.start, it.end)}\n\n`;
   });
