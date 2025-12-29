@@ -2543,7 +2543,7 @@ function buildGuestDosingText(){
 const name =
   (document.getElementById('patientName').value || '').trim() ||
   'Patient';
-  let out = `Guest Dosing Request — ${name}\n\nHome clinic: Please review and approve guest dosing for the following clinics and dates. Provide the patient with needed documentation and payment notices. This request was created using dosego.org, Inquiries: dosego.org@gmail.com.\n\n`;
+  let out = `Guest Dosing Request — ${name}\n\nHome clinic: Please review and approve guest dosing for the following clinics and dates. Provide the patient with needed documentation and payment notices. This request was created using dosego.org.\n\n`;
   itinerary.forEach((it, idx)=>{
     out += `---\n${idx+1}) City: ${it.city}, ${it.state}\nClinic: ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''}\nAddress: ${it.clinic.Street || ''}, ${it.clinic.City || ''}, ${it.clinic.State || ''} ${it.clinic.Zipcode || it.clinic.Zip || ''}\nPhone: ${it.clinic.Phone || ''}\nRequested dates: ${it.start} → ${it.end}\nSchedule:\n${generateDateList(it.start, it.end)}\n\n`;
   });
@@ -2636,7 +2636,7 @@ init();
   padding:12px 8px;
 ">
   <span class="label small-muted">
-    Patent Pending (U.S. Provisional Application No. 63/938,389)
+    Patent Pending
     © 2025–2026 All rights reserved.
   </span>
   <br>
