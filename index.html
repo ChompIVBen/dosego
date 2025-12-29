@@ -2220,14 +2220,22 @@ Program Name,DBA,Street,City,State,Zipcode,Phone,Certification,FullCertification
       <div style="margin-top:10px">
         <input id="emailSubject" style="width:100%;padding:8px;border-radius:8px;display:none;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff" />
       </div> 
+      
       <div style="margin-top:10px; height:70%">
-        <textarea style="height:100%" id="emailBody"></textarea>
+        <textarea readonly style="height:100%;white-space:pre-wrap; cursor:default;background:var(--panel); color:#e9eef6; font-family:Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif; font-size:16px;" id="emailBody"></textarea>
       </div>
+
+
+
+
+      
       <div class="row" style="display:flex;gap:8px;justify-content:flex-end;margin-top:40px">
         <button id="downloadPacket" class="btn" style="margin-right:auto">Download Document</button>
         <button id="openMail" class="btn" >Open to mail app</button>
         <button id="copyEmail" class="btn ghost">Copy to clipboard</button>
       </div>
+
+
     </div>
   </div>
 
