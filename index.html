@@ -13,8 +13,6 @@
 <link href="style.css" rel="stylesheet">
   <meta name="description" content="dosego.org: Guest Dosing itinerary builder for travel on methadone.">
   <meta name="keywords" content="dosego.org, dose, go, methadone, clinic, guest dose, dosing, travel">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 </head>
 <body>
@@ -26,8 +24,6 @@
       <div class="small-muted">MAT Travel Companion - Guest Dosing Itinerary Builder — dosego.org <strong>never</strong> saves or stores your information or request.</div>
 
     </header>
-<div id="clinicMap" style="height:400px; margin-top:16px; display:none;"></div>
-<div id="mapLoading" style="display:none; font-weight:bold; margin-top:8px;">Loading map...</div>
 
     <div class="info">
     <!-- TOP INPUTS -->
@@ -74,9 +70,6 @@
       <section id="promotedSection"></section>
       <section id="results"></section>
       <section id="expandedClinic" aria-live="polite"></section>
-      <div id="clinicMap" style="height:400px; margin-top:16px; display:none;"></div>
-<div id="mapLoading" style="display:none; font-weight:bold; margin-top:8px;">Loading map...</div>
-
     </main>
 
     <!-- HIDDEN CSV TEXTAREAS: paste your clinic CSV and promoted CSV here (same columns) -->
@@ -2392,60 +2385,7 @@ function renderClinics(city, state){
     const card = buildClinicCard(c, false, `clinic-${idx}`);
     out.appendChild(card);
   });
-  showClinicMap(city, state, filtered);
-
 }
-
-// --------- Leaflet mapping code ---------
-let map, markers = [];
-
-// Initialize map once
-function initMap() {
-  if(map) return;
-  map = L.map('clinicMap').setView([39.8283, -98.5795], 4); // US center
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
-}
-
-// Geocode city+state using Nominatim
-async function geocodeCityState(city, state) {
-  const url = `https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}&format=json&limit=1`;
-  const res = await fetch(url);
-  const data = await res.json();
-  if (data.length > 0) return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
-  return null;
-}
-
-// Show map for selected clinics
-async function showClinicMap(city, state, clinicList){
-  if(!clinicList || clinicList.length === 0) return;
-  initMap();
-  document.getElementById('clinicMap').style.display = 'block';
-  document.getElementById('mapLoading').style.display = 'block';
-  
-  // Clear existing markers
-  markers.forEach(m => map.removeLayer(m));
-  markers = [];
-
-  for(const c of clinicList){
-    const loc = await geocodeCityState(c.City, c.State);
-    if(loc){
-      const m = L.marker([loc.lat, loc.lon]).addTo(map)
-        .bindPopup(`<b>${c.DBA || c['Program Name']}</b><br>${c.Street || ''}, ${c.City || ''}, ${c.State || ''}`);
-      markers.push(m);
-    }
-    await new Promise(r => setTimeout(r, 1000)); // rate-limit
-  }
-
-  if(markers.length > 0){
-    const group = L.featureGroup(markers);
-    map.fitBounds(group.getBounds().pad(0.2));
-  }
-  document.getElementById('mapLoading').style.display = 'none';
-}
-
-
 
 /* ---------- Build card element function (DBA-first title logic) ---------- */
 function buildClinicCard(c, isPromoted=false, idSuffix=''){
