@@ -51,7 +51,7 @@
 
     <div class="info">
     <!-- TOP INPUTS -->
-    <div class="topgrid" aria-label="controls" style="padding-top: 12px;">
+    <div class="topgrid" aria-label="controls" style="padding-top: 12px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
       <div class="control" style="min-width:210px; display:none;" onclick="this.querySelector('input').focus()"
 >
         <div style="display:flex;flex-direction:column">
@@ -83,15 +83,14 @@
           <input style="width:100%; flex:1;" id="topEndDate" type="date">
         </div>
       </div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button id="clearBtn" class="btn ghost">Reset</button>
-      </div>
     </div>
 
     <div id="infoDisplay" style="margin:12px 0;color:var(--muted)"></div>
 
     <main class="main">
-      <div class="map" id="map"></div>
+      <div class="map" id="map"></div>      
+         <button id="clearBtn" class="btn ghost" style="width: 100px; margin:auto">Reset</button>
+
       <section id="promotedSection"></section>
       <section id="results"></section>
       <section id="expandedClinic" aria-live="polite"></section>
