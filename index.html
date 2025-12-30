@@ -76,7 +76,7 @@
     <div id="infoDisplay" style="margin:12px 0;color:var(--muted)"></div>
 
     <main class="main">
-      <div id="map" style="height: 400px; width: 100%; margin: 16px 0;"></div>
+      <div id="map" style="height: 350px; width: 75%; margin: 16px auto; opacity: 25%;"></div>
       <section id="promotedSection"></section>
       <section id="results"></section>
       <section id="expandedClinic" aria-live="polite"></section>
@@ -2215,6 +2215,38 @@ VICTA,VICTA,"110 Elmwood Ave.",Providence,RI,2907,"(401) 300-5757",Certified,05/
   </div>
            <div>    <button id="howTo" class="btn">Important Guest Dosing Instructions</button>
               <button id="resources" class="btn">Support Resources</button> </div>
+<button id="backToTop" title="Back to top" 
+  style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: rgb(6, 90, 116);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+    cursor: pointer;
+    display: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  "
+>⬆</button>
+
+<script>
+const backToTopBtn = document.getElementById('backToTop');
+
+// Show button when scrolling down
+window.addEventListener('scroll', () => {
+  backToTopBtn.style.display = window.scrollY > 200 ? 'block' : 'none';
+});
+
+// Scroll smoothly to top on click
+backToTopBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
 
       <!-- <div class="small-muted">Clinic Directory Updated: 12/6/2025</div>  -->
 
@@ -2404,23 +2436,43 @@ function renderClinics(city, state){
     const card = buildClinicCard(c, false, `clinic-${idx}`);
     out.appendChild(card);
   });
-}
-function focusClinicCard(c) {
-  const cardId =
-    (c.DBA || c['Program Name'] || 'clinic')
-      .toString()
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-');
+filtered.forEach((c, idx) => {
+  const lat = c.Latitude || c['Geocodio Latitude'];
+  const lng = c.Longitude || c['Geocodio Longitude'];
+  if (!lat || !lng) return;
 
-  const el = document.getElementById(`clinic-${cardId}`);
+  const marker = L.marker([lat, lng])
+    .bindPopup(c.DBA || c['Program Name'] || 'Clinic')
+    .on('click', () => focusClinicCard(c, `clinic-${idx}`)); // pass suffix!
+  
+  searchLayer.addLayer(marker);
+});
+
+document.getElementById('map').style.opacity='100%';
+
+
+}
+function focusClinicCard(c, idSuffix = '') {
+  const cardIdBase = (c.DBA || c['Program Name'] || 'clinic')
+    .toString()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-');
+
+  const fullId = `clinic-${cardIdBase}${idSuffix ? '-' + idSuffix : ''}`;
+  const el = document.getElementById(fullId);
   if (!el) return;
 
-  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  collapseAllCards();
   toggleExpandCard(el);
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
   el.classList.add('highlight');
-
   setTimeout(() => el.classList.remove('highlight'), 1500);
 }
+
+
+
+
+
 
 
 
@@ -2466,13 +2518,14 @@ function buildClinicCard(c, isPromoted=false, idSuffix=''){
   // Attach behaviors
 
   // Create a stable ID for map ↔ card linking
-const cardId =
-  (c.DBA || c['Program Name'] || 'clinic')
-    .toString()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-');
+// inside buildClinicCard
+const cardIdBase = (c.DBA || c['Program Name'] || 'clinic')
+  .toString()
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, '-');
 
-card.id = `clinic-${cardId}${idSuffix ? '-' + idSuffix : ''}`;
+card.id = `clinic-${cardIdBase}${idSuffix ? '-' + idSuffix : ''}`;
+
 
 
   // Expand/collapse via clicking anywhere (except buttons) — toggle
@@ -2524,6 +2577,7 @@ function addToItinerary(clinicObj){
   flash('Added to itinerary');
   document.getElementById('cityInput').value=''; document.getElementById('topStartDate').value=''; document.getElementById('topEndDate').value='';
   document.getElementById('promotedSection').innerHTML=''; document.getElementById('results').innerHTML=''; document.getElementById('expandedClinic').style.display='none';
+document.getElementById('map').style.opacity='25%';
 
   updateInfoDisplay();
 }
@@ -2647,11 +2701,15 @@ function initMap() {
   
   if (map) return;
 
-  map = L.map('map').setView([39.5, -98.35], 4);
+  map = L.map('map', { zoomControl: false }).setView([39.5, -98.35], 4);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap'
-  }).addTo(map);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Tiles &copy; Esri &copy; OpenStreetMap contributors',
+}).addTo(map);
+
+
+
+
 }
 
 initMap();
@@ -2691,9 +2749,26 @@ function showCityClinicsOnMap(city, state) {
     const lng = c["Geocodio Longitude"];
     if (!lat || !lng) return;
 
-    const marker = L.marker([lat, lng])
-      .bindPopup(c["Program Name"])
-.on('click', () => focusClinicCard(c));
+const marker = L.marker([lat, lng])
+  .bindTooltip(c.DBA ? c.DBA : c['Program Name'], {
+    permanent: true,        // initially permanent, we'll hide/show manually
+    direction: 'top',       // tooltip above marker
+    offset: [0, -10],       // move a bit up
+    className: 'clinic-tooltip'
+  })
+  .addTo(searchLayer);
+
+// Inline control of visibility based on zoom
+(function(m) {
+  const zoomThreshold = 12; // only show when zoomed in
+  const tooltipEl = m.getTooltip().getElement();
+  if (tooltipEl) tooltipEl.style.display = map.getZoom() >= zoomThreshold ? 'block' : 'none';
+  map.on('zoomend', () => {
+    if (tooltipEl) tooltipEl.style.display = map.getZoom() >= zoomThreshold ? 'block' : 'none';
+  });
+})(marker);
+
+marker.on('click', () => focusClinicCard(c));
 
     searchLayer.addLayer(marker);
 bounds.push(L.latLng(lat, lng));
@@ -2710,7 +2785,7 @@ promoted.forEach(c => {
   if (!lat || !lng) return;
 
   const marker = L.marker([lat, lng], { icon: starIcon })
-    .bindPopup(`⭐ ${c["Program Name"]}`)
+    .bindPopup(`⭐ ${c.DBA ? c.DBA : c['Program Name']}`)
 .on('click', () => focusClinicCard(c));
 
   searchLayer.addLayer(marker);
@@ -2730,29 +2805,8 @@ promoted.forEach(c => {
 function addToItineraryMap(clinic) {
   itinerary.push(clinic);
   clearSearchLayer();
-  renderItineraryMap();
 }
-function renderItineraryMap() {
-  clearItineraryLayer();
 
-  const bounds = [];
-
-  itinerary.forEach((c, i) => {
-    const lat = c["Geocodio Latitude"];
-    const lng = c["Geocodio Longitude"];
-    if (!lat || !lng) return;
-
-    const marker = L.marker([lat, lng], { icon: starIcon })
-      .bindPopup(`Stop ${i + 1}: ${c["Program Name"]}`);
-
-    itineraryLayer.addLayer(marker);
-bounds.push(L.latLng(lat, lng));
-  });
-
-  if (bounds.length) {
-    map.fitBounds(bounds, { padding: [50, 50] });
-  }
-}
 
 /* ---------- Download helper ---------- */
 function downloadFile(filename, content){
