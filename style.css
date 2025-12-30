@@ -85,6 +85,10 @@ html, body{
 html, body{
   overflow-x: hidden;
 }
+.highlight {
+  outline: 2px solid gold;
+  background: #fffbe6;
+}
 
 .control{
   background: linear-gradient(

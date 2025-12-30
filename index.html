@@ -6,6 +6,14 @@
 <title>dosego.org — Guest Dosing Request</title>
   <link rel="icon" href="icon.png">
 <link rel="canonical" href="https://dosego.org">
+<!-- Leaflet CSS -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,6 +21,7 @@
 <link href="style.css" rel="stylesheet">
   <meta name="description" content="dosego.org: Guest Dosing itinerary builder for travel on methadone.">
   <meta name="keywords" content="dosego.org, dose, go, methadone, clinic, guest dose, dosing, travel">
+<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
 
 </head>
 <body>
@@ -39,7 +48,7 @@
       <div class="autocomplete control" style="min-width:300px" onclick="this.querySelector('input').focus()"
 >
         <div style="display:flex;flex-direction:column;gap:6px;width:100%">
-          <span class="label small-muted">Destination (Search again for Multi-City)</span>
+          <span class="label small-muted">Destination <strong>(Re-Search for Multi-City)</strong></span>
           <input style="width:100%; flex:1;" id="cityInput" type="text" placeholder="Start typing: e.g. Madison, WI" autocomplete="off" />
         </div>
       </div>
@@ -67,10 +76,12 @@
     <div id="infoDisplay" style="margin:12px 0;color:var(--muted)"></div>
 
     <main class="main">
+      <div id="map" style="height: 400px; width: 100%; margin: 16px 0;"></div>
       <section id="promotedSection"></section>
       <section id="results"></section>
       <section id="expandedClinic" aria-live="polite"></section>
     </main>
+
 
     <!-- HIDDEN CSV TEXTAREAS: paste your clinic CSV and promoted CSV here (same columns) -->
 
@@ -2334,16 +2345,26 @@ function onCityInput(e){
     list.appendChild(item);
   });
   cityInput.parentNode.appendChild(list);
+  
 }
 
 function closeAutocomplete(){
+
   const existing = document.getElementById('autocomplete-list');
   if(existing) existing.remove();
 }
 document.addEventListener('click', e=> { if(!e.target.closest('.autocomplete')) closeAutocomplete(); });
+const starIcon = L.icon({
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/616/616489.png',
+  iconSize: [28, 28],
+  iconAnchor: [14, 28],
+  popupAnchor: [0, -24]
+});
 
 /* ---------- Render promoted (city) ---------- */
 function renderPromoted(city, state){
+    showCityClinicsOnMap(city, state); // 👈 MAP UPDATES HERE
+
   const section = document.getElementById('promotedSection');
   section.innerHTML = '';
   if(!city) return;
@@ -2366,6 +2387,7 @@ const matches = promoted.filter(p =>
 
 /* ---------- Render normal clinics for city+state ---------- */
 function renderClinics(city, state){
+
   const out = document.getElementById('results');
   out.innerHTML = '';
   if(!city || !state) return;
@@ -2383,6 +2405,24 @@ function renderClinics(city, state){
     out.appendChild(card);
   });
 }
+function focusClinicCard(c) {
+  const cardId =
+    (c.DBA || c['Program Name'] || 'clinic')
+      .toString()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-');
+
+  const el = document.getElementById(`clinic-${cardId}`);
+  if (!el) return;
+
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  toggleExpandCard(el);
+  el.classList.add('highlight');
+
+  setTimeout(() => el.classList.remove('highlight'), 1500);
+}
+
+
 
 /* ---------- Build card element function (DBA-first title logic) ---------- */
 function buildClinicCard(c, isPromoted=false, idSuffix=''){
@@ -2424,6 +2464,17 @@ function buildClinicCard(c, isPromoted=false, idSuffix=''){
     </div>
   `;
   // Attach behaviors
+
+  // Create a stable ID for map ↔ card linking
+const cardId =
+  (c.DBA || c['Program Name'] || 'clinic')
+    .toString()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-');
+
+card.id = `clinic-${cardId}${idSuffix ? '-' + idSuffix : ''}`;
+
+
   // Expand/collapse via clicking anywhere (except buttons) — toggle
   card.addEventListener('click', (ev) => {
     // if clicked a button, ignore toggle here
@@ -2473,6 +2524,7 @@ function addToItinerary(clinicObj){
   flash('Added to itinerary');
   document.getElementById('cityInput').value=''; document.getElementById('topStartDate').value=''; document.getElementById('topEndDate').value='';
   document.getElementById('promotedSection').innerHTML=''; document.getElementById('results').innerHTML=''; document.getElementById('expandedClinic').style.display='none';
+
   updateInfoDisplay();
 }
 
@@ -2495,6 +2547,7 @@ function updateInfoDisplay(){
 
 /* ---------- Generate button (delegated) ---------- */
 document.addEventListener('click', (e) => {
+
   if (e.target && e.target.id === 'generateBtn') {
 
     if (itinerary.length === 0) {
@@ -2546,6 +2599,161 @@ const name =
   return out;
 }
 
+function readCSV(id) {
+  const el = document.getElementById(id);
+  if (!el) return [];
+
+  return Papa.parse(el.value.trim(), {
+    header: true,
+    skipEmptyLines: true,
+    dynamicTyping: true
+  }).data;
+}
+function loadClinicCSV() {
+  const el = document.getElementById('clinicCSV');
+  if (!el) return [];
+  return Papa.parse(el.value.trim(), {
+    header: true,
+    skipEmptyLines: true,
+    dynamicTyping: true
+  }).data;
+}
+
+function loadPromotedCSV() {
+  const el = document.getElementById('promotedCSV');
+  if (!el) return [];
+  return Papa.parse(el.value.trim(), {
+    header: true,
+    skipEmptyLines: true,
+    dynamicTyping: true
+  }).data;
+}
+if (!Array.isArray(clinics) || clinics.length === 0) {
+  clinics = loadClinicCSV();
+}
+
+if (!Array.isArray(promoted) || promoted.length === 0) {
+  promoted = loadPromotedCSV();
+}
+const clinicsData = loadClinicCSV();
+const promotedData = loadPromotedCSV();
+const MAP_CLINICS = clinicsData || clinics;
+const MAP_PROMOTED = promotedData || promoted;
+
+
+let map;
+
+function initMap() {
+  
+  if (map) return;
+
+  map = L.map('map').setView([39.5, -98.35], 4);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
+}
+
+initMap();
+let searchLayer = L.layerGroup();
+let itineraryLayer = L.layerGroup();
+
+function attachLayers() {
+  searchLayer.addTo(map);
+  itineraryLayer.addTo(map);
+}
+
+attachLayers();
+//helpers
+function clearSearchLayer() {
+  searchLayer.clearLayers();
+}
+
+function clearItineraryLayer() {
+  itineraryLayer.clearLayers();
+}
+function showCityClinicsOnMap(city, state) {
+  initMap();
+  clearSearchLayer();
+
+  const cityU = city.toUpperCase();
+  const stateU = state.toUpperCase();
+
+  const bounds = [];
+
+  clinics.forEach(c => {
+    if (
+      c.City?.toUpperCase() !== cityU ||
+      c.State?.toUpperCase() !== stateU
+    ) return;
+
+    const lat = c["Geocodio Latitude"];
+    const lng = c["Geocodio Longitude"];
+    if (!lat || !lng) return;
+
+    const marker = L.marker([lat, lng])
+      .bindPopup(c["Program Name"])
+.on('click', () => focusClinicCard(c));
+
+    searchLayer.addLayer(marker);
+bounds.push(L.latLng(lat, lng));
+  });
+
+promoted.forEach(c => {
+  const promoCity = (c.City || c["Geocodio City"] || '').trim().toUpperCase();
+  const promoState = (c.State || c["Geocodio State"] || '').trim().toUpperCase();
+
+  if (promoCity !== cityU || promoState !== stateU) return;
+
+  const lat = c["Geocodio Latitude"];
+  const lng = c["Geocodio Longitude"];
+  if (!lat || !lng) return;
+
+  const marker = L.marker([lat, lng], { icon: starIcon })
+    .bindPopup(`⭐ ${c["Program Name"]}`)
+.on('click', () => focusClinicCard(c));
+
+  searchLayer.addLayer(marker);
+  bounds.push(L.latLng(lat, lng));
+});
+
+
+  if (bounds.length) {
+    map.fitBounds(bounds, { padding: [40, 40] });
+  }
+  if (bounds.length > 0) {
+  map.fitBounds(L.latLngBounds(bounds), { padding: [40, 40] });
+}
+
+}
+
+function addToItineraryMap(clinic) {
+  itinerary.push(clinic);
+  clearSearchLayer();
+  renderItineraryMap();
+}
+function renderItineraryMap() {
+  clearItineraryLayer();
+
+  const bounds = [];
+
+  itinerary.forEach((c, i) => {
+    const lat = c["Geocodio Latitude"];
+    const lng = c["Geocodio Longitude"];
+    if (!lat || !lng) return;
+
+    const marker = L.marker([lat, lng], { icon: starIcon })
+      .bindPopup(`Stop ${i + 1}: ${c["Program Name"]}`);
+
+    itineraryLayer.addLayer(marker);
+bounds.push(L.latLng(lat, lng));
+  });
+
+  if (bounds.length) {
+    map.fitBounds(bounds, { padding: [50, 50] });
+  }
+}
+
 /* ---------- Download helper ---------- */
 function downloadFile(filename, content){
   const blob = new Blob([content], {type:'text/plain'});
@@ -2582,7 +2790,8 @@ document.getElementById('clearBtn').addEventListener('click', ()=>{
   itinerary = []; selectedCity = null; selectedState = null;
   document.getElementById('cityInput').value=''; document.getElementById('patientName').value=''; document.getElementById('topStartDate').value=''; document.getElementById('topEndDate').value='';
   document.getElementById('promotedSection').innerHTML=''; document.getElementById('results').innerHTML=''; document.getElementById('expandedClinic').style.display='none';
-  updateInfoDisplay();
+window.location.href = window.location.href; // forces a full reload
+
 });
 
 
