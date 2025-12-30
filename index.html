@@ -2717,10 +2717,11 @@ function initMap() {
   
   if (map) return;
 
-  map = L.map('map', { zoomControl: false }).setView([39.5, -98.35], 4);
+  map = L.map('map', { zoomControl: false,   attributionControl: false
+ }).setView([39.5, -98.35], 4);
 
 L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-  attribution: 'Tiles &copy; Esri &copy; OpenStreetMap contributors',
+  attribution: '© Esri · © OSM',
     maxZoom: 16
 }).addTo(map);
 
@@ -2912,7 +2913,7 @@ init();
 ">
   <span class="label small-muted">
     Patent Pending
-    © 2025–2026 All rights reserved.
+    © 2026 All rights reserved. Map data: © Esri · © OSM
   </span>
   <br>
   <a href="mission.html" class="label small-muted">Mission Statement</a>
