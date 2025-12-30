@@ -99,6 +99,10 @@ html, body{
   font-size: 0.9rem;
 }
 
+.map{
+  height: 350px; width: 75%; margin: 16px auto; opacity: 25%;
+}
+
 .control{
   background: linear-gradient(
     180deg,
@@ -157,7 +161,9 @@ input[type="date"]{
   .card.expanded {
     transform: none !important;
   }
-
+.map{
+  width: 100%;
+}
   header{
     flex-direction:column;
     align-items:flex-start;
