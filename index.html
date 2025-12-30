@@ -2236,7 +2236,9 @@ VICTA,VICTA,"110 Elmwood Ave.",Providence,RI,2907,"(401) 300-5757",Certified,05/
 
 <script>
 const backToTopBtn = document.getElementById('backToTop');
-
+   window.onload = () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 // Show button when scrolling down
 window.addEventListener('scroll', () => {
   backToTopBtn.style.display = window.scrollY > 200 ? 'block' : 'none';
@@ -2578,6 +2580,7 @@ function addToItinerary(clinicObj){
   document.getElementById('cityInput').value=''; document.getElementById('topStartDate').value=''; document.getElementById('topEndDate').value='';
   document.getElementById('promotedSection').innerHTML=''; document.getElementById('results').innerHTML=''; document.getElementById('expandedClinic').style.display='none';
 document.getElementById('map').style.opacity='25%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 
   updateInfoDisplay();
 }
@@ -2705,6 +2708,7 @@ function initMap() {
 
 L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
   attribution: 'Tiles &copy; Esri &copy; OpenStreetMap contributors',
+    maxZoom: 16
 }).addTo(map);
 
 

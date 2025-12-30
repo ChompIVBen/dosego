@@ -108,6 +108,40 @@
       </main>
     </div>
   </div>
+  <button id="backToTop" title="Back to top" 
+  style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: rgb(6, 90, 116);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+    cursor: pointer;
+    display: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  "
+>⬆</button>
+
+<script>
+const backToTopBtn = document.getElementById('backToTop');
+   window.onload = () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+// Show button when scrolling down
+window.addEventListener('scroll', () => {
+  backToTopBtn.style.display = window.scrollY > 200 ? 'block' : 'none';
+});
+
+// Scroll smoothly to top on click
+backToTopBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
   <script>
 
 /* ---------- How-to button ---------- */
