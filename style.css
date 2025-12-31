@@ -20,7 +20,7 @@ html, body{
 }
   .wrap{max-width:1100px;margin:28px auto;padding:24px;}
   header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-  h1{margin:0;font-size:1.5rem;color:var(--accent-red);font-weight:800}
+  h1{margin:0;font-size:1.5rem;color:var(--accent-red);font-weight:700}
   .subtitle{color:var(--muted);font-size:0.95rem}
   /* top controls */
   .topgrid{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:14px}
@@ -48,7 +48,7 @@ html, body{
   .actions{display:flex;gap:8px;margin-top:12px;align-items:center}
   .selectBtn{background:var(--accent-blue);color:white;padding:8px 12px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
   .selectBtn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
-  .promotedBadge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:800;margin-bottom:8px;background:var(--promoted-gold);color:#111}
+  .promotedBadge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:700;margin-bottom:8px;background:var(--promoted-gold);color:#111}
   /* expanded area */
   .expanded-area{max-height:0;opacity:0;margin-top:0;transition:all .28s cubic-bezier(.2,.9,.3,1);overflow:hidden}
   .card.expanded .expanded-area{max-height:560px;opacity:1;margin-top:12px}
