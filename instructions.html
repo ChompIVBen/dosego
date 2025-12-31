@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>dosego.org — Instructions</title>
+    <link rel="icon" href="icon.png">
+<link rel="canonical" href="https://dosego.org/howto">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+  <meta name="description" content="How to use your travel itinerary.">
+  <meta name="keywords" content="dosego.org, dose, go, methadone, clinic, guest dose, dosing, travel">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>dosego.org - Instructions</h1>
+      </div>
+    </header>  
+    <div style="margin:20px">
+                <button id="home" class="btn">Back Home</button>
+                      <button
+  id="howTo"
+  class="btn"
+  style="font-size:16px; padding:6px 10px; line-height:1.2; white-space:nowrap;"
+>
+  How To Guest Dose
+</button>
+</div>
+      <main>
+        <section class="card">
+          <h2>1. Make a Home-Clinic Appointment (ASAP)</h2>
+          <p class="muted small">Bring your itinerary (printed or on your phone). If possible, make this visit 1–4 weeks before travel.</p>
+          <ul>
+            <li><strong>Say to staff:</strong> “I have a travel itinerary and need guest dosing arranged. Can we start the guest dosing request now?”</li>
+            <li>Ask: “Do you need any forms? Will you contact the clinics on my route? Will I need to pay anything?”</li>
+            <li>Get the name and phone of the staff handling it and sign required consent/forms.</li>
+            <li>Ask for a copy of every signed form for your travel packet.</li>
+            <li>Ask: “Will I pay my home clinic, or will the guest clinics charge me?”</li>
+            <li>If guest clinics collect payment, ask how much per day/dose and which payment methods they accept.</li>
+            <li>If home clinic collects payment, get a receipt.</li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h2>2. Guest Dosing Confirmation Packet (from your home clinic)</h2>
+          <p class="muted small">Request a final packet containing at minimum:</p>
+          <ul>
+            <li>Confirmation that home clinic authorized guest dosing.</li>
+            <li>List of guest clinics that accepted, with dates/times approved.</li>
+            <li>Contact name & phone at each guest clinic (if available).</li>
+            <li>Any special instructions (arrival time, urine screen rules, etc.).</li>
+          </ul>
+          <p><strong>Reccomended: Get both a paper copy and a digital copy on your phone.</strong></p>
+        </section>
+
+
+      </main>
+    </div>
+  </div>
+  <button id="backToTop" title="Back to top" 
+  style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: rgb(6, 90, 116);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+    cursor: pointer;
+    display: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  "
+>⬆</button>
+
+<script>
+const backToTopBtn = document.getElementById('backToTop');
+   window.onload = () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+// Show button when scrolling down
+window.addEventListener('scroll', () => {
+  backToTopBtn.style.display = window.scrollY > 200 ? 'block' : 'none';
+});
+
+// Scroll smoothly to top on click
+backToTopBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+  <script>
+
+/* ---------- How-to button ---------- */
+document.getElementById('home').addEventListener('click', ()=>{
+  window.location.href = 'index.html';
+
+});
+
+document.getElementById('howTo').addEventListener('click', ()=>{
+  window.location.href = 'howto.html';
+
+});
+  </script>
+</body>
+             <div style="
+  margin-top:auto;
+  text-align:center;
+  padding:12px 8px;
+">
+  <span class="label small-muted">
+    Patent Pending
+    © 2026 All rights reserved.
+  </span>
+  <br>
+  <a href="mission.html" class="label small-muted">Mission Statement</a>
+  <br>
+   <span class="label small-muted">
+    Inquiries: dosego.org@gmail.com
+  </span> 
+</div>
+     </html>

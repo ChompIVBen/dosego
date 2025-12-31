@@ -32,13 +32,12 @@
       </div><br>
       <h1 style="font-size: 17px; color:rgba(255, 255, 255, 0.904)">MAT Travel Companion - Guest Dosing Itinerary Request Builder</h1>
   <button
-  id="howTo"
+  id="instructions"
   class="btn"
   style="font-size:16px; padding:6px 10px; line-height:1.2; white-space:nowrap;"
 >
-  Instructions To Guest Dose
+  Instructions
 </button>
-
 <button
   id="resources"
   class="btn"
@@ -2867,11 +2866,12 @@ window.location.href = window.location.href; // forces a full reload
 
 
 /* ---------- How-to button ---------- */
-document.getElementById('howTo').addEventListener('click', ()=>{
-  window.location.href = 'howto.html';
+
+
+document.getElementById('instructions').addEventListener('click', ()=>{
+  window.location.href = 'instructions.html';
 
 });
-
 
 document.getElementById('resources').addEventListener('click', ()=>{
   window.location.href = 'resources.html';
