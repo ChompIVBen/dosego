@@ -2222,7 +2222,8 @@ VICTA,VICTA,"110 Elmwood Ave.",Providence,RI,2907,"(401) 300-5757",Certified,05/
     <!--Costs like $100 a month, "Madison West comprehensive" is a placeholder! not a real buyer-->
     <textarea id="promotedCSV" style="display:none;">
 "Program Name",DBA,Street,City,State,Zipcode,Phone,Certification,FullCertification,"Geocodio Latitude","Geocodio Longitude","Geocodio Accuracy Score","Geocodio Accuracy Type","Geocodio Address Line 1","Geocodio Address Line 2","Geocodio Address Line 3","Geocodio House Number","Geocodio Street","Geocodio Unit Type","Geocodio Unit Number","Geocodio City","Geocodio State","Geocodio County","Geocodio Postal Code","Geocodio Country","Geocodio Source"
-    </textarea>
+
+</textarea>
     <!--example for above entry:^ 
     "Quality Addiction Management, Inc.","Madison West Comprehensive Treatment Center","151 E Badger Road",Madison,WI,53713,"(608) 250-2512",Certified,10/26/2006,43.036772,-89.382471,1,rooftop,"151 E Badger Rd",,"Fitchburg, WI 53713",151,"E Badger Rd",,,Fitchburg,WI,"Dane County",53713,US,Dane
     -->
@@ -2457,7 +2458,7 @@ filtered.forEach((c, idx) => {
   if (!lat || !lng) return;
 
   const marker = L.marker([lat, lng])
-    .bindPopup(c.DBA || c['Program Name'] || 'Clinic')
+.bindPopup([c.DBA, c['Program Name']].filter(Boolean).join(' — ') || 'Clinic')
     .on('click', () => focusClinicCard(c, `clinic-${idx}`)); // pass suffix!
   
   searchLayer.addLayer(marker);
@@ -2768,7 +2769,14 @@ function showCityClinicsOnMap(city, state) {
     if (!lat || !lng) return;
 
 const marker = L.marker([lat, lng])
-  .bindTooltip(c.DBA ? c.DBA : c['Program Name'], {
+.bindTooltip(
+  [c.DBA, c['Program Name']].some(v => v && v.trim())
+    ? [c.DBA, c['Program Name']]
+        .map(v => v?.trim())
+        .filter(Boolean)
+        .join(' — ')
+    : 'Clinic',
+  {
     permanent: true,        // initially permanent, we'll hide/show manually
     direction: 'top',       // tooltip above marker
     offset: [0, -10],       // move a bit up
@@ -2778,7 +2786,7 @@ const marker = L.marker([lat, lng])
 
 // Inline control of visibility based on zoom
 (function(m) {
-  const zoomThreshold = 12; // only show when zoomed in
+  const zoomThreshold = 13; // only show when zoomed in
   const tooltipEl = m.getTooltip().getElement();
   if (tooltipEl) tooltipEl.style.display = map.getZoom() >= zoomThreshold ? 'block' : 'none';
   map.on('zoomend', () => {
@@ -2803,7 +2811,7 @@ promoted.forEach(c => {
   if (!lat || !lng) return;
 
   const marker = L.marker([lat, lng], { icon: starIcon })
-    .bindPopup(`⭐ ${c.DBA ? c.DBA : c['Program Name']}`)
+    .bindPopup(`⭐ ${[c.DBA, c['Program Name']].filter(Boolean).join(' — ') || 'Clinic'}`)
 .on('click', () => focusClinicCard(c));
 
   searchLayer.addLayer(marker);
