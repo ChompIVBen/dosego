@@ -2603,7 +2603,7 @@ document.getElementById('map').style.opacity='25%';
 function updateInfoDisplay(){
   const el = document.getElementById('infoDisplay');
   if(itinerary.length === 0){ el.textContent = ''; return; }
-  const rows = itinerary.map((it, i)=> `${i+1}) ${it.city}, ${it.state} — ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''} (${it.start} → ${it.end})`);
+  const rows = itinerary.map((it, i)=> `${i+1}) ${it.city}, ${it.state} — ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''} — ${new Date(it.start.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })} → ${new Date(it.end.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })}`);
 
   el.innerHTML = `
     <strong>Itinerary (${itinerary.length})</strong>
@@ -2662,9 +2662,9 @@ function buildGuestDosingText(){
 const name =
   (document.getElementById('patientName').value || '').trim() ||
   '(Patient Name)';
-  let out = `Guest Dosing Request — ${name}\nPatient contact: (provide to home clinic)\n\nItinerary:   (year/mm/dd)\n`;
+  let out = `Guest Dosing Request — ${name}\nPatient contact: (provide to home clinic)\n\nItinerary:\n`;
   itinerary.forEach((it, idx)=>{
-    out += `---\nRequested dates: ${it.start} → ${it.end}\nClinic: ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''}\nAddress: ${it.clinic.Street || ''}, ${it.clinic.City || ''}, ${it.clinic.State || ''} ${it.clinic.Zipcode || it.clinic.Zip || ''}\nPhone: ${it.clinic.Phone || ''}\n\n`;
+    out += `---\nRequested dates: ${new Date(it.start.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })} → ${new Date(it.end.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })}\nClinic: ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''}\nAddress: ${it.clinic.Street || ''}, ${it.clinic.City || ''}, ${it.clinic.State || ''} ${it.clinic.Zipcode || it.clinic.Zip || ''}\nPhone: ${it.clinic.Phone || ''}\n\n`;
   });
   out += `---\n\nThis request was created using dosego.org.\n`;
   return out;
