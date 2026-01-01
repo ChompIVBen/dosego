@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1"/>
+<title>dosego.org</title>
+  <link rel="icon" href="icon.png">
+<link rel="canonical" href="https://dosego.org">
+<!-- Leaflet CSS -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+  <meta name="description" content="dosego.org: Guest Dosing itinerary builder for travel on methadone.">
+  <meta name="keywords" content="dosego.org, dose, go, methadone, dosego, guest dose, clinic, dosing, travel">
+<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>dosego.org</h1>
+      </div><br>
+      <h1 style="font-size: 17px; color:rgba(255, 255, 255, 0.904)">MAT Travel Companion</h1>
+  <button
+  id="instructions"
+  class="btn"
+  style="font-size:16px; padding:6px 10px; width:175px; height:auto; margin:auto; line-height:1.2; white-space:nowrap;"
+>
+  Instructions
+</button>
+<button
+  id="resources"
+  class="btn"
+  style="font-size:16px; padding:6px 10px; width:175px; height:auto; margin:auto; line-height:1.2; white-space:nowrap;"
+>
+  Support Resources
+</button>
+<button
+  id="itin"
+  class="btn"
+  style="font-size:16px; padding:6px 10px; width:175px; height:auto; margin:auto; line-height:1.2; white-space:nowrap;"
+>
+  Travel Itinerary Builder
+</button>
+    </header>
+<button id="backToTop" title="Back to top" 
+  style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: rgb(6, 90, 116);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+    cursor: pointer;
+    display: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  "
+>⬆</button>
+
+<script>
+const backToTopBtn = document.getElementById('backToTop');
+   window.onload = () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+// Show button when scrolling down
+window.addEventListener('scroll', () => {
+  backToTopBtn.style.display = window.scrollY > 200 ? 'block' : 'none';
+});
+
+// Scroll smoothly to top on click
+backToTopBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+
+document.getElementById('itin').addEventListener('click', ()=>{
+  window.location.href = 'index.html';
+
+});
+
+document.getElementById('instructions').addEventListener('click', ()=>{
+  window.location.href = 'instructions.html';
+
+});
+
+document.getElementById('resources').addEventListener('click', ()=>{
+  window.location.href = 'resources.html';
+
+});
+
+/* ---------- Helpers ---------- */
+function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, (m)=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
+
+
+</script>
+        <div style="
+  margin-top:auto;
+  text-align:center;
+  padding:12px 8px;
+">
+  <span class="label small-muted">
+    Patent Pending
+    © 2026 All rights reserved
+  </span>
+  <br>
+  <a href="mission.html" class="label small-muted">Mission Statement</a>
+  <br>
+   <span class="label small-muted">
+    Inquiries: dosego.org@gmail.com
+  </span> 
+</div>
+</body>
+          </html>
