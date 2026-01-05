@@ -2542,16 +2542,22 @@ document.getElementById('map').style.opacity='100%';
 
 
 }
-function focusClinicCard(c, idSuffix = '', isPromoted = false) {
-  const cardIdBase = (c.DBA || c['Program Name'] || 'clinic')
-    .toString()
+function focusClinicCard(c) {
+  const clinicKey = [
+    c.DBA || '',
+    c['Program Name'] || '',
+    c.Street || '',
+    c.City || '',
+    c.State || ''
+  ]
+    .join('|')
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-');
+    .replace(/[^a-z0-9|]+/g, '');
 
-  const fullId = `clinic-${cardIdBase}${isPromoted ? '-promoted' : ''}${idSuffix !== '' ? '-' + idSuffix : ''}`;
-  const el = document.getElementById(fullId);
+  const el = document.querySelector(`.card[data-clinic-key="${clinicKey}"]`);
+
   if (!el) {
-    console.warn('Card not found:', fullId);
+    console.warn('Card not found for clinic:', clinicKey);
     return;
   }
 
@@ -2561,6 +2567,8 @@ function focusClinicCard(c, idSuffix = '', isPromoted = false) {
   el.classList.add('highlight');
   setTimeout(() => el.classList.remove('highlight'), 1500);
 }
+
+
 
 
 
@@ -2624,16 +2632,30 @@ card.style.borderColor = isPromoted ? 'rgb(255,222,33)' : 'var(--glass)';
     </div>
   `;
   // Attach behaviors
-
-  // Create a stable ID for map ↔ card linking
-// inside buildClinicCard
-const cardIdBase = (c.DBA || c['Program Name'] || 'clinic')
-  .toString()
+const clinicKey = [
+  c.DBA || '',
+  c['Program Name'] || '',
+  c.Street || '',
+  c.City || '',
+  c.State || ''
+]
+  .join('|')
   .toLowerCase()
-  .replace(/[^a-z0-9]+/g, '-');
+  .replace(/[^a-z0-9|]+/g, '');
+card.dataset.clinicKey = clinicKey;
 
-card.id = `clinic-${cardIdBase}${isPromoted ? '-promoted' : ''}${idSuffix !== '' ? '-' + idSuffix : ''}`;
+const resolvedTitle = dba || program || 'clinic';
 
+const cardIdBase = resolvedTitle
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/^-+|-+$/g, '');
+
+const fullId = `clinic-${cardIdBase}${isPromoted ? '-promoted' : ''}${idSuffix !== '' ? '-' + idSuffix : ''}`;
+
+card.id = fullId;
+card.dataset.fullId = fullId;          // 🔑 STORE IT
+card.dataset.cardIdBase = cardIdBase;  // optional but useful
 
 
   // Expand/collapse via clicking anywhere (except buttons) — toggle
