@@ -2440,7 +2440,7 @@ function renderClinics(city, state){
   const out = document.getElementById('results');
   out.innerHTML = '';
   if(!city || !state) return;
-  const title = document.createElement('div'); title.id = 'clinicTitle'; title.textContent = `All Clinics in ${city}, ${state}`;
+  const title = document.createElement('div'); title.id = 'clinicTitle'; title.textContent = `Clinics in ${city}, ${state}`;
   out.appendChild(title);
   const stateU = (state||'').toUpperCase();
   const filtered = clinics.filter(c => (c.City||'').toLowerCase() === city.toLowerCase() && ((c.State||'').toUpperCase() === stateU));
