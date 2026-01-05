@@ -2520,14 +2520,16 @@ card.style.borderColor = isPromoted ? 'rgb(255,222,33)' : 'var(--glass)';
   <h3 class="card-title">${escapeHtml(title)}</h3>
   ${subtitle ? `<div class="subtitle-muted">${escapeHtml(subtitle)}</div>` : ''}
   <div class="meta">${escapeHtml(addr)}</div>
-  <div class="meta meta-row">
-    <strong>${escapeHtml(c.Phone || '')}</strong>
-    ${
-      isPromoted && c.url
-        ? `Website: <a href="${escapeHtml(c.url)}" target="_blank"; class="verified-info">${escapeHtml(c.url)}</a>`
-        : ''
-    }
-  </div>
+<div class="meta meta-row" style="overflow:hidden;">
+  <strong style="float:left;">${escapeHtml(c.Phone || '')}</strong>
+  ${
+    isPromoted && c.url
+      ? `<span style="float:right;">Website: <a href="${escapeHtml(c.url)}" target="_blank" class="verified-info">${escapeHtml(c.url)}</a></span>`
+      : ''
+  }
+</div>
+
+
     <div class="actions">
       <button class="selectBtn addBtn">Add to Itinerary</button>
       <button class="selectBtn secondary detailsBtn">Details</button>

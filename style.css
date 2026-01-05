@@ -46,7 +46,6 @@ html, body{
   .subtitle-muted{color:var(--muted);margin-top:6px;font-size:13px}
   .meta{color:var(--muted);margin-top:6px;font-size:14px;
     .meta-row {
-  display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
