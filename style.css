@@ -58,6 +58,10 @@ html, body{
   align-items: center;      /* same vertical level */
   justify-content: space-between; /* space between them */
   gap: 1rem;                /* breathable spacing (optional but nice) */}
+  .meta-row { display: flex; flex-wrap: wrap; }          /* force flex layout to wrap */
+.meta-row > * { min-width: 0; }                        /* allow children to shrink */
+.meta-row a { word-break: break-word; overflow-wrap: anywhere; }  /* break long URLs */
+
   .actions{display:flex;gap:8px;margin-top:12px;align-items:center}
   .selectBtn{background:var(--accent-blue);color:white;padding:8px 12px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
   .selectBtn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
