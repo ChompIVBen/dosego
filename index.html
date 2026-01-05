@@ -2404,9 +2404,9 @@ function closeAutocomplete(){
 }
 document.addEventListener('click', e=> { if(!e.target.closest('.autocomplete')) closeAutocomplete(); });
 const starIcon = L.icon({
-  iconUrl: 'https://cdn-icons-png.flaticon.com/512/616/616489.png',
-  iconSize: [35, 35],
-  iconAnchor: [16, 46],
+  iconUrl: 'verifiedicon.png',
+  iconSize: [42, 42],
+  iconAnchor: [22, 42],
   popupAnchor: [0, -24]
 });
 
@@ -2862,7 +2862,7 @@ const marker = L.marker([lat, lng], { icon: starIcon })
   {
     permanent: true,        // initially permanent, we'll hide/show manually
     direction: 'top',       // tooltip above marker
-    offset: [0, -40],       // move a bit up
+    offset: [0, -10],       // move a bit up
     className: 'clinic-tooltip'
   })
   .addTo(searchLayer);
