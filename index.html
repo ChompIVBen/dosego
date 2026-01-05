@@ -2602,6 +2602,8 @@ function focusClinicCard(c) {
 //old good promo border color: rgb(255,222,33)
 /* ---------- Build card element function (DBA-first title logic) ---------- */
 function buildClinicCard(c, isPromoted=false, idSuffix=''){
+    if (!(c.DBA || c['Program Name'] || c.Latitude || c.Longitude)) return document.createElement('div'); 
+
   const card = document.createElement('div'); card.className = 'card'; if(isPromoted) card.dataset.promoted = '1';
   // Title logic: prefer DBA, fallback to Program Name, fallback to "Clinic"
   const dba = (c.DBA || c.DBA || '').trim();
