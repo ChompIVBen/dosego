@@ -2821,7 +2821,7 @@ promoted.forEach(c => {
   if (!lat || !lng) return;
 
 
-  const marker = L.marker([lat, lng], { icon: starIcon })
+  const marker = L.marker([lat, lng], { icon: starIcon, zIndexOffset: 1000})
     .bindPopup(`⭐ ${[c.DBA, c['Program Name']].filter(Boolean).join(' — ') || 'Clinic'}`)
 .on('click', () => focusClinicCard(c));
 
