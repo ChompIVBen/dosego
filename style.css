@@ -6,6 +6,7 @@
     --accent-blue:rgb(6, 90, 116);
     --accent-red:#8110cc;
     --promoted-gold:linear-gradient(90deg,#ffd86b,#f9a825);
+    --verified-green:linear-gradient(90deg,#17bd5c,#01963f);
     --glass: rgba(255,255,255,0.03);
     --radius:14px;
   }
@@ -65,7 +66,8 @@ html, body{
   .actions{display:flex;gap:8px;margin-top:12px;align-items:center}
   .selectBtn{background:var(--accent-blue);color:white;padding:8px 12px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
   .selectBtn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
-  .promotedBadge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:700;margin-bottom:8px;background:var(--promoted-gold);color:#111}
+  /*this is now verified and green*/
+  .promotedBadge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:700;margin-bottom:8px;background:var(--verified-green);color:#111}
   /* expanded area */
   .expanded-area{max-height:0;opacity:0;margin-top:0;transition:all .28s cubic-bezier(.2,.9,.3,1);overflow:hidden}
   .card.expanded .expanded-area{max-height:560px;opacity:1;margin-top:12px}
@@ -103,13 +105,13 @@ html, body{
   overflow-x: hidden;
 }
 .highlight {
-  outline: 2px solid rgb(255,222,33);
+  outline: 2px solid rgba(75, 122, 252, 0.596);
   background: #fffbe6;
 }
 .clinic-tooltip {
   background-color: rgba(255, 255, 255, 0.658);
   color: rgba(0, 0, 0, 0.877);
-  font-weight: bold;
+  font-weight: 300px;
   padding: 2px 6px;
   border-radius: 4px;
   box-shadow: 0 0 3px rgba(0,0,0,0.3);
@@ -180,6 +182,9 @@ input[type="date"]{
   }
 .map{
   width: 100%;
+}
+.clinic-tooltip {
+  font-size: 0.55rem;
 }
   header{
     flex-direction:column;
