@@ -184,7 +184,7 @@ input[type="date"]{
   width: 100%;
 }
 .clinic-tooltip {
-  font-size: 0.62rem;
+  font-size: 0.65rem;
 }
   header{
     flex-direction:column;
@@ -334,7 +334,6 @@ input[type="date"]{
   button {
     font-size: 16px;
   }
-@media (max-width:640px){
 
   .autocomplete,
   .expanded-col,
@@ -342,7 +341,5 @@ input[type="date"]{
     min-width: 0 !important;
     width: 100%;
   }
-
-}
 
 }
