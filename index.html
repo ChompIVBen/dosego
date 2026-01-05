@@ -2426,7 +2426,7 @@ const matches = promoted.filter(p =>
 );
 
   if(matches.length === 0) return;
-  const title = document.createElement('div'); title.id = 'promotedTitle'; title.textContent = `Verified Clinics`;
+  const title = document.createElement('div'); title.id = 'promotedTitle'; title.textContent = `Verified Clinics in ${city}, ${state}`;
   section.appendChild(title);
   matches.forEach((c, idx)=>{
     const card = buildClinicCard(c, true, idx);
