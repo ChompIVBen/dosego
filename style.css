@@ -105,7 +105,7 @@ html, body{
   overflow-x: hidden;
 }
 .highlight {
-  outline: 2px solid rgba(75, 122, 252, 0.596);
+  outline: 2px solid rgba(75, 211, 252, 0.596);
   background: #fffbe6;
 }
 .clinic-tooltip {
