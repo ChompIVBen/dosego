@@ -2429,7 +2429,7 @@ const matches = promoted.filter(p =>
   const title = document.createElement('div'); title.id = 'promotedTitle'; title.textContent = `Verified Clinics`;
   section.appendChild(title);
   matches.forEach((c, idx)=>{
-    const card = buildClinicCard(c, true, `promoted-${idx}`);
+    const card = buildClinicCard(c, true, idx);
     section.appendChild(card);
   });
 }
@@ -2469,15 +2469,18 @@ document.getElementById('map').style.opacity='100%';
 
 
 }
-function focusClinicCard(c, idSuffix = '') {
+function focusClinicCard(c, idSuffix = '', isPromoted = false) {
   const cardIdBase = (c.DBA || c['Program Name'] || 'clinic')
     .toString()
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-');
 
-  const fullId = `clinic-${cardIdBase}${idSuffix ? '-' + idSuffix : ''}`;
+  const fullId = `clinic-${cardIdBase}${isPromoted ? '-promoted' : ''}${idSuffix !== '' ? '-' + idSuffix : ''}`;
   const el = document.getElementById(fullId);
-  if (!el) return;
+  if (!el) {
+    console.warn('Card not found:', fullId);
+    return;
+  }
 
   collapseAllCards();
   toggleExpandCard(el);
@@ -2485,6 +2488,10 @@ function focusClinicCard(c, idSuffix = '') {
   el.classList.add('highlight');
   setTimeout(() => el.classList.remove('highlight'), 1500);
 }
+
+
+
+
 
 
 
@@ -2550,7 +2557,7 @@ const cardIdBase = (c.DBA || c['Program Name'] || 'clinic')
   .toLowerCase()
   .replace(/[^a-z0-9]+/g, '-');
 
-card.id = `clinic-${cardIdBase}${idSuffix ? '-' + idSuffix : ''}`;
+card.id = `clinic-${cardIdBase}${isPromoted ? '-promoted' : ''}${idSuffix !== '' ? '-' + idSuffix : ''}`;
 
 
 
@@ -2804,13 +2811,13 @@ const marker = L.marker([lat, lng])
   });
 })(marker);
 
-marker.on('click', () => focusClinicCard(c));
+marker.on('click', () => focusClinicCard(c, '', false));
 
     searchLayer.addLayer(marker);
 bounds.push(L.latLng(lat, lng));
   });
 
-promoted.forEach(c => {
+promoted.forEach((c, idx) => {
   const promoCity = (c.City || c["Geocodio City"] || '').trim().toUpperCase();
   const promoState = (c.State || c["Geocodio State"] || '').trim().toUpperCase();
 
@@ -2820,14 +2827,17 @@ promoted.forEach(c => {
   const lng = c["Geocodio Longitude"];
   if (!lat || !lng) return;
 
+// Promoted markers
+const marker = L.marker([lat, lng], { icon: starIcon, zIndexOffset: 1000 })
+  .bindPopup(`⭐ ${[c.DBA, c['Program Name']].filter(Boolean).join(' — ') || 'Clinic'}`)
+  .on('click', () => focusClinicCard(c, String(idx), true)); // pass numeric idx and true for promoted
 
-  const marker = L.marker([lat, lng], { icon: starIcon, zIndexOffset: 1000})
-    .bindPopup(`⭐ ${[c.DBA, c['Program Name']].filter(Boolean).join(' — ') || 'Clinic'}`)
-.on('click', () => focusClinicCard(c));
+
 
   searchLayer.addLayer(marker);
   bounds.push(L.latLng(lat, lng));
 });
+
 
 
   if (bounds.length) {
