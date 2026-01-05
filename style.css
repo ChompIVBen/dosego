@@ -44,7 +44,21 @@ html, body{
   .card.expanded{transform:translateY(-8px) scale(1.01);box-shadow:0 30px 70px rgba(0,0,0,0.75);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
   .card h3{margin:0;color:#fff;font-size:1.05rem}
   .subtitle-muted{color:var(--muted);margin-top:6px;font-size:13px}
-  .meta{color:var(--muted);margin-top:6px;font-size:14px}
+  .meta{color:var(--muted);margin-top:6px;font-size:14px; display: flex;
+    .meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.verified-info {
+  font-weight: 600;
+  opacity: 0.85;
+}
+  align-items: center;      /* same vertical level */
+  justify-content: space-between; /* space between them */
+  gap: 1rem;                /* breathable spacing (optional but nice) */}
   .actions{display:flex;gap:8px;margin-top:12px;align-items:center}
   .selectBtn{background:var(--accent-blue);color:white;padding:8px 12px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
   .selectBtn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}

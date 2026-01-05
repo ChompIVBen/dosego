@@ -2221,7 +2221,8 @@ VICTA,VICTA,"110 Elmwood Ave.",Providence,RI,2907,"(401) 300-5757",Certified,05/
 </textarea>
     <!--Costs like $100 a month, "Madison West comprehensive" is a placeholder! not a real buyer-->
     <textarea id="promotedCSV" style="display:none;">
-"Program Name",DBA,Street,City,State,Zipcode,Phone,Certification,FullCertification,"Geocodio Latitude","Geocodio Longitude","Geocodio Accuracy Score","Geocodio Accuracy Type","Geocodio Address Line 1","Geocodio Address Line 2","Geocodio Address Line 3","Geocodio House Number","Geocodio Street","Geocodio Unit Type","Geocodio Unit Number","Geocodio City","Geocodio State","Geocodio County","Geocodio Postal Code","Geocodio Country","Geocodio Source"
+"Program Name",DBA,Street,City,State,Zipcode,Phone,Certification,FullCertification,"Geocodio Latitude","Geocodio Longitude","Geocodio Accuracy Score","Geocodio Accuracy Type","Geocodio Address Line 1","Geocodio Address Line 2","Geocodio Address Line 3","Geocodio House Number","Geocodio Street","Geocodio Unit Type","Geocodio Unit Number","Geocodio City","Geocodio State","Geocodio County","Geocodio Postal Code","Geocodio Country","Geocodio Source",url
+CompDrug,,"547 East 11th Ave.",Columbus,OH,43211,"(614) 224-4506",Certified,06/01/2003,39.993885,-82.991874,1,rooftop,"547 E 11th Ave",,"Columbus, OH 43211",547,"E 11th Ave",,,Columbus,OH,"Franklin County",43211,US,"City of Columbus","https://compdrug.org/transfer-guest-dose/"
 
 </textarea>
     <!--example for above entry:^ 
@@ -2425,7 +2426,7 @@ const matches = promoted.filter(p =>
 );
 
   if(matches.length === 0) return;
-  const title = document.createElement('div'); title.id = 'promotedTitle'; title.textContent = `Promoted Clinics`;
+  const title = document.createElement('div'); title.id = 'promotedTitle'; title.textContent = `Verified Clinics`;
   section.appendChild(title);
   matches.forEach((c, idx)=>{
     const card = buildClinicCard(c, true, `promoted-${idx}`);
@@ -2439,7 +2440,7 @@ function renderClinics(city, state){
   const out = document.getElementById('results');
   out.innerHTML = '';
   if(!city || !state) return;
-  const title = document.createElement('div'); title.id = 'clinicTitle'; title.textContent = `Clinics in ${city}, ${state}`;
+  const title = document.createElement('div'); title.id = 'clinicTitle'; title.textContent = `All Clinics in ${city}, ${state}`;
   out.appendChild(title);
   const stateU = (state||'').toUpperCase();
   const filtered = clinics.filter(c => (c.City||'').toLowerCase() === city.toLowerCase() && ((c.State||'').toUpperCase() === stateU));
@@ -2460,7 +2461,7 @@ filtered.forEach((c, idx) => {
   const marker = L.marker([lat, lng])
 .bindPopup([c.DBA, c['Program Name']].filter(Boolean).join(' — ') || 'Clinic')
     .on('click', () => focusClinicCard(c, `clinic-${idx}`)); // pass suffix!
-  
+
   searchLayer.addLayer(marker);
 });
 
@@ -2505,12 +2506,21 @@ function buildClinicCard(c, isPromoted=false, idSuffix=''){
   if(dba && program && dba !== program) subtitle = program;
   // build inner HTML
   const addr = [c.Street || c.Street1 || '', c.City || '', c.State || '', c.Zipcode || c.Zip || ''].filter(Boolean).join(', ');
+card.style.borderColor = isPromoted ? 'rgb(255,222,33)' : 'var(--glass)';
+
   card.innerHTML = `
-    ${isPromoted ? '<div class="promotedBadge">PROMOTED</div>' : ''}
-    <h3 class="card-title">${escapeHtml(title)}</h3>
-    ${subtitle ? `<div class="subtitle-muted">${escapeHtml(subtitle)}</div>` : ''}
-    <div class="meta">${escapeHtml(addr)}</div>
-    <div class="meta"><strong>${escapeHtml(c.Phone || '')}</strong></div>
+  ${isPromoted ? '<div class="promotedBadge">VERIFIED</div>' : ''}
+  <h3 class="card-title">${escapeHtml(title)}</h3>
+  ${subtitle ? `<div class="subtitle-muted">${escapeHtml(subtitle)}</div>` : ''}
+  <div class="meta">${escapeHtml(addr)}</div>
+  <div class="meta meta-row">
+    <strong>${escapeHtml(c.Phone || '')}</strong>
+    ${
+      isPromoted && c.url
+        ? `Website:<a href="${escapeHtml(c.url)}" target="_blank"; class="verified-info">${escapeHtml(c.url)}</a>`
+        : ''
+    }
+  </div>
     <div class="actions">
       <button class="selectBtn addBtn">Add to Itinerary</button>
       <button class="selectBtn secondary detailsBtn">Details</button>
@@ -2809,6 +2819,7 @@ promoted.forEach(c => {
   const lat = c["Geocodio Latitude"];
   const lng = c["Geocodio Longitude"];
   if (!lat || !lng) return;
+
 
   const marker = L.marker([lat, lng], { icon: starIcon })
     .bindPopup(`⭐ ${[c.DBA, c['Program Name']].filter(Boolean).join(' — ') || 'Clinic'}`)
