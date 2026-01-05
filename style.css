@@ -44,7 +44,7 @@ html, body{
   .card.expanded{transform:translateY(-8px) scale(1.01);box-shadow:0 30px 70px rgba(0,0,0,0.75);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
   .card h3{margin:0;color:#fff;font-size:1.05rem}
   .subtitle-muted{color:var(--muted);margin-top:6px;font-size:13px}
-  .meta{color:var(--muted);margin-top:6px;font-size:14px; display: flex;
+  .meta{color:var(--muted);margin-top:6px;font-size:14px;
     .meta-row {
   display: flex;
   align-items: center;

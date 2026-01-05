@@ -2524,7 +2524,7 @@ card.style.borderColor = isPromoted ? 'rgb(255,222,33)' : 'var(--glass)';
     <strong>${escapeHtml(c.Phone || '')}</strong>
     ${
       isPromoted && c.url
-        ? `Website:<a href="${escapeHtml(c.url)}" target="_blank"; class="verified-info">${escapeHtml(c.url)}</a>`
+        ? `Website: <a href="${escapeHtml(c.url)}" target="_blank"; class="verified-info">${escapeHtml(c.url)}</a>`
         : ''
     }
   </div>
