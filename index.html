@@ -2897,7 +2897,7 @@ const name =
   '(Patient Name)';
   let out = `Guest Dosing Request — ${name}\nPatient contact: (provide to home clinic)\n\nItinerary:\n`;
   itinerary.forEach((it, idx)=>{
-    out += `---\nRequested dates: ${new Date(it.start.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })} → ${new Date(it.end.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })}\nClinic: ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''}\nAddress: ${it.clinic.Street || ''}, ${it.clinic.City || ''}, ${it.clinic.State || ''} ${it.clinic.Zipcode || it.clinic.Zip || ''}\nPhone: ${it.clinic.Phone || ''}\n\n`;
+    out += `---\nRequested dates: ${new Date(it.start.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })} → ${new Date(it.end.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })}\nClinic: ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''}\nAddress: ${it.clinic.Street || ''}, ${it.clinic.City || ''}, ${it.clinic.State || ''} ${it.clinic.Zipcode || it.clinic.Zip || ''}\nPhone: ${it.clinic.Phone || ''}${it.clinic.url ? `\nWebsite: ${it.clinic.url}` : ''}\n\n`;
   });
   out += `---\n\nThis request was created using dosego.org.\n`;
   return out;
