@@ -125,24 +125,34 @@ html, body{
 
 /* Floating overlay for single clinic card */
 .floating-card-overlay {
-  position:fixed;
-  top:0; left:0; width:100%; height:100%;
+  position: fixed;         /* ensures it floats above all content */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;           /* use viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: rgba(0,0,0,0.5);
-  display:flex; justify-content:center; align-items:center;
-  z-index:999;
+  z-index: 9999;           /* above footer, other elements */
+  overflow-y: auto;        /* allow scrolling if card is tall on mobile */
+  -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
 }
 
+
+
 .floating-card-container {
-  max-width:500px; width:90%;
-background:var(--card);
-  border-radius:12px;
-  padding:16px;
-  box-shadow:0 8px 32px rgba(0,0,0,0.6);
-  display:flex;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;        /* ensures card fits inside viewport */
+  overflow-y: auto;
+  background: var(--card);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  display: flex;
   flex-direction: column;
-  gap:12px;
-  max-height:80vh;
-  overflow-y:auto;
+  gap: 12px;
 }
 
 .map{
