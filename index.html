@@ -3186,7 +3186,9 @@ function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, (
     if(results.length === 0){ dropdown.style.display='none'; return; }
 
     results.forEach(c=>{
-      const text = (c.DBA||c['Program Name']||'').trim();
+const dba = (c.DBA || '').trim();
+const prog = (c['Program Name'] || '').trim();
+const text = dba && prog ? `${dba} - ${prog}` : (dba || prog);
       const city = c.City || '';
       const state = c.State || '';
       const div = document.createElement('div');
