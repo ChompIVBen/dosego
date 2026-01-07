@@ -87,6 +87,14 @@
     <div id="infoDisplay" style="margin:12px 0;color:var(--muted)"></div>
 
     <main class="main">
+
+<!-- Reverse Clinic Search Input -->
+<div style="position:relative; margin:12px 0;">
+  <input type="text" id="reverseClinicInput" placeholder="Optional: Search by Clinic Name..." style="width:100%; padding:8px; font-size:1rem; background:#e9eef6" autocomplete="off" />
+  <div id="reverseClinicDropdown" class="dropdown" style="position:absolute; color:rgba(17, 17, 17, 0.842); top:100%; left:0; right:0; background:#e9eef6; border:1px solid #e9eef6; max-height:200px; overflow-y:auto; z-index:1000; display:none;"></div>
+</div>
+
+
       <div class="map" id="map"></div>      
          <button id="clearBtn" class="btn ghost" style="width: 100px; margin:auto">Reset</button>
 
@@ -2804,8 +2812,14 @@ function addToItinerary(clinicObj){
   const name = (document.getElementById('patientName').value||'').trim();
   const start = (document.getElementById('topStartDate').value||'').trim();
   const end = (document.getElementById('topEndDate').value||'').trim();
+    selectedCity = (clinicObj.City || '').trim();
+  selectedState = (clinicObj.State || '').trim().toUpperCase();
+   const overlay = document.getElementById('reverseClinicOverlay');
+  if(overlay && overlay.classList.contains('floating-card-overlay')){
+    overlay.innerHTML = '';
+    overlay.className = '';
+  }
   if(!start || !end){ alert('Pick start and end dates first.'); return; }
-  if(!selectedCity || !selectedState){ alert('Pick a destination from the dropdown first.'); return; }
   itinerary.push({ patientName: name, city: selectedCity, state: selectedState, start, end, clinic: clinicObj });
   updateInfoDisplay();
   flash('Added to itinerary');
@@ -3134,6 +3148,116 @@ document.getElementById('resources').addEventListener('click', ()=>{
 
 /* ---------- Helpers ---------- */
 function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, (m)=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
+
+
+(function(){
+  const input = document.getElementById('reverseClinicInput');
+  const dropdown = document.getElementById('reverseClinicDropdown');
+
+  // Create overlay container once
+  const overlayContainer = document.createElement('div');
+  overlayContainer.id = 'reverseClinicOverlay';
+  document.body.appendChild(overlayContainer);
+
+  // Search both arrays, add promoted flag
+  function searchClinics(query){
+    if(!query) return [];
+
+    query = query.toLowerCase();
+
+    const promotedMatches = promoted.filter(c=>{
+      const dba = (c.DBA||'').trim();
+      const prog = (c['Program Name']||'').trim();
+      return (dba && dba.toLowerCase().includes(query)) || (prog && prog.toLowerCase().includes(query));
+    }).map(c => ({ ...c, promoted:true }));
+
+    const regularMatches = clinics.filter(c=>{
+      const dba = (c.DBA||'').trim();
+      const prog = (c['Program Name']||'').trim();
+      return (dba && dba.toLowerCase().includes(query)) || (prog && prog.toLowerCase().includes(query));
+    }).map(c => ({ ...c, promoted:false }));
+
+    return [...promotedMatches, ...regularMatches]; // promoted first
+  }
+
+  // Render dropdown
+  function renderDropdown(results){
+    dropdown.innerHTML='';
+    if(results.length === 0){ dropdown.style.display='none'; return; }
+
+    results.forEach(c=>{
+      const text = (c.DBA||c['Program Name']||'').trim();
+      const city = c.City || '';
+      const state = c.State || '';
+      const div = document.createElement('div');
+      div.textContent = `${text} — ${city}, ${state}`;
+      div.style.padding = '6px 8px';
+      div.style.borderBottom = '1px solid #e9eef6';
+      div.addEventListener('click', ()=>{
+        showFloatingCard(c);
+        dropdown.style.display = 'none';
+        input.value = '';
+      });
+      dropdown.appendChild(div);
+    });
+
+    dropdown.style.display='block';
+  }
+
+  // Input listener
+  input.addEventListener('input', ()=>{
+    const q = input.value.trim();
+    const results = searchClinics(q);
+    renderDropdown(results);
+  });
+
+  // Close dropdown if clicked outside
+  document.addEventListener('click',(e)=>{
+    if(!input.contains(e.target) && !dropdown.contains(e.target)){
+      dropdown.style.display='none';
+    }
+  });
+
+  // Show floating card
+  function showFloatingCard(c){
+    overlayContainer.innerHTML='';
+    overlayContainer.className='floating-card-overlay';
+
+    const cardWrapper = document.createElement('div');
+    cardWrapper.className='floating-card-container';
+
+    // Use promoted flag for styling
+    const card = buildClinicCard(c, c.promoted);
+    cardWrapper.appendChild(card);
+
+    // Buttons inside card (no white box)
+    const btnContainer = document.createElement('div');
+    btnContainer.style.display='flex';
+    btnContainer.style.justifyContent='flex-end';
+    btnContainer.style.gap='8px';
+    btnContainer.style.marginTop='12px';
+
+
+
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent='Close';
+    closeBtn.className='selectBtn secondary';
+    closeBtn.addEventListener('click', closeOverlay);
+
+    btnContainer.appendChild(closeBtn);
+    cardWrapper.appendChild(btnContainer);
+
+    overlayContainer.appendChild(cardWrapper);
+  }
+
+  function closeOverlay(){
+    overlayContainer.innerHTML='';
+    overlayContainer.className='';
+  }
+
+})();
+
+
 
 /* ---------- Init behaviors (match pasted "City, ST" on change) ---------- */
 function init(){
