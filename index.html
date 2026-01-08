@@ -2820,7 +2820,7 @@ function addToItinerary(clinicObj){
     overlay.innerHTML = '';
     overlay.className = '';
   }
-  if(!start || !end){ alert('Pick start and end dates first.'); return; }
+  if(!start || !end){ window.scrollTo({ top: 0, behavior: 'smooth' });alert('Pick start and end dates first.'); return; }
   itinerary.push({ patientName: name, city: selectedCity, state: selectedState, start, end, clinic: clinicObj });
   updateInfoDisplay();
   flash('Added to itinerary');
