@@ -2820,7 +2820,7 @@ function addToItinerary(clinicObj){
     overlay.innerHTML = '';
     overlay.className = '';
   }
-  if(!start || !end){ window.scrollTo({ top: 0, behavior: 'smooth' });alert('Pick start and end dates first.'); return; }
+  if(!start || !end){ window.scrollTo({ top: 0, behavior: 'smooth' });alert('Pick start and end dates first.');flash2('Pick start and end dates first.'); return; }
   itinerary.push({ patientName: name, city: selectedCity, state: selectedState, start, end, clinic: clinicObj });
   updateInfoDisplay();
   flash('Added to itinerary');
@@ -2870,9 +2870,12 @@ document.addEventListener('click', (e) => {
   }
 });
 
+function flash2(msg){
+  const el = document.createElement('div'); el.style.cssText='position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,var(--accent-red2),#f10c04);color:white;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);font-weight:700;z-index:2000'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),1500);
+}
 
 function flash(msg){
-  const el = document.createElement('div'); el.style.cssText='position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,var(--accent-blue),#0033aa);color:white;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);font-weight:700;z-index:2000'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),1100);
+  const el = document.createElement('div'); el.style.cssText='position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,var(--accent-blue),#0033aa);color:white;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);font-weight:700;z-index:2000'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),1400);
 }
 
 /* ---------- Date list generation ---------- */
