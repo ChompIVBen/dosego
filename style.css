@@ -269,13 +269,18 @@ input[type="date"]{
 
   h1{
     font-size:1.28rem; /* scaled slightly but still same style */
+    
   }
   .modal .row button{
     width: 100%;
   }
   .wrap{
     padding:16px;
+      margin-top: 6px;   /* was 28px */
   }
+header{
+  gap: 6px;
+}
 
   .topgrid{
     flex-direction:column;
