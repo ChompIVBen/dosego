@@ -30,27 +30,46 @@
       <div>
         <h1>dosego.org</h1>
       </div><br>
-      <h1 style="font-size: 17px; color:rgba(255, 255, 255, 0.904)">Guest Dosing Itinerary Request Builder - MAT Travel</h1>
-  <div class="menu-container">
-    <button class="menu-toggle" id="menuToggle">☰</button>
+<h1 style="font-size: 17px; color:rgba(255, 255, 255, 0.904); display: inline;">
+  Guest Dosing Itinerary Request Builder - MAT Travel
+</h1>
+<button class="menu-toggle" id="menuToggle">
+  ☰
+</button>
 
-    <div class="menu-dropdown" id="menuDropdown">
-      <button id="instructions" class="menu-btn">Instructions</button>
-      <button id="resources" class="menu-btn">Support Resources</button>
-    </div>
+<!-- Floating dropdown -->
+<div class="menu-dropdown" id="menuDropdown">
+  <button id="instructions" class="menu-btn">Instructions</button>
+  <button id="resources" class="menu-btn">Support Resources</button>
 </div>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const toggle = document.getElementById("menuToggle");
-    const dropdown = document.getElementById("menuDropdown");
 
-    toggle.addEventListener("click", () => {
-      dropdown.style.display =
-        dropdown.style.display === "block" ? "none" : "block";
-    });
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("menuToggle");
+  const dropdown = document.getElementById("menuDropdown");
+
+  // Toggle dropdown
+  toggle.addEventListener("click", (e) => {
+    e.stopPropagation(); // prevent document click from closing immediately
+    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+
+    // Position dropdown below button
+    const rect = toggle.getBoundingClientRect();
+    dropdown.style.top = rect.bottom + window.scrollY + 4 + "px"; // 4px gap
+    dropdown.style.left = rect.left + window.scrollX + "px";
   });
+
+  // Close if clicking outside
+  document.addEventListener("click", (e) => {
+    if (!dropdown.contains(e.target) && e.target !== toggle) {
+      dropdown.style.display = "none";
+    }
+  });
+});
 </script>
+
 
 
     </header>
