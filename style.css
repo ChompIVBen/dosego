@@ -227,6 +227,7 @@ input[type="date"]{
     flex-direction:column;
     align-items:flex-start;
         width:100%;
+  gap: 6px;
 
   }
 
@@ -269,9 +270,7 @@ input[type="date"]{
     padding:16px;
       margin-top: 6px;   /* was 28px */
   }
-header{
-  gap: 6px;
-}
+
 
   .topgrid{
     flex-direction:column;
