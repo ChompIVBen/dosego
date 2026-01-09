@@ -31,20 +31,27 @@
         <h1>dosego.org</h1>
       </div><br>
       <h1 style="font-size: 17px; color:rgba(255, 255, 255, 0.904)">Guest Dosing Itinerary Request Builder - MAT Travel</h1>
-  <button
-  id="instructions"
-  class="btn"
-  style="font-size:16px; padding:6px 10px; width:175px; height:auto; margin:auto; line-height:1.2; white-space:nowrap;"
->
-  Instructions
-</button>
-<button
-  id="resources"
-  class="btn"
-  style="font-size:16px; padding:6px 10px; width:175px; height:auto; margin:auto; line-height:1.2; white-space:nowrap;"
->
-  Support Resources
-</button>
+  <div class="menu-container">
+    <button class="menu-toggle" id="menuToggle">☰</button>
+
+    <div class="menu-dropdown" id="menuDropdown">
+      <button id="instructions" class="menu-btn">Instructions</button>
+      <button id="resources" class="menu-btn">Support Resources</button>
+    </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const toggle = document.getElementById("menuToggle");
+    const dropdown = document.getElementById("menuDropdown");
+
+    toggle.addEventListener("click", () => {
+      dropdown.style.display =
+        dropdown.style.display === "block" ? "none" : "block";
+    });
+  });
+</script>
+
 
     </header>
 
