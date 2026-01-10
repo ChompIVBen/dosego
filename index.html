@@ -49,20 +49,48 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const toggle = document.getElementById("menuToggle");
-  const dropdown = document.getElementById("menuDropdown");
+ // Toggle dropdown
+const dropdown = document.getElementById("menuDropdown");
 
-  // Toggle dropdown
-  toggle.addEventListener("click", (e) => {
-    e.stopPropagation(); // prevent document click from closing immediately
-    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+toggle.addEventListener("click", (e) => {
+  e.stopPropagation(); // prevent document click from closing immediately
 
-    // Position dropdown below button
-    const rect = toggle.getBoundingClientRect();
-    dropdown.style.top = rect.bottom + window.scrollY + 4 + "px"; // 4px gap
-    dropdown.style.left = rect.left + window.scrollX + "px";
-  });
+  if (dropdown.style.display === "block") {
+    dropdown.style.display = "none";
+  } else {
+    // Show dropdown first so we can measure
+    dropdown.style.display = "block";
 
-  // Close if clicking outside
+    // Wait a frame to ensure layout is updated
+    requestAnimationFrame(() => {
+      // 1️⃣ Anchor to button
+      const rect = toggle.getBoundingClientRect();
+      let top = rect.bottom + window.scrollY + 4; // 4px gap
+      let left = rect.left + window.scrollX;
+
+      const ddRect = dropdown.getBoundingClientRect();
+      const padding = 8;
+
+      // 2️⃣ Clamp horizontally
+      if (left + ddRect.width > window.innerWidth - padding) {
+        left = window.innerWidth - ddRect.width - padding;
+      }
+      if (left < padding) {
+        left = padding;
+      }
+
+      // 3️⃣ Clamp vertically (flip above button if needed)
+      if (top + ddRect.height > window.innerHeight) {
+        top = rect.top - ddRect.height - 4;
+      }
+
+      // Apply final position
+      dropdown.style.left = left + "px";
+      dropdown.style.top = top + "px";
+    });
+  }
+});
+
   document.addEventListener("click", (e) => {
     if (!dropdown.contains(e.target) && e.target !== toggle) {
       dropdown.style.display = "none";
