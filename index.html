@@ -2878,7 +2878,7 @@ function addToItinerary(clinicObj){
   if(!start || !end){ window.scrollTo({ top: 0, behavior: 'smooth' });alert('Pick start and end dates first.');flash2('Pick start and end dates first.'); return; }
   itinerary.push({ patientName: name, city: selectedCity, state: selectedState, start, end, clinic: clinicObj });
   updateInfoDisplay();
-  flash('Added to itinerary');
+  flash3('Added to itinerary');
   document.getElementById('cityInput').value=''; document.getElementById('topStartDate').value=''; document.getElementById('topEndDate').value='';
   document.getElementById('promotedSection').innerHTML=''; document.getElementById('results').innerHTML=''; document.getElementById('expandedClinic').style.display='none';
 document.getElementById('map').style.opacity='25%';
@@ -2924,7 +2924,9 @@ document.addEventListener('click', (e) => {
     emailModal.setAttribute('aria-hidden', 'false');
   }
 });
-
+function flash3(msg){
+  const el = document.createElement('div'); el.style.cssText='position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,#01963f,#17bd5c);color:white;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);font-weight:700;z-index:2000'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),1500);
+}
 function flash2(msg){
   const el = document.createElement('div'); el.style.cssText='position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,var(--accent-red2),#f10c04);color:white;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);font-weight:700;z-index:2000'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),1500);
 }
