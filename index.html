@@ -3180,7 +3180,7 @@ document.getElementById('closeModal').addEventListener('click', ()=> { emailModa
 document.getElementById('downloadPacket').addEventListener('click', ()=>{
     const text = buildGuestDosingText();
   const name = (document.getElementById('patientName').value||'').trim() || '';
-  downloadFile(`GuestDosingRequest-${name.replace(/\s+/g,'')}.txt`, text);
+  downloadFile(`GuestDosingRequest${name.replace(/\s+/g,'')}.txt`, text);
 });
 
 /* ---------- Clear button ---------- */
