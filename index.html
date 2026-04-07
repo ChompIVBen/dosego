@@ -2731,7 +2731,7 @@ function focusClinicCard(c) {
   toggleExpandCard(el);
   el.scrollIntoView({ behavior: 'smooth', block: 'center' });
   el.classList.add('highlight');
-  setTimeout(() => el.classList.remove('highlight'), 1500);
+  setTimeout(() => el.classList.remove('highlight'), 2000);
 }
 
 
@@ -2924,15 +2924,18 @@ document.addEventListener('click', (e) => {
     emailModal.setAttribute('aria-hidden', 'false');
   }
 });
+function flash4(msg){
+  const el = document.createElement('div'); el.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:20px;background:var(--accent-red);color:white;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);font-weight:700;z-index:2000'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),2000);
+}
 function flash3(msg){
-  const el = document.createElement('div'); el.style.cssText='position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,#01963f,#17bd5c);color:white;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);font-weight:700;z-index:2000'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),1500);
+  const el = document.createElement('div'); el.style.cssText='position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,#01963f,#17bd5c);color:white;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);font-weight:700;z-index:2000'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),2000);
 }
 function flash2(msg){
-  const el = document.createElement('div'); el.style.cssText='position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,var(--accent-red2),#f10c04);color:white;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);font-weight:700;z-index:2000'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),1500);
+  const el = document.createElement('div'); el.style.cssText='position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,var(--accent-red2),#f10c04);color:white;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);font-weight:700;z-index:2000'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),2000);
 }
 
 function flash(msg){
-  const el = document.createElement('div'); el.style.cssText='position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,var(--accent-blue),#0033aa);color:white;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);font-weight:700;z-index:2000'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),1400);
+  const el = document.createElement('div'); el.style.cssText='position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,var(--accent-blue),#0033aa);color:white;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);font-weight:700;z-index:2000'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),1800);
 }
 
 /* ---------- Date list generation ---------- */
@@ -3192,6 +3195,14 @@ document.getElementById('clearBtn').addEventListener('click', ()=>{
 window.location.href = window.location.href; // forces a full reload
 
 });
+
+  const input = document.getElementById('topEndDate');
+
+  input.addEventListener('change', function () {
+    if (input.value) { // ensures it's not empty
+      flash4('Results  ⬇');
+    }
+  });
 
 
 /* ---------- How-to button ---------- */
