@@ -32,7 +32,7 @@
         <h1>dosego.org</h1>
       </div><br>
 <h1 style="font-size: 17px; color:rgba(255, 255, 255, 0.904); display: inline;">
-  Guest Dosing Itinerary Request Builder - MAT Travel
+  Plan methadone-friendly travel in minutes—find clinics, prepare requests, and avoid delays or denial.
 </h1>
 <button class="menu-toggle" id="menuToggle">
   ☰
@@ -117,7 +117,7 @@ toggle.addEventListener("click", (e) => {
       <div class="autocomplete control" style="min-width:300px" onclick="this.querySelector('input').focus()"
 >
         <div style="display:flex;flex-direction:column;gap:6px;width:100%">
-          <span class="label small-muted">Destination <strong>(Re-Search for Multi-City)</strong></span>
+          <span class="label small-muted"><b>1 </b>Destination <strong>(Re-Search for Multi-City)</strong></span>
           <input style="width:100%; flex:1;" id="cityInput" type="text" placeholder="Start typing: e.g. Madison, WI" autocomplete="off" />
         </div>
       </div>
@@ -125,7 +125,7 @@ toggle.addEventListener("click", (e) => {
       <div class="control" style="min-width:170px" onclick="this.querySelector('input').focus()"
 >
         <div style="display:flex;flex-direction:column">
-          <span class="label small-muted">Date of First Dose At Clinic</span>
+        <span class="label small-muted"><b>2 </b>Date of First Dose At Clinic</span>
           <input style="width:100%; flex:1;" id="topStartDate" type="date">
         </div>
       </div>
@@ -133,7 +133,7 @@ toggle.addEventListener("click", (e) => {
       <div class="control" style="min-width:170px" onclick="this.querySelector('input').focus()"
 >
         <div style="display:flex;flex-direction:column">
-          <span class="label small-muted">Date of Final Dose At Clinic</span>
+          <span class="label small-muted"><b>3 </b>Date of Final Dose At Clinic</span>
           <input style="width:100%; flex:1;" id="topEndDate" type="date">
         </div>
       </div>
@@ -145,7 +145,7 @@ toggle.addEventListener("click", (e) => {
 
 <!-- Reverse Clinic Search Input -->
 <div style="position:relative; margin:12px 0;">
-  <input type="text" id="reverseClinicInput" placeholder="Optional: Search by Clinic Name..." style="width:100%; padding:8px; font-size:1rem; background:#e9eef6" autocomplete="off" />
+  <input type="text" id="reverseClinicInput" placeholder="Or: Search by Clinic Name..." style="width:100%; padding:8px; font-size:1rem; background:#e9eef6" autocomplete="off" />
   <div id="reverseClinicDropdown" class="dropdown" style="position:absolute; color:rgba(17, 17, 17, 0.842); top:100%; left:0; right:0; background:#e9eef6; border:1px solid #e9eef6; max-height:200px; overflow-y:auto; z-index:1000; display:none;"></div>
 </div>
 

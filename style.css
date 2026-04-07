@@ -21,7 +21,10 @@ html, body{
   -webkit-font-smoothing: antialiased;
 }
 
+b {
+    font-size:1.5rem;color:var(--accent-red);font-weight:700
 
+}
 /* Hamburger button inline */
 .menu-toggle {
   display: inline;
@@ -79,7 +82,7 @@ html, body{
   .control{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));border-radius:12px;padding:10px 12px;border:1px solid var(--glass);display:flex;align-items:center;gap:10px;min-width:150px}
   .control input[type="text"], .control input[type="date"]{background:transparent;border:0;outline:none;color:#e9eef6;font-size:15px;min-width:140px}
   .label{color:var(--muted);font-size:13px}
-  .btn{background:var(--accent-blue);color:white;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}
+  .btn{background:var(--accent-red);color:white;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}
   .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
   .btn:hover{filter:brightness(.95)}
   .info{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);color:var(--muted);margin-bottom:12px}
