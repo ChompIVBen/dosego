@@ -3179,8 +3179,8 @@ document.getElementById('closeModal').addEventListener('click', ()=> { emailModa
 // Download Button
 document.getElementById('downloadPacket').addEventListener('click', ()=>{
     const text = buildGuestDosingText();
-  const name = (document.getElementById('patientName').value||'').trim() || 'request';
-  downloadFile(`GuestDosingRequest-${name.replace(/\s+/g,'')}.txt`, text);
+  const name = (document.getElementById('patientName').value||'').trim() || '';
+  downloadFile(`GuestDosingRequest${name.replace(/\s+/g,'')}.txt`, text);
 });
 
 /* ---------- Clear button ---------- */
