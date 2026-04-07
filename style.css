@@ -210,7 +210,7 @@ html, body{
 }
 
 .map{
-  height: 350px; width: 75%; margin: 16px auto; opacity: 25%;
+  height: 350px; width: 75%; margin: 16px auto; opacity: 10%;
 }
 
 .control{
