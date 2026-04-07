@@ -151,8 +151,6 @@ toggle.addEventListener("click", (e) => {
 
 
       <div class="map" id="map"></div>      
-         <button id="clearBtn" class="btn ghost" style="width: 100px; margin:auto">Reset</button>
-
       <section id="promotedSection"></section>
       <section id="results"></section>
       <section id="expandedClinic" aria-live="polite"></section>
@@ -2901,7 +2899,18 @@ function updateInfoDisplay(){
     <button id="generateBtn" class="btn" style="margin-top:12px; background: #01963f">
       Generate Full Itinerary
     </button>
+             <button id="clearBtn" class="btn ghost" style="width: 100px; margin:auto">Reset</button>
+
   `;
+  /* ---------- Clear button ---------- */
+document.getElementById('clearBtn').addEventListener('click', ()=>{
+  if(!confirm('Clear itinerary and selections?')) return;
+  itinerary = []; selectedCity = null; selectedState = null;
+  document.getElementById('cityInput').value=''; document.getElementById('patientName').value=''; document.getElementById('topStartDate').value=''; document.getElementById('topEndDate').value='';
+  document.getElementById('promotedSection').innerHTML=''; document.getElementById('results').innerHTML=''; document.getElementById('expandedClinic').style.display='none';
+window.location.href = window.location.href; // forces a full reload
+
+});
 }
 
 /* ---------- Generate button (delegated) ---------- */
@@ -3186,15 +3195,7 @@ document.getElementById('downloadPacket').addEventListener('click', ()=>{
   downloadFile(`GuestDosingRequest${name.replace(/\s+/g,'')}.txt`, text);
 });
 
-/* ---------- Clear button ---------- */
-document.getElementById('clearBtn').addEventListener('click', ()=>{
-  if(!confirm('Clear itinerary and selections?')) return;
-  itinerary = []; selectedCity = null; selectedState = null;
-  document.getElementById('cityInput').value=''; document.getElementById('patientName').value=''; document.getElementById('topStartDate').value=''; document.getElementById('topEndDate').value='';
-  document.getElementById('promotedSection').innerHTML=''; document.getElementById('results').innerHTML=''; document.getElementById('expandedClinic').style.display='none';
-window.location.href = window.location.href; // forces a full reload
 
-});
 
   const input = document.getElementById('topEndDate');
 
