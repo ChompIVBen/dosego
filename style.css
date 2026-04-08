@@ -3,7 +3,7 @@
     --panel:#053746;
     --card:#0f1720;
     --muted:#9aa3ad;
-    --accent-blue:rgb(6, 90, 116);
+    --accent-blue:#8110cc; /*made the same*/
     --accent-red:#8110cc;
     --accent-red2:#cc1610;
     --promoted-gold:linear-gradient(90deg,#ffd86b,#f9a825);
@@ -14,7 +14,7 @@
 html, body{
   min-height: 100%;
   margin: 0;
-  background: linear-gradient(180deg, #0b4455 0%, var(--bg) 100%);
+  background: #272727; /*linear-gradient(180deg, #0b4455 0%, var(--bg) 100%);*/
   background-attachment: fixed;
   font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
   color: #e9eef6;
@@ -119,7 +119,7 @@ b {
 
   .actions{display:flex;gap:8px;margin-top:12px;align-items:center}
   .selectBtn{background:var(--accent-blue);color:white;padding:8px 12px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
-  .selectBtn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+  .selectBtn.secondary{background:transparent;border:1px solid rgba(255, 3, 3, 0.04);color:var(--muted);}
   /*this is now verified and green*/
   .promotedBadge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:700;margin-bottom:8px;background:var(--verified-green);color:#111}
   /* expanded area */

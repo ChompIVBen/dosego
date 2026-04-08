@@ -30,13 +30,13 @@
     <header>
       <div>
         <h1>dosego.org</h1>
-      </div><br>
+      </div>
+      <button class="menu-toggle" id="menuToggle">
+        ☰
+      </button>
 <h1 style="font-size: 17px; color:rgba(255, 255, 255, 0.904); display: inline;">
   Plan methadone-friendly travel in minutes—find clinics, prepare requests, and avoid delays or denial.
 </h1>
-<button class="menu-toggle" id="menuToggle">
-  ☰
-</button>
 
 <!-- Floating dropdown -->
 <div class="menu-dropdown" id="menuDropdown">
@@ -2474,7 +2474,7 @@ Maryhaven,"Maryhaven OTP","1791 Alum Creek Dr.",Columbus,OH,43207,"(614) 445-813
     bottom: 20px;
     right: 20px;
     z-index: 1000;
-    background-color: rgb(6, 90, 116);
+    background-color:#8110cc;
     color: white;
     border: none;
     border-radius: 50%;
@@ -2779,7 +2779,6 @@ card.style.borderColor = isPromoted ? '#01963f' : 'var(--glass)';
 
     <div class="actions">
       <button class="selectBtn addBtn">Add to Itinerary</button>
-      <button class="selectBtn secondary detailsBtn">Details</button>
     </div>
     <div class="expanded-area">
       <div class="expanded-row">
@@ -2831,8 +2830,8 @@ card.dataset.cardIdBase = cardIdBase;  // optional but useful
     toggleExpandCard(card);
   });
   // detailsBtn toggles
-  const detailsBtn = card.querySelector('.detailsBtn');
-  detailsBtn.addEventListener('click', (ev)=>{ ev.stopPropagation(); toggleExpandCard(card); });
+ // const detailsBtn = card.querySelector('.detailsBtn');
+  //detailsBtn.addEventListener('click', (ev)=>{ ev.stopPropagation(); toggleExpandCard(card); });
   // collapseBtn
   const collapseBtn = card.querySelector('.collapseBtn');
   if(collapseBtn) collapseBtn.addEventListener('click', (ev)=>{ ev.stopPropagation(); collapseAllCards(); });
