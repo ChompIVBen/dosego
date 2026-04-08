@@ -136,7 +136,7 @@ b {
   /* modal for email (simple) */
   .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:2000}
 .modal{
-  background: var(--panel);
+  background: #272727;
   padding: 10px;
   border-radius: 0;
   width: 100%;
