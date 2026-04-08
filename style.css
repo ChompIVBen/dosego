@@ -1,7 +1,7 @@
   :root{
-    --bg:#08101a;
-    --panel:#053746;
-    --card:#0f1720;
+    --bg:#272727;
+    --panel:#3b3b3b;
+    --card:rgb(31, 31, 31);
     --muted:#9aa3ad;
     --accent-blue:#8110cc; /*made the same*/
     --accent-red:#8110cc;
@@ -46,7 +46,7 @@ b {
   position: absolute;          /* floating */
   top: 36px;                   /* below button */
   left: 0;                     /* we'll set position via JS */
-  background: #053746;
+  background: #3b3b3b;
   padding: 10px;
   border-radius: 10px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
