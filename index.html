@@ -104,6 +104,7 @@ toggle.addEventListener("click", (e) => {
     </header>
 
     <div class="info">
+      <div>Guest dosing clinic itinerary builder: Enter travel details and add a clinic. Repeat for multi-city.</div>
     <!-- TOP INPUTS -->
     <div class="topgrid" aria-label="controls" style="padding-top: 12px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
       <div class="control" style="min-width:210px; display:none;" onclick="this.querySelector('input').focus()"
@@ -113,7 +114,6 @@ toggle.addEventListener("click", (e) => {
           <input style="width:100%; flex:1;" id="patientName" type="text" placeholder="Full name">
         </div>
       </div>
-
       <div class="autocomplete control" style="min-width:300px" onclick="this.querySelector('input').focus()"
 >
         <div style="display:flex;flex-direction:column;gap:6px;width:100%">
@@ -3209,7 +3209,7 @@ document.getElementById('downloadPacket').addEventListener('click', ()=>{
 
 
 document.getElementById('instructions').addEventListener('click', ()=>{
-  window.location.href = 'instructions.html';
+  window.location.href = 'howto.html';
 
 });
 
