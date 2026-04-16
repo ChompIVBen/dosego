@@ -29,8 +29,10 @@
   <div class="wrap">
     <header>
       <div>
-        <h1>dosego.org</h1>
-      </div>
+<h1 id="titleID" style="position: relative; z-index: 2147483647; cursor: pointer; pointer-events: auto; margin: 0;">
+  dosego.org
+</h1>
+</div>
       <button class="menu-toggle" id="menuToggle">
         ☰
       </button>
@@ -51,7 +53,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggle = document.getElementById("menuToggle");
  // Toggle dropdown
 const dropdown = document.getElementById("menuDropdown");
+/*  This is the clear/reset for the title  */
+document.getElementById('titleID').addEventListener('click', ()=>{
+  if(!confirm('Clear itinerary and selections?')) return;
+  itinerary = []; selectedCity = null; selectedState = null;
+  document.getElementById('cityInput').value=''; document.getElementById('patientName').value=''; document.getElementById('topStartDate').value=''; document.getElementById('topEndDate').value='';
+  document.getElementById('promotedSection').innerHTML=''; document.getElementById('results').innerHTML=''; document.getElementById('expandedClinic').style.display='none';
+window.location.href = window.location.href; // forces a full reload
 
+});
 toggle.addEventListener("click", (e) => {
   e.stopPropagation(); // prevent document click from closing immediately
 
@@ -2910,8 +2920,10 @@ document.getElementById('clearBtn').addEventListener('click', ()=>{
 window.location.href = window.location.href; // forces a full reload
 
 });
-}
 
+
+
+}
 /* ---------- Generate button (delegated) ---------- */
 document.addEventListener('click', (e) => {
 
