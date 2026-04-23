@@ -2897,7 +2897,7 @@ document.getElementById('map').style.opacity='10%';
 /* ---------- Info update ---------- */
 function updateInfoDisplay(){
   const el = document.getElementById('infoDisplay');
-  if(itinerary.length === 0){ el.textContent = ''; return; }
+//  if(itinerary.length === 0){ el.textContent = ''; return; }
   const rows = itinerary.map((it, i)=> `${i+1}) ${it.city}, ${it.state} — ${it.clinic.DBA ? '' + it.clinic.DBA + ', ' : ''}${it.clinic['Program Name'] || it.clinic.ClinicName || ''} — ${new Date(it.start.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })} → ${new Date(it.end.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })}`);
 
   el.innerHTML = `
