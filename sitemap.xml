@@ -6,22 +6,12 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://dosego.org/howto</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://dosego.org/mission</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://dosego.org/resources</loc>
+    <loc>https://dosego.org/promoted-clinics</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
     <url>
-    <loc>https://dosego.org/instructions</loc>
+    <loc>https://dosego.org/resources</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
