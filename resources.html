@@ -93,17 +93,26 @@
       white-space: nowrap;
     }
 
-    .mark {
-      width: 34px;
-      height: 34px;
-      flex-shrink: 0;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--brand), #19a3d8);
-      display: grid;
-      place-items: center;
-      color: #fff;
-      font-weight: 800;
-    }
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.logo-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
 
     .nav-links {
       display: flex;
@@ -482,11 +491,10 @@ header .wrap {
   <header>
     <div class="wrap">
       <nav class="nav" aria-label="Main navigation">
-        <a class="logo" href="index.html">
-          <span class="mark" aria-hidden="true">D</span>
-          <span>dosego.org</span>
-        </a>
-
+<div class="logo">
+  <img src="icon.jpg" alt="" class="logo-icon">
+  dosego.org
+</div>
         <div class="nav-links">
           <a href="index.html">Back to guest dosing</a>
         </div>

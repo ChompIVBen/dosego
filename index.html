@@ -25,8 +25,26 @@ a{color:var(--brand)}
 header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .nav{display:flex;align-items:center;justify-content:space-between;height:66px}
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.02em}
-.mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--brand),#19a3d8);display:grid;place-items:center;color:#fff;font-weight:800}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  margin: 0;
+}
 
+.logo-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
 /* Header navigation */
 
 .nav-links {
@@ -331,8 +349,10 @@ header .wrap {
 
 <header>
   <div class="wrap nav">
-    <div class="logo"><div class="mark">D</div>dosego.org</div>
-    <nav class="nav-links">
+<div class="logo">
+  <img src="icon.jpg" alt="" class="logo-icon">
+  dosego.org
+</div>    <nav class="nav-links">
       <a href="#how">How it works</a>
       <a href="#faq">FAQ</a>
 <a href="resources.html">Support Resources</a>
