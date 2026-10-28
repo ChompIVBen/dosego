@@ -571,14 +571,60 @@ function showCitySuggestions(stopIndex, query) {
   // madison, wi
   // madison,wi
   // madison
-  const cleaned = raw.replace(/\s*,\s*/g, ',').toLowerCase();
-  const tokens = cleaned.split(/[\s,]+/).filter(Boolean);
+  const cleaned = raw.replace(/\s*,\s*/g, ' ').trim().toLowerCase();
 
-  let cityQuery = tokens[0] || '';
+  const stateNames = {
+    'alabama': 'AL', 'alaska': 'AK', 'arizona': 'AZ',
+    'arkansas': 'AR', 'california': 'CA', 'colorado': 'CO',
+    'connecticut': 'CT', 'delaware': 'DE', 'florida': 'FL',
+    'georgia': 'GA', 'hawaii': 'HI', 'idaho': 'ID',
+    'illinois': 'IL', 'indiana': 'IN', 'iowa': 'IA',
+    'kansas': 'KS', 'kentucky': 'KY', 'louisiana': 'LA',
+    'maine': 'ME', 'maryland': 'MD', 'massachusetts': 'MA',
+    'michigan': 'MI', 'minnesota': 'MN', 'mississippi': 'MS',
+    'missouri': 'MO', 'montana': 'MT', 'nebraska': 'NE',
+    'nevada': 'NV', 'new hampshire': 'NH', 'new jersey': 'NJ',
+    'new mexico': 'NM', 'new york': 'NY',
+    'north carolina': 'NC', 'north dakota': 'ND',
+    'ohio': 'OH', 'oklahoma': 'OK', 'oregon': 'OR',
+    'pennsylvania': 'PA', 'rhode island': 'RI',
+    'south carolina': 'SC', 'south dakota': 'SD',
+    'tennessee': 'TN', 'texas': 'TX', 'utah': 'UT',
+    'vermont': 'VT', 'virginia': 'VA', 'washington': 'WA',
+    'west virginia': 'WV', 'wisconsin': 'WI', 'wyoming': 'WY',
+    'district of columbia': 'DC'
+  };
+
+  let cityQuery = cleaned;
   let stateQuery = '';
 
-  if (tokens.length >= 2 && tokens[tokens.length - 1].length === 2) {
-    stateQuery = tokens[tokens.length - 1].toUpperCase();
+  // Match full state names first, including names with spaces.
+    // Match full or partial state names and abbreviations.
+  const stateNamesSorted = Object.keys(stateNames)
+    .sort((a, b) => b.length - a.length);
+
+  const tokens = cleaned.split(/\s+/).filter(Boolean);
+  const last = tokens[tokens.length - 1] || '';
+
+  // Try matching the end of the input against a state name.
+  for (const name of stateNamesSorted) {
+    const parts = name.split(' ');
+    const suffix = tokens.slice(-parts.length).join(' ');
+
+    if (
+      suffix.length >= 0 &&
+      name.startsWith(suffix) &&
+      tokens.length > parts.length - 1
+    ) {
+      stateQuery = stateNames[name];
+      cityQuery = tokens.slice(0, -parts.length).join(' ');
+      break;
+    }
+  }
+
+  // If no state name matched, try a two-letter abbreviation.
+  if (!stateQuery && last.length === 2) {
+    stateQuery = last.toUpperCase();
     cityQuery = tokens.slice(0, -1).join(' ');
   }
 
