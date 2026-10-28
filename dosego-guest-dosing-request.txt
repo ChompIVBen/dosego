@@ -1,0 +1,29 @@
+Guest Dosing Request — Benjamin Grande
+
+Itinerary:
+---
+City: Madison, WI
+Requested dates: Oct 30, 2026 to Oct 31, 2026
+Clinic: Madison East Comprehensive Treatment Center
+Program: Milwaukee Health Services System, LLC
+Address: 5109 World Dairy Dr., Madison, WI, 53718
+Phone: (608) 242-0220
+
+---
+City: Minneapolis, MN
+Requested dates: Nov 2, 2026 to Nov 18, 2026
+Clinic: Addiction Recovery Services Opiate Treatment Program
+Program: Minneapolis VA Health Care System Opiate Treatment Program
+Address: One Veterans Dr., Outpatient Methadone Progr. 116-A, Minneapolis, MN, 55417
+Phone: (612) 467-2228
+
+---
+City: Nashville, TN
+Requested dates: Nov 19, 2026 to Dec 25, 2026
+Clinic: Hermitage Comprehensive Treatment Center
+Program: Middle Tennessee Treatment Centers, LLC
+Address: 589 Stewarts Ferry Pike, Nashville, TN, 37214
+Phone: (629) 255-0516
+
+---
+This request was prepared using dosego.org. Please confirm guest-dosing availability, required records, dosing times, and any fees directly with the clinic and the home treatment program. Selection does not guarantee acceptance.

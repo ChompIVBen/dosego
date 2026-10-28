@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Promoted Clinics | dosego.org</title>
+<meta name="description" content="Become a Promoted Clinic on dosego.org. Reach more guest dosers with priority placement, enhanced clinic details, and a Promoted badge.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f8fb; --panel:#fff; --ink:#0f172a; --muted:#5b6676;
+  --line:#e3e8ef; --brand:#0b6bcb; --brand-dark:#084f99;
+  --ok:#0f7b55; --warn:#a15c00; --bad:#b42318; --radius:16px;
+  --gold:#8a6a1f; --gold-bg:#fff8e2; --gold-line:#eedb9f;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+a{color:var(--brand)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.02em;text-decoration:none;color:var(--ink)}
+.mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--brand),#19a3d8);display:grid;place-items:center;color:#fff;font-weight:800}
+.nav-links{display:flex;gap:22px;align-items:center;color:var(--muted);font-size:14px;font-weight:500}
+.nav-links a{text-decoration:none;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;font:inherit;font-weight:650;border-radius:12px;padding:12px 18px;text-decoration:none;transition:.15s}
+.btn-primary{background:var(--brand);color:#fff}
+.btn-primary:hover{background:var(--brand-dark)}
+.btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:#c8d2df}
+.btn-sm{padding:8px 12px;font-size:14px;border-radius:10px}
+.hero{padding:64px 0 44px;background:
+  radial-gradient(900px 420px at 82% -10%, #dceeff 0%, transparent 60%),
+  radial-gradient(700px 380px at 0% 0%, #fff4d6 0%, transparent 55%)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff4d6;color:#7a5a1d;border:1px solid var(--gold-line);padding:6px 12px;border-radius:999px;font-size:13px;font-weight:650}
+h1{font-size:clamp(34px,5.2vw,58px);line-height:1.05;letter-spacing:-.035em;margin:18px 0 14px;max-width:780px}
+.sub{font-size:18px;color:var(--muted);max-width:680px;margin:0 0 26px}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:start}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 30px rgba(15,23,42,.06)}
+.badge{font-size:11px;font-weight:700;padding:4px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:6px}
+.badge.ok{background:#e5f5ec;color:var(--ok)}
+.badge.promoted{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-line)}
+.section{padding:56px 0}
+.section-head{max-width:700px;margin-bottom:26px}
+.section-head h2{font-size:clamp(26px,3.4vw,36px);letter-spacing:-.03em;margin:0 0 10px}
+.section-head p{color:var(--muted);margin:0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tile{padding:22px}
+.tile h3{margin:0 0 6px;font-size:17px}
+.tile p{margin:0;color:var(--muted);font-size:14px}
+.tier-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}
+.tier{padding:26px}
+.tier h3{margin:0 0 8px;font-size:24px}
+.tier p{margin:0 0 16px;color:var(--muted);font-size:15px}
+.tier ul{margin:0 0 22px;padding-left:20px;color:#334155;font-size:15px}
+.tier li{margin:8px 0}
+.tier-label{font-size:12px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tier.promoted{border:1px solid var(--gold-line);background:linear-gradient(180deg,#fffdf5 0%,#fff 60%);box-shadow:0 16px 42px rgba(15,23,42,.08)}
+.price{font-size:28px;font-weight:800;margin-bottom:4px}
+.price small{display:block;font-size:14px;font-weight:500;color:var(--muted)}
+.demo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.demo{padding:16px}
+.map-preview{height:130px;border-radius:12px;background:
+  linear-gradient(135deg,#e2e9f0 25%,transparent 25%) -20px 0,
+  linear-gradient(225deg,#e2e9f0 25%,transparent 25%) -20px 0,
+  linear-gradient(315deg,#e2e9f0 25%,transparent 25%),
+  linear-gradient(45deg,#e2e9f0 25%,transparent 25%);
+  background-size:40px 40px;position:relative;overflow:hidden;border:1px solid var(--line)}
+.pin{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:700;box-shadow:0 6px 18px rgba(15,23,42,.14);display:flex;align-items:center;gap:7px;white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--brand)}
+.dot.promoted{background:var(--gold)}
+.demo-label{margin-top:12px;font-size:13px;color:var(--muted);text-align:center}
+.cta-band{background:var(--ink);color:#fff;border-radius:22px;padding:40px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.cta-band h2{margin:0 0 8px;letter-spacing:-.02em}
+.cta-band p{margin:0;color:#c9d6d2;max-width:600px}
+.faq{max-width:780px}
+details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:12px}
+summary{font-weight:650;cursor:pointer}
+details p{color:var(--muted);margin:12px 0 0;font-size:14.5px}
+footer{border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:13px;background:#fff}
+.footer-grid{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+@media(max-width:900px){
+  .hero-grid,.tier-grid,.grid,.demo-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .hero{padding:42px 0 30px}
+  .cta-band{padding:28px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="/"><div class="mark">D</div>dosego.org</a>
+    <nav class="nav-links">
+      <a href="/">Back to guest dosing</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">For opioid treatment programs</span>
+        <h1>Help traveling patients find your clinic first.</h1>
+        <p class="sub">
+          dosego.org helps guest dosers organize treatment continuity before they travel. Certified clinics are
+          verified on dosego.org. Promoted Clinics receive priority visibility, a richer profile, and a clear
+          Promoted badge.
+        </p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn btn-primary" href="#apply">Apply for Promoted</a>
+          <a class="btn btn-ghost" href="#included">See what’s included</a>
+        </div>
+        <div style="display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-top:22px">
+          <span>✔ Installment-based participation</span>
+          <span>✔ Priority clinic placement</span>
+          <span>✔ Promoted map badge</span>
+          <span>✔ Supports dosego.org’s continued operation</span>
+        </div>
+      </div>
+
+      <div class="card" style="padding:22px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <strong>How travelers see it</strong>
+          <span class="badge promoted">★ Promoted</span>
+        </div>
+
+        <div class="map-preview" style="margin-bottom:14px">
+          <div class="pin"><span class="dot promoted"></span> Riverside Treatment Center</div>
+        </div>
+
+        <div class="card" style="box-shadow:none;padding:14px;margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
+            <div>
+              <div style="font-weight:700">1. Riverside Treatment Center</div>
+              <div style="font-size:13px;color:var(--muted)">Priority placement · Promoted</div>
+            </div>
+            <span class="badge promoted">★ Promoted</span>
+          </div>
+        </div>
+
+        <div class="card" style="box-shadow:none;padding:14px">
+          <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
+            <div>
+              <div style="font-weight:700">2. Community Health Clinic</div>
+              <div style="font-size:13px;color:var(--muted)">Certified listing</div>
+            </div>
+            <span class="badge ok">Certified</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="included">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Certified verifies. Promoted amplifies.</h2>
+        <p>Both statuses support traveler confidence. Promoted adds the visibility tools that help guest dosers discover and contact your clinic.</p>
+      </div>
+
+      <div class="tier-grid">
+        <article class="card tier">
+          <div class="tier-label">Included</div>
+          <h3>Certified Clinic</h3>
+          <p>Confirms that your program is verified and listed on dosego.org.</p>
+          <ul>
+            <li>Verified clinic listing</li>
+            <li>Core location, phone, and program details</li>
+            <li>Certified status shown on the clinic profile</li>
+            <li>Eligible to appear in guest-doser searches</li>
+          </ul>
+          <span class="badge ok">✓ Certified</span>
+        </article>
+
+        <article class="card tier promoted">
+          <div class="tier-label">Paid upgrade</div>
+          <h3>Promoted Clinic</h3>
+          <p>For clinics that want greater visibility among guest dosers planning treatment away from home.</p>
+          <ul>
+            <li>Priority placement in relevant clinic lists</li>
+            <li>Top positioning in eligible map results</li>
+            <li>Distinctive Promoted badge on map and profile</li>
+            <li>Expanded clinic details, services, hours, and languages</li>
+            <li>Direct booking or inquiry link</li>
+            <li>Helps keep dosego.org available for travelers and clinics</li>
+          </ul>
+          <div class="price">Installment-based <small>Transparent monthly participation</small></div>
+          <a class="btn btn-primary" href="#apply">Request program details</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Clear visibility, without clutter</h2>
+        <p>The Promoted badge is designed to be recognizable while preserving a calm, trustworthy map experience.</p>
+      </div>
+
+      <div class="demo-grid">
+        <div class="card demo">
+          <div class="map-preview">
+            <div class="pin"><span class="dot promoted"></span> Riverside Treatment Center</div>
+          </div>
+          <div class="demo-label">Map pin with Promoted indicator</div>
+        </div>
+
+        <div class="card demo">
+          <div class="map-preview">
+            <div class="pin"><span class="badge promoted">★ Promoted</span></div>
+          </div>
+          <div class="demo-label">Compact Promoted badge</div>
+        </div>
+
+        <div class="card demo">
+          <div class="map-preview">
+            <div class="pin">1. Riverside Treatment Center</div>
+          </div>
+          <div class="demo-label">Priority placement in results</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Why clinics choose Promoted</h2>
+        <p>Traveling patients often need to make arrangements quickly. Promoted helps your clinic appear earlier in that decision.</p>
+      </div>
+
+      <div class="grid">
+        <div class="card tile">
+          <h3>More qualified exposure</h3>
+          <p>Appear above standard listings when guest dosers search in your service area.</p>
+        </div>
+        <div class="card tile">
+          <h3>A complete first impression</h3>
+          <p>Show services, languages, hours, and contact options before a traveler calls.</p>
+        </div>
+        <div class="card tile">
+          <h3>Sustainable platform support</h3>
+          <p>Promoted participation helps fund and maintain dosego.org as an independent planning resource.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="apply" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta-band">
+        <div>
+          <h2>Become a Promoted Clinic</h2>
+          <p>Tell us about your clinic. We’ll send eligibility information, availability in your area, and current installment options.</p>
+        </div>
+        <a class="btn btn-primary" href="mailto:dosego.org@gmail.com?subject=Promoted%20Clinic%20Application">Apply now</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap faq">
+      <div class="section-head"><h2>Questions clinics ask</h2></div>
+
+      <details>
+        <summary>What does Certified mean?</summary>
+        <p>Certified means dosego.org has verified that the clinic is present and listed on the platform. It is not a paid placement.</p>
+      </details>
+
+      <details>
+        <summary>What does Promoted change?</summary>
+        <p>Promoted adds priority visibility, expanded profile content, and a Promoted badge across eligible map and list views.</p>
+      </details>
+
+      <details>
+        <summary>How does payment work?</summary>
+        <p>Promoted participation is offered through a transparent installment plan. We confirm available terms for your location during onboarding.</p>
+      </details>
+
+      <details>
+        <summary>Does Promoted affect medical care or certification?</summary>
+        <p>No. Promoted is a visibility program. Clinical suitability, licensing, and treatment decisions remain between the traveler and the clinic.</p>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div><strong>dosego.org</strong><br>Travel continuity planning for medication-assisted treatment.<br>dosego.org does not provide medical advice.</div>
+    <div>Clinic data is informational and may change. Always verify directly with the clinic.<br>© <span id="year"></span> dosego.org</div>
+    <div><b>Contact:</b> dosego.org@gmail.com</div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
