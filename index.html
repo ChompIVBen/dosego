@@ -343,6 +343,32 @@ header .wrap {
     display: none !important;
   }
 }
+
+/* Fix date inputs overflowing their stop cards on mobile */
+.stop,
+.stop .fields,
+.stop .fields > div,
+.stop .city-autocomplete {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.stop input,
+.stop select {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.stop input[type="date"] {
+  display: block;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
 </style>
 </head>
 <body>
@@ -441,7 +467,7 @@ header .wrap {
             <div id="activeCityDates" style="font-size:13px;color:var(--muted)"></div>
           </div>
           <div style="display:flex;gap:8px">
-            <input id="clinicSearch" placeholder="Search clinic or ZIP" oninput="renderClinics()" style="max-width:220px; display: none">
+            <input id="clinicSearch" placeholder="Search clinic" oninput="renderClinics()" style="max-width:220px; display: none">
           </div>
         </div>
         <div id="map"></div>
@@ -707,7 +733,7 @@ function renderStops(){
      </div>
      <div class="fields">
 <div class="city-autocomplete">
-  <label for="city-${i}">City, State or ZIP</label>
+  <label for="city-${i}">City, State</label>
   <input
     id="city-${i}"
     value="${esc(s.city)}"
@@ -724,7 +750,7 @@ function renderStops(){
 }
 function buildPlan(){
   const clean=stops.filter(s=>s.city.trim());
-  if(!clean.length){toast('Add at least one city or ZIP.');return;}
+  if(!clean.length){toast('Add at least one city.');return;}
   for(const s of clean){
     if(s.first && s.last && s.last < s.first){toast('A final dose date cannot be before its first dose date.');return;}
   }
