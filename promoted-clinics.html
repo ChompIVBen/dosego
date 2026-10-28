@@ -17,14 +17,17 @@
     --ink: #172033;
     --muted: #626d7d;
     --line: #e4e7ec;
-    --brand: #b8860b;
-    --brand-dark: #8c6508;
-    --gold: #d4a72c;
-    --gold-light: #fff7df;
-    --gold-line: #ead49a;
-    --ok: #147750;
+--brand: #15803d;
+--brand-dark: #166534;
+--gold: #22c55e;
+--gold-light: #f0fdf4;
+--gold-line: #86efac;
+--ok: #15803d;
     --radius: 16px;
     --shadow: 0 8px 28px rgba(23, 32, 51, .055);
+    
+
+
   }
 
   * {
@@ -211,9 +214,9 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: var(--gold-light);
-    color: #79580a;
-    border: 1px solid var(--gold-line);
+    background: #fef7e5;
+    color: #917023;
+    border: 1px #e4d29b;
     padding: 6px 12px;
     border-radius: 999px;
     font-size: 12px;
@@ -308,40 +311,41 @@
     line-height: 1.4;
   }
 
-  .badge.ok {
-    color: #116444;
-    background: #e8f6ef;
-    border: 1px solid #c8e8d6;
-  }
 
-  .badge.promoted {
-    position: relative;
-    overflow: hidden;
-    color: #775208;
-    background: linear-gradient(110deg, #fff8df, #f4dfa0 48%, #fff4ce);
-    border: 1px solid #d9b85d;
-    box-shadow: 0 2px 8px rgba(184, 134, 11, .09);
-  }
+.badge.ok {
+  color: #166534;
+  background: #dcfce7;
+  border: 1px solid #86efac;
+}
 
-  /* Subtle golden glint on Promoted badges */
+.badge.promoted {
+  position: relative;
+  overflow: hidden;
+  color: #166534;
+  background: linear-gradient(110deg, #f0fdf4, #bbf7d0 48%, #dcfce7);
+  border: 1px solid #86efac;
+  box-shadow: 0 2px 8px rgba(22, 101, 52, .09);
+}
 
-  .badge.promoted::after {
-    content: "";
-    position: absolute;
-    top: -30%;
-    bottom: -30%;
-    left: -65%;
-    width: 32%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, .9),
-      transparent
-    );
-    transform: skewX(-22deg);
-    animation: gold-glint 5s ease-in-out infinite;
-    pointer-events: none;
-  }
+/* Subtle green badge glint */
+.badge.promoted::after {
+  content: "";
+  position: absolute;
+  top: -30%;
+  bottom: -30%;
+  left: -65%;
+  width: 32%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, .9),
+    transparent
+  );
+  transform: skewX(-22deg);
+  animation: gold-glint 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
 
   @keyframes gold-glint {
     0%, 72% {
@@ -435,10 +439,10 @@
     width: 100%;
     padding: 14px 16px;
     margin: 0 0 18px;
-    border: 1px solid var(--gold-line);
+    border: 1px solid #ca321a;
     border-radius: 12px;
-    background: var(--gold-light);
-    color: #79580a;
+    background:  #3d1f1a;
+    color: #de9f0d;
     font-weight: 800;
     font-size: 16px;
   }
@@ -489,23 +493,31 @@
     text-align: center;
   }
 
-  .dot {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background: #8c9aab;
-  }
+.dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  flex-shrink: 0;
+  border-radius: 0;
+  background: none;
+  color: #15803d;
+  font-size: 19px;
+  line-height: 1;
+}
 
-  .dot.promoted {
-    background: #c29319;
-    box-shadow: 0 0 0 4px rgba(212, 167, 44, .18);
-  }
+.dot::before {
+  content: "★";
+}
 
-  .dot.ok {
-    background: var(--ok);
-  }
+.dot.promoted,
+.dot.ok {
+  background: none;
+  color: #15803d;
+  box-shadow: none;
+}
+
 
   /* Three feature demonstrations */
 
@@ -1025,7 +1037,7 @@
           <div class="map-preview">
             <div class="pin"><span class="badge promoted">★ Promoted</span></div>
           </div>
-          <div class="demo-label">Compact Promoted badge</div>
+          <div class="demo-label">Promoted badge</div>
         </div>
 
         <div class="card demo">
