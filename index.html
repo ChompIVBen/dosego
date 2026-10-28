@@ -612,7 +612,7 @@ function showCitySuggestions(stopIndex, query) {
     const suffix = tokens.slice(-parts.length).join(' ');
 
     if (
-      suffix.length >= 0 &&
+      suffix.length >= 1 &&
       name.startsWith(suffix) &&
       tokens.length > parts.length - 1
     ) {
@@ -875,6 +875,7 @@ function focusMap(){
   const pts=clinics.filter(clinicMatches).map(c=>[parseFloat(c.latitude),parseFloat(c.longitude)]).filter(p=>Number.isFinite(p[0])&&Number.isFinite(p[1]));
   if(pts.length)map.fitBounds(pts,{padding:[40,40],maxZoom:13});
 }
+
 function drawMarkers(list){
   if(!markerLayer)return;
 
@@ -912,19 +913,34 @@ function drawMarkers(list){
     }
 
     const marker=L.marker([lat,lng],markerOptions).addTo(markerLayer);
+    const idx=clinics.indexOf(c);
+    const chosen=selected[activeStop]?.key===c.key;
 
     marker.bindPopup(`
-      <strong>${esc(c.title||'Clinic')}</strong>
-      ${c.promoted?'<br><span style="color:#0f7b55;font-weight:700">★ Promoted</span>':''}
-      ${c.program&&c.program!==c.title?`<br>${esc(c.program)}`:''}
-<br>${
-  c.address
-    ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${c.title||''} ${c.address}`)}" target="_blank" rel="noopener noreferrer">${esc(c.address)}</a>`
-    : 'Address not listed'
-}   ${c.phone?`<br><a href="tel:${esc(c.phone.replace(/[^0-9+]/g,''))}">${esc(c.phone)}</a>`:''}
+      <div style="min-width:180px;max-width:260px">
+        <strong>${esc(c.title||'Clinic')}</strong>
+        ${c.promoted?'<br><span style="color:#0f7b55;font-weight:700">★ Promoted</span>':''}
+        ${c.status?`<br><span>${esc(c.status)}</span>`:'<br><span>Status unknown</span>'}
+        ${c.program&&c.program!==c.title?`<br><span>${esc(c.program)}</span>`:''}
+        <br>
+        ${
+          c.address
+            ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${c.title||''} ${c.address}`)}" target="_blank" rel="noopener noreferrer">${esc(c.address)}</a>`
+            : 'Address not listed'
+        }
+        ${c.phone?`<br><a href="tel:${esc(c.phone.replace(/[^0-9+]/g,''))}">${esc(c.phone)}</a>`:''}
+        <div style="margin-top:10px">
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            style="width:100%;white-space:nowrap"
+            onclick="chooseClinic(${idx})"
+          >${chosen?'✓ Selected':'Select this clinic'}</button>
+        </div>
+      </div>
     `);
 
-    if(selected[activeStop]?.key===c.key){
+    if(chosen){
       marker.openPopup();
     }
   });
@@ -933,6 +949,7 @@ function drawMarkers(list){
     map.setView(pts[0],13);
   }
 }
+
 function exportItinerary(){
   const rows=[['City / ZIP','First dose','Final dose','Clinic','Program Name','Address','Phone','Certification','Promoted']];
   stops.forEach((s,i)=>{const c=selected[i]||{};rows.push([s.city,s.first,s.last,c.title||'',c.program||'',c.address||'',c.phone||'',c.status||'',c.promoted?'Yes':'No']);});
