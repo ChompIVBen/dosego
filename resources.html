@@ -15,8 +15,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;750;800&display=swap" rel="stylesheet">
 
-  <link href="style.css" rel="stylesheet">
-
   <style>
     :root {
       --bg: #f6f8fb;
@@ -400,6 +398,73 @@
         transition: none;
       }
     }
+    /* Header: restore original desktop spacing */
+header .wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 66px;
+  min-height: 0;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 20px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.logo {
+  flex-shrink: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 22px;
+  min-width: 0;
+}
+
+/* Mobile only */
+@media (max-width: 480px) {
+  header .wrap {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .nav {
+    height: auto;
+    min-height: 66px;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .logo {
+    align-self: flex-start;
+    font-size: 20px;
+  }
+
+  .nav-links {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px 16px;
+    font-size: 13px;
+  }
+}
   </style>
 </head>
 
@@ -408,7 +473,7 @@
     <div class="wrap">
       <nav class="nav" aria-label="Main navigation">
         <a class="logo" href="index.html">
-          <span class="mark" aria-hidden="true">d</span>
+          <span class="mark" aria-hidden="true">D</span>
           <span>dosego.org</span>
         </a>
 
@@ -517,24 +582,15 @@
     </section>
   </main>
 
-  <footer>
-    <div class="wrap">
-      <div class="footer-grid">
-        <div>
-          <strong>dosego.org</strong>
-          <p>© 2026 All rights reserved. Patent pending.</p>
-          <p>dosego.org does not provide medical advice.</p>
-        </div>
-
-        <div class="footer-links">
-          <a href="mailto:dosego.org@gmail.com">
-            Contact: dosego.org@gmail.com
-          </a>
-          <a href="index.html">Back to home</a>
-        </div>
-      </div>
-    </div>
-  </footer>
+<footer>
+  <div class="wrap footer-grid">
+    <div><strong>dosego.org</strong><br>Travel continuity planning for medication-assisted treatment.<br>dosego.org does not provide medical advice.</div>
+    <div>Clinic data is informational and may change. Always verify directly with the clinic.<br>© <span id="year"></span> dosego.org</div>
+    <div><b>Contact:</b> dosego.org@gmail.com       </div>
+    <div><b>Clinic Inquiries: </b><a href="promoted-clinics.html">For Clinics</a>
+</div>
+  </div>
+</footer>
 
   <button
     id="backToTop"

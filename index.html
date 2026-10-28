@@ -237,7 +237,73 @@ footer{border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-s
 .fields > .city-autocomplete {
   grid-column: 1 / -1;
 }
+/* Header: restore original desktop spacing */
+header .wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
 
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 66px;
+  min-height: 0;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 20px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.logo {
+  flex-shrink: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 22px;
+  min-width: 0;
+}
+
+/* Mobile only */
+@media (max-width: 480px) {
+  header .wrap {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .nav {
+    height: auto;
+    min-height: 66px;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .logo {
+    align-self: flex-start;
+    font-size: 20px;
+  }
+
+  .nav-links {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px 16px;
+    font-size: 13px;
+  }
+}
 </style>
 </head>
 <body>
