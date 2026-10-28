@@ -962,7 +962,7 @@ function downloadFile(content,name,type){
   a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 function buildRequestText(){
-  const name=(el('patientName')?.value||'').trim()||'(Patient Name)';
+  const name=(el('patientName')?.value||'').trim()||'(Patient Name and Contact Info)';
   let out=`Guest Dosing Request — ${name}\n\nItinerary:\n`;
   stops.forEach((s,i)=>{
     const c=selected[i]||{};
