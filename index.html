@@ -369,6 +369,26 @@ header .wrap {
   padding-right: 8px;
 }
 
+/* Make date inputs align evenly inside stop cards */
+.stop input[type="date"] {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 11px 12px;
+  margin: 0;
+  text-align: left;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Keep the calendar icon inside the right edge */
+.stop input[type="date"]::-webkit-calendar-picker-indicator {
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
 </style>
 </head>
 <body>
