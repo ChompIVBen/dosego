@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://dosego.org</loc>
+    <loc>https://dosego.org/</loc>
   </url>
   <url>
-    <loc>https://dosego.org/resources</loc>
+    <loc>https://dosego.org/resources/</loc>
   </url>
   <url>
-    <loc>https://dosego.org/clinics</loc>
+    <loc>https://dosego.org/clinics/</loc>
   </url>
 </urlset>
