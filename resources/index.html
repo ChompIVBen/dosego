@@ -319,32 +319,7 @@
       color: var(--brand);
     }
 
-    .back-to-top {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 1000;
-      width: 44px;
-      height: 44px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      border-radius: 50%;
-      background: var(--brand);
-      color: #fff;
-      font-size: 22px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, .2);
-    }
-
-    .back-to-top:hover {
-      background: var(--brand-dark);
-    }
-
-    .back-to-top.show {
-      display: flex;
-    }
+  
 
     @media (max-width: 900px) {
       .nav {
@@ -392,10 +367,6 @@
         padding: 19px;
       }
 
-      .back-to-top {
-        right: 14px;
-        bottom: 14px;
-      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -609,15 +580,6 @@ header .wrap {
 </div>
   </div>
 </footer>
-
-  <button
-    id="backToTop"
-    class="back-to-top"
-    type="button"
-    title="Back to top"
-    aria-label="Back to top">
-    ↑
-  </button>
 </script>
 </body>
 </html>
