@@ -1,3 +1,3 @@
 https://findtreatment.gov/locator
 
-//this site is the other itinerary builder
+//this site is the other clinic searcher, its great, but no itinerary builder, that's dosego.org's niche
