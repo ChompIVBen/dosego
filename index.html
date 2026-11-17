@@ -155,7 +155,9 @@
   <div class="card" role="dialog" aria-modal="true" aria-labelledby="requestTitle"  style="width:96vw; max-width:1400px; height:90vh; max-height:95vh; overflow:auto; padding:30px">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 id="requestTitle" style="margin:0">Guest dosing request</h2><button id="requestClose" class="btn btn-ghost btn-sm" type="button">Close</button></div>
     <p style="color:var(--muted);font-size:14px">Review, copy, or download this draft. It does not send a request automatically.</p>
-<textarea id="requestText" readonly style="width:100%;height:calc(90vh - 220px);min-height:400px;padding:12px;box-sizing:border-box;border:1px solid var(--line);border-radius:10px;font:inherit;white-space:pre-wrap;resize:none"></textarea>    <div class="actions"><button id="requestCopy" class="btn btn-primary" type="button">Copy request</button><button id="requestDownload" class="btn btn-ghost" type="button">Download .txt</button></div>
+<textarea id="requestText" readonly style="width:100%;height:calc(90vh - 220px);min-height:400px;padding:12px;box-sizing:border-box;border:1px solid var(--line);border-radius:10px;font:inherit;white-space:pre-wrap;resize:none"></textarea>    
+<div class="actions">
+  <button id="requestCopy" class="btn btn-primary" type="button">Copy request</button><button id="requestDownload" class="btn btn-ghost" type="button">Download .txt</button></div>
   </div>
 </div>
 <div id="toast" class="toast"></div>
@@ -630,7 +632,7 @@ function buildRequestText(){
   let out=`Guest Dosing Request — ${name}\n\nItinerary:\n`;
   stops.forEach((s,i)=>{
     const c=selected[i]||{};
-    out+=`---\nCity: ${s.city}\nRequested dates: ${fmt(s.first)} to ${fmt(s.last)}\nClinic: ${c.title||'Not selected'}\n${c.program&&c.program!==c.title?'Program: '+c.program+'\n':''}Address: ${c.address||'Not listed'}\nPhone: ${c.phone||'Not listed'}${c.url?'\nWebsite: '+c.url:''}\n\n`;
+    out+=`---\nCity: ${s.city}\nRequested dates: ${fmt(s.first)} to (final dose on) ${fmt(s.last)}\nClinic: ${c.title||'Not selected'}\n${c.program&&c.program!==c.title?'Program: '+c.program+'\n':''}Address: ${c.address||'Not listed'}\nPhone: ${c.phone||'Not listed'}${c.url?'\nWebsite: '+c.url:''}\n\n`;
   });
   out+='---\nThis request was prepared using dosego.org. Please confirm guest-dosing availability, required records, dosing times, and any fees directly with the clinic and the home treatment program. dosego.org does not guarantee acceptance.';
   return out;
@@ -642,13 +644,42 @@ function showRequest(){
 }
 function closeRequest(){el('requestModal').style.display='none';el('requestModal').setAttribute('aria-hidden','true');}
 function copyRequest(){
-  const text=el('requestText').value;
-  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(text).then(()=>toast('Request copied.')).catch(()=>fallbackCopy(text));
-  else fallbackCopy(text);
+  const text = el('requestText').value;
+  const btn = el('requestCopy');
+
+  function showCopied(){
+    btn.textContent = 'Copied!';
+    setTimeout(() => {
+      btn.textContent = 'Copy request';
+    }, 2000);
+  }
+
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text)
+      .then(showCopied)
+      .catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
 }
+
 function fallbackCopy(text){
-  el('requestText').focus();el('requestText').select();
-  try{document.execCommand('copy');toast('Request copied.')}catch(e){toast('Select the text and copy it manually.')}
+  const btn = el('requestCopy');
+  el('requestText').focus();
+  el('requestText').select();
+
+  try {
+    if(document.execCommand('copy')){
+      btn.textContent = 'Copied!';
+      setTimeout(() => {
+        btn.textContent = 'Copy request';
+      }, 2000);
+    } else {
+      btn.textContent = 'Select and copy manually';
+    }
+  } catch(e) {
+    btn.textContent = 'Select and copy manually';
+  }
 }
 function downloadRequest(){downloadFile(el('requestText').value,'dosego-guest-dosing-request.txt','text/plain;charset=utf-8');toast('Request downloaded.');}
 function loadClinics(){
