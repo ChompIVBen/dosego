@@ -152,11 +152,10 @@
 </footer>
 
 <div id="requestModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.58);z-index:1000;align-items:center;justify-content:center;padding:18px" aria-hidden="true">
-  <div class="card" role="dialog" aria-modal="true" aria-labelledby="requestTitle" style="width:min(760px,100%);max-height:90vh;overflow:auto;padding:22px">
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="requestTitle"  style="width:96vw; max-width:1400px; height:90vh; max-height:95vh; overflow:auto; padding:30px">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 id="requestTitle" style="margin:0">Guest dosing request</h2><button id="requestClose" class="btn btn-ghost btn-sm" type="button">Close</button></div>
     <p style="color:var(--muted);font-size:14px">Review, copy, or download this draft. It does not send a request automatically.</p>
-    <textarea id="requestText" style="width:100%;min-height:330px;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit;white-space:pre-wrap"></textarea>
-    <div class="actions"><button id="requestCopy" class="btn btn-primary" type="button">Copy request</button><button id="requestDownload" class="btn btn-ghost" type="button">Download .txt</button></div>
+<textarea id="requestText" readonly style="width:100%;height:calc(90vh - 220px);min-height:400px;padding:12px;box-sizing:border-box;border:1px solid var(--line);border-radius:10px;font:inherit;white-space:pre-wrap;resize:none"></textarea>    <div class="actions"><button id="requestCopy" class="btn btn-primary" type="button">Copy request</button><button id="requestDownload" class="btn btn-ghost" type="button">Download .txt</button></div>
   </div>
 </div>
 <div id="toast" class="toast"></div>
