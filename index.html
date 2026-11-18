@@ -772,13 +772,27 @@ function downloadFile(content,name,type){
   a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 function buildRequestText(){
-  const name=(el('patientName')?.value||'').trim()||'(Patient Name and Contact Info)';
+  const name=(el('patientName')?.value||'').trim()
+    ||'(Patient Name and Contact Info)';
+
   let out=`Guest Dosing Request — ${name}\n\nItinerary:\n`;
+
   stops.forEach((s,i)=>{
     const c=selected[i]||{};
-    out+=`---\nCity: ${s.city}\nRequested dates: ${fmt(s.first)} to (final dose on) ${fmt(s.last)}\nClinic: ${c.title||'Not selected'}\n${c.program&&c.program!==c.title?'Program: '+c.program+'\n':''}Address: ${c.address||'Not listed'}\nPhone: ${c.phone||'Not listed'}${c.url?'\nWebsite: '+c.url:''}\n\n`;
+
+    out+=`---\nCity: ${s.city}\nRequested dates: ${fmt(s.first)} to (final dose on) ${fmt(s.last)}\nClinic: ${c.title||'Not selected'}\n${c.program&&c.program!==c.title?'Program: '+c.program+'\n':''}Address: ${c.address||'Not listed'}\nPhone: ${c.phone||'Not listed'}`;
+
+    if(c.promoted){
+      out+=`\nHours: ${c.hours||'Not listed'}`;
+      out+=`\nWebsite: ${c.directInquiry||c.url||'Not listed'}`;
+      out+=`\nClinic notes: ${c.notes||'Not listed'}`;
+    }
+
+    out+='\n\n';
   });
+
   out+='---\nThis itinerary was created using dosego.org. Please confirm guest-dosing availability, required records, dosing times, and any fees directly with the clinic and the home treatment program. dosego.org does not guarantee acceptance.';
+
   return out;
 }
 function showRequest(){
@@ -831,11 +845,12 @@ function emailRequest(){
     || '(Patient Name and Contact Info)';
 
   const subject = `Guest Dosing Request — ${patient}`;
-  const body = el('requestText').value;
+  const body = el('requestText').value
+    .replace(/\r\n/g, '\n')
+    .replace(/\n/g, '\r\n');
 
-  const mailto = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-  window.location.href = mailto;
+  window.location.href =
+    `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 function loadClinics(){
   Papa.parse('clinics.csv',{download:true,header:true,skipEmptyLines:'greedy',dynamicTyping:false,
