@@ -157,9 +157,13 @@
     <p style="color:var(--muted);font-size:14px">Review, copy, or download this draft. It does not send a request automatically.</p>
 <textarea id="requestText" readonly style="width:100%;height:calc(100dvh - 230px);min-height:400px;padding:12px;box-sizing:border-box;border:1px solid var(--line);border-radius:10px;font:inherit;white-space:pre-wrap;resize:none"></textarea>    
 <div class="actions">
-  <button id="requestCopy" class="btn btn-primary" type="button">Copy request</button><button id="requestDownload" class="btn btn-ghost" type="button">Download .txt</button></div>
-  </div>
+  <button id="requestCopy" class="btn btn-primary" type="button">Copy request</button>
+  <button id="requestDownload" class="btn btn-ghost" type="button">Download .txt</button>
+  <button id="requestEmail" class="btn btn-ghost" type="button">✉ Email request</button>
 </div>
+</div>
+</div>
+
 <div id="toast" class="toast"></div>
 
 <script>
@@ -822,6 +826,16 @@ function fallbackCopy(text){
   }
 }
 function downloadRequest(){downloadFile(el('requestText').value,'dosego-guest-dosing-request.txt','text/plain;charset=utf-8');toast('Request downloaded.');}
+function emailRequest(){
+  const patient = (el('patientName')?.value || '').trim()
+    || 'Patient information not provided';
+
+  const subject = `Guest Dosing Request — ${patient}`;
+  const body = el('requestText').value;
+
+  const mailto = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
+}
 function loadClinics(){
   Papa.parse('clinics.csv',{download:true,header:true,skipEmptyLines:'greedy',dynamicTyping:false,
     complete:r=>{
@@ -872,15 +886,26 @@ function toggleClinicDetails(idx) {
   button.setAttribute('aria-expanded', String(!isOpen));
   button.textContent = isOpen ? '▾ Clinic details' : '▴ Hide details';
 }
-el('year').textContent=new Date().getFullYear();
-el('clinicSearch').addEventListener('input',renderClinics);
-el('requestClose').addEventListener('click',closeRequest);
-el('requestCopy').addEventListener('click',copyRequest);
-el('requestDownload').addEventListener('click',downloadRequest);
-el('requestText').addEventListener('keydown',e=>{if(e.key==='Escape')closeRequest();});
-el('requestModal').addEventListener('click',e=>{if(e.target===el('requestModal'))closeRequest();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeRequest();});
-addStop();loadClinics();
+el('year').textContent = new Date().getFullYear();
+
+el('clinicSearch')?.addEventListener('input', renderClinics);
+el('requestClose')?.addEventListener('click', closeRequest);
+el('requestCopy')?.addEventListener('click', copyRequest);
+el('requestDownload')?.addEventListener('click', downloadRequest);
+el('requestText')?.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeRequest();
+});
+el('requestModal')?.addEventListener('click', e => {
+  if (e.target === el('requestModal')) closeRequest();
+});
+el('requestEmail')?.addEventListener('click', emailRequest);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeRequest();
+});
+
+addStop();
+loadClinics();
 </script>
 </body>
 </html>
