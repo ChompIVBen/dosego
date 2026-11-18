@@ -548,22 +548,39 @@ function drawMarkers(list){
   markerLayer.clearLayers();
   const pts=[];
 
-  const promotedIcon=L.divIcon({
-    className:'',
-    html:`<div style="
-      width:28px;height:28px;
-      border-radius:50%;
-      background:#0f7b55;
-      color:#fff;
-      display:flex;align-items:center;justify-content:center;
-      font-weight:800;
-      border:2px solid #fff;
-      box-shadow:0 2px 6px rgba(0,0,0,.3);
-    ">★</div>`,
-    iconSize:[28,28],
-    iconAnchor:[14,14],
-    popupAnchor:[0,-14]
-  });
+ const normalIcon = L.divIcon({
+  className: '',
+  html: `<div style="
+    width:20px;height:20px;
+    border-radius:50%;
+    background:#0b6bcb;
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;
+    border:2px solid #fff;
+    box-shadow:0 2px 6px rgba(0,0,0,.3);
+  "></div>`,
+  iconSize: [30, 30],
+  iconAnchor: [15, 15],
+  popupAnchor: [0, -15]
+});
+
+const promotedIcon = L.divIcon({
+  className: '',
+  html: `<div style="
+    width:30px;height:30px;
+    border-radius:50%;
+    background:#0f7b55;
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;
+    border:2px solid #fff;
+    box-shadow:0 2px 6px rgba(0,0,0,.3);
+  ">★</div>`,
+  iconSize: [30, 30],
+  iconAnchor: [15, 15],
+  popupAnchor: [0, -15]
+});
 
   list.forEach(c=>{
     const lat=parseFloat(c.latitude);
@@ -573,10 +590,13 @@ function drawMarkers(list){
 
     pts.push([lat,lng]);
 
-    const markerOptions={};
-    if(c.promoted){
-      markerOptions.icon=promotedIcon;
-    }
+   const markerOptions={};
+
+if(c.promoted){
+  markerOptions.icon=promotedIcon;
+} else {
+  markerOptions.icon=normalIcon;
+}
 
     const marker=L.marker([lat,lng],markerOptions).addTo(markerLayer);
     const idx=clinics.indexOf(c);
