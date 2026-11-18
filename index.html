@@ -151,11 +151,11 @@
   </div>
 </footer>
 
-<div id="requestModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.58);z-index:1000;align-items:center;justify-content:center;padding:18px" aria-hidden="true">
-  <div class="card" role="dialog" aria-modal="true" aria-labelledby="requestTitle"  style="width:96vw; max-width:1400px; height:90vh; max-height:95vh; overflow:auto; padding:30px">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 id="requestTitle" style="margin:0">Guest dosing request</h2><button id="requestClose" class="btn btn-ghost btn-sm" type="button">Close</button></div>
+<div id="requestModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.58);z-index:1000;align-items:center;justify-content:center;padding:0px" aria-hidden="true">
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="requestTitle"    style="width:100vw; height:100dvh; max-width:none; max-height:none; overflow:auto; padding:30px; border-radius:0; box-sizing:border-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 id="requestTitle" style="margin:0">Guest dosing itinerary</h2><button id="requestClose" class="btn btn-ghost btn-sm" type="button">Close</button></div>
     <p style="color:var(--muted);font-size:14px">Review, copy, or download this draft. It does not send a request automatically.</p>
-<textarea id="requestText" readonly style="width:100%;height:calc(90vh - 220px);min-height:400px;padding:12px;box-sizing:border-box;border:1px solid var(--line);border-radius:10px;font:inherit;white-space:pre-wrap;resize:none"></textarea>    
+<textarea id="requestText" readonly style="width:100%;height:calc(100dvh - 230px);min-height:400px;padding:12px;box-sizing:border-box;border:1px solid var(--line);border-radius:10px;font:inherit;white-space:pre-wrap;resize:none"></textarea>    
 <div class="actions">
   <button id="requestCopy" class="btn btn-primary" type="button">Copy request</button><button id="requestDownload" class="btn btn-ghost" type="button">Download .txt</button></div>
   </div>
@@ -419,7 +419,7 @@ function renderCityList(){
   const done=Object.keys(selected).filter(k=>selected[k]).length;
   el('selectionSummary').innerHTML=`<div class="itin-row"><span>Clinics selected</span><strong>${done} / ${stops.length}</strong></div>
     ${done===stops.length?'<div class="badge ok" style="display:inline-block;margin-top:8px">Itinerary complete</div>':'<div class="badge warn" style="display:inline-block;margin-top:8px">Select remaining clinics</div>'}
-    ${done===stops.length?'<div class="actions"><button class="btn btn-primary btn-sm" onclick="showRequest()">Generate request</button></div>':''}`;
+    ${done===stops.length?'<div class="actions"><button class="btn btn-primary btn-sm" onclick="showRequest()">Generate itinerary</button></div>':''}`;
 }
 function selectCity(i){
   if(i<0||i>=stops.length)return;
@@ -634,7 +634,7 @@ function buildRequestText(){
     const c=selected[i]||{};
     out+=`---\nCity: ${s.city}\nRequested dates: ${fmt(s.first)} to (final dose on) ${fmt(s.last)}\nClinic: ${c.title||'Not selected'}\n${c.program&&c.program!==c.title?'Program: '+c.program+'\n':''}Address: ${c.address||'Not listed'}\nPhone: ${c.phone||'Not listed'}${c.url?'\nWebsite: '+c.url:''}\n\n`;
   });
-  out+='---\nThis request was prepared using dosego.org. Please confirm guest-dosing availability, required records, dosing times, and any fees directly with the clinic and the home treatment program. dosego.org does not guarantee acceptance.';
+  out+='---\nThis itinerary was created using dosego.org. Please confirm guest-dosing availability, required records, dosing times, and any fees directly with the clinic and the home treatment program. dosego.org does not guarantee acceptance.';
   return out;
 }
 function showRequest(){
