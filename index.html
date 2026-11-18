@@ -628,12 +628,6 @@ function highlightClinicCard(idx) {
 
   activeClinicCard = card;
   card.classList.add('clinic-map-active');
-
-  // Bring the corresponding card into view
-  card.scrollIntoView({
-    behavior: 'smooth',
-    block: 'nearest'
-  });
 }
 function focusClinic(idx, event) {
   // Don't interfere with buttons, links, or other controls
