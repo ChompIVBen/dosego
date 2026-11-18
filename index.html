@@ -772,13 +772,42 @@ function downloadFile(content,name,type){
   a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 function buildRequestText(){
-  const name=(el('patientName')?.value||'').trim()||'(Patient Name and Contact Info)';
-  let out=`Guest Dosing Request — ${name}\n\nItinerary:\n`;
+  const name=(el('patientName')?.value||'').trim()
+    || '(Patient Name and Contact Info)';
+
+  let out = `Guest Dosing Request — ${name}
+
+ITINERARY
+=========
+
+`;
+
   stops.forEach((s,i)=>{
     const c=selected[i]||{};
-    out+=`---\nCity: ${s.city}\nRequested dates: ${fmt(s.first)} to (final dose on) ${fmt(s.last)}\nClinic: ${c.title||'Not selected'}\n${c.program&&c.program!==c.title?'Program: '+c.program+'\n':''}Address: ${c.address||'Not listed'}\nPhone: ${c.phone||'Not listed'}${c.url?'\nWebsite: '+c.url:''}\n\n`;
+
+    out += `STOP ${i+1}
+------------------------------
+
+City: ${s.city}
+First dose date: ${fmt(s.first)}
+Final dose date: ${fmt(s.last)}
+
+Clinic: ${c.title||'Not selected'}
+${c.program&&c.program!==c.title?'Program: '+c.program+'\n':''}Address: ${c.address||'Not listed'}
+Phone: ${c.phone||'Not listed'}
+${c.url?'Website: '+c.url+'\n':''}
+\n`;
   });
-  out+='---\nThis itinerary was created using dosego.org. Please confirm guest-dosing availability, required records, dosing times, and any fees directly with the clinic and the home treatment program. dosego.org does not guarantee acceptance.';
+
+  out += `IMPORTANT
+=========
+
+This itinerary was created using dosego.org.
+
+Please confirm guest-dosing availability, required records, dosing times, and any fees directly with the clinic and the home treatment program.
+
+dosego.org does not guarantee acceptance.`;
+
   return out;
 }
 function showRequest(){
@@ -828,12 +857,13 @@ function fallbackCopy(text){
 function downloadRequest(){downloadFile(el('requestText').value,'dosego-guest-dosing-request.txt','text/plain;charset=utf-8');toast('Request downloaded.');}
 function emailRequest(){
   const patient = (el('patientName')?.value || '').trim()
-    || 'Patient information not provided';
+    || '(Patient Name and Contact Info)';
 
   const subject = `Guest Dosing Request — ${patient}`;
   const body = el('requestText').value;
 
   const mailto = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
   window.location.href = mailto;
 }
 function loadClinics(){
