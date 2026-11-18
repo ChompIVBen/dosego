@@ -169,7 +169,8 @@ let stops = [];
 let selected = {};
 let activeStop = 0;
 let map, markerLayer;
-const el = id => document.getElementById(id);
+let markerByKey = new Map();
+let activeClinicCard = null;const el = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt = d => d ? new Date(d+'T00:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}) : '—';
 const truthy = v => ['1','true','yes','y','promoted'].includes(String(v ?? '').trim().toLowerCase());
@@ -473,8 +474,10 @@ function renderClinics(){
     return;
   }
 
-  const list=clinics.filter(clinicMatches)
-    .sort((a,b)=>Number(b.promoted)-Number(a.promoted));
+const list = clinics
+  .filter(c => !c.cityOnly)
+  .filter(clinicMatches)
+  .sort((a,b) => Number(b.promoted) - Number(a.promoted));
 
   el('clinicResults').innerHTML=list.length?list.map(c=>{
     const idx=clinics.indexOf(c);
@@ -488,8 +491,12 @@ function renderClinics(){
       ? '<span class="badge ok" style="margin-left:6px">★ Promoted</span>'
       : '';
   return `
-    <div class="clinic ${c.promoted ? 'promoted' : ''}" data-clinic="${idx}">
-      <div>
+<div
+  class="clinic ${c.promoted ? 'promoted' : ''}"
+  data-clinic="${idx}"
+  onclick="focusClinic(${idx}, event)"
+  style="cursor:pointer"
+>      <div>
         <div class="clinic-name">
           ${esc(c.title || 'Clinic')}
           ${promotedBadge}
@@ -541,7 +548,7 @@ function renderClinics(){
                   <div>
                     ${
                       c.directInquiry
-                        ? `<a href="${esc(c.directInquiry)}" target="_blank" rel="noopener noreferrer">Contact clinic</a>`
+                        ? `<a href="${esc(c.directInquiry)}" target="_blank" rel="noopener noreferrer">Clinic Website</a>`
                         : c.url
                           ? `<a href="${esc(c.url)}" target="_blank" rel="noopener noreferrer">Visit website</a>`
                           : c.phone
@@ -589,12 +596,61 @@ function focusMap(){
   const pts=clinics.filter(clinicMatches).map(c=>[parseFloat(c.latitude),parseFloat(c.longitude)]).filter(p=>Number.isFinite(p[0])&&Number.isFinite(p[1]));
   if(pts.length)map.fitBounds(pts,{padding:[40,40],maxZoom:13});
 }
+function highlightClinicCard(idx) {
+  // Remove previous highlight
+  if (activeClinicCard) {
+    activeClinicCard.classList.remove('clinic-map-active');
+  }
 
+  const card = document.querySelector(
+    `.clinic[data-clinic="${idx}"]`
+  );
+
+  if (!card) {
+    activeClinicCard = null;
+    return;
+  }
+
+  activeClinicCard = card;
+  card.classList.add('clinic-map-active');
+
+  // Bring the corresponding card into view
+  card.scrollIntoView({
+    behavior: 'smooth',
+    block: 'nearest'
+  });
+}
+function focusClinic(idx, event) {
+  // Don't interfere with buttons, links, or other controls
+  if (event && event.target.closest('a, button')) return;
+
+  const clinic = clinics[idx];
+  if (!clinic) return;
+
+  highlightClinicCard(idx);
+
+  const marker = markerByKey.get(clinic.key);
+
+  if (marker && map) {
+    map.flyTo(marker.getLatLng(), 14, {
+      duration: 0.7
+    });
+
+    marker.openPopup();
+  }
+}
 function drawMarkers(list){
   if(!markerLayer)return;
 
   markerLayer.clearLayers();
-  const pts=[];
+markerByKey.clear();
+activeClinicCard = null;
+
+document.querySelectorAll('.clinic-map-active').forEach(card => {
+  card.classList.remove('clinic-map-active');
+});
+
+const pts=[];
 
  const normalIcon = L.divIcon({
   className: '',
@@ -646,8 +702,12 @@ if(c.promoted){
   markerOptions.icon=normalIcon;
 }
 
-    const marker=L.marker([lat,lng],markerOptions).addTo(markerLayer);
-    const idx=clinics.indexOf(c);
+const marker = L.marker([lat,lng],markerOptions).addTo(markerLayer);
+
+const idx = clinics.indexOf(c);
+
+// Store marker so clinic cards can find it
+markerByKey.set(c.key, marker);
     const chosen=selected[activeStop]?.key===c.key;
 
     marker.bindPopup(`
@@ -673,7 +733,10 @@ if(c.promoted){
         </div>
       </div>
     `);
-
+// When a map popup opens, highlight its matching clinic card
+marker.on('popupopen', () => {
+  highlightClinicCard(idx);
+});
     if(chosen){
       marker.openPopup();
     }
@@ -762,6 +825,7 @@ function loadClinics(){
         const title=dba||program||street||([city,state].filter(Boolean).join(', '));
         const lat=d['Geocodio Latitude']||'',lng=d['Geocodio Longitude']||'';
         const key=[program,dba,street,city,state,zip].join('|').toLowerCase();
+        const cityOnly = !program && !dba && !street;
         return {
   key, title, program, dba, street, city, state, zip, address,
   phone: String(d.Phone || '').trim(),
@@ -776,7 +840,8 @@ function loadClinics(){
   hours: String(d.Hours || '').trim(),
   languages: String(d.Languages || '').trim(),
   directInquiry: String(d.DirectInquiry || '').trim(),
-  notes: String(d.Notes || '').trim()
+  notes: String(d.Notes || '').trim(),
+  cityOnly
 };
       }).filter(c=>c.title||c.city||c.zip);
       renderClinics();

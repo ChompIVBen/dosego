@@ -446,3 +446,12 @@ header .wrap {
   color: var(--muted);
   margin-bottom: 3px;
 }
+/* Highlight clinic card associated with open map popup */
+.clinic-map-active {
+  background: #f0f7ff;
+  transition: outline 0.2s ease, background 0.2s ease;
+}
+
+.clinic {
+  cursor: pointer;
+}
