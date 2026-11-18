@@ -399,3 +399,50 @@ header .wrap {
   padding: 12px;
   font-size: 15px;
 }
+  .clinic.promoted {
+  background: #f2fbf6;
+  border-left: 4px solid var(--ok);
+}
+
+.clinic-details-toggle {
+  margin-top: 10px;
+}
+
+.clinic-details {
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.detail-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+
+.detail-full {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 640px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.detail-label {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--muted);
+  margin-bottom: 3px;
+}

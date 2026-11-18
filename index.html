@@ -487,40 +487,88 @@ function renderClinics(){
     const promotedBadge=c.promoted
       ? '<span class="badge ok" style="margin-left:6px">★ Promoted</span>'
       : '';
-
-    return `
-      <div class="clinic" style="${
-        c.promoted
-          ? 'background:#f2fbf6;border-left:4px solid var(--ok);'
-          : ''
-      }">
-        <div>
-          <div class="clinic-name">
-            ${esc(c.title||'Clinic')}
-            ${promotedBadge}
-            ${statusBadge}
-          </div>
-
-          ${c.program&&c.program!==c.title?`<div class="clinic-meta">${esc(c.program)}</div>`:''}
-
-<div class="clinic-meta">
-${
-  c.address
-    ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${c.title||''} ${c.address}`)}" target="_blank" rel="noopener noreferrer">${esc(c.address)}</a>`
-    : 'Address not listed'
-}<br>
-            ${c.phone?`📞 ${esc(c.phone)}`:''}
-            ${c.url?`<br><a href="${esc(c.url)}" target="_blank" rel="noopener noreferrer">Website</a>`:''}
-          </div>
+  return `
+    <div class="clinic ${c.promoted ? 'promoted' : ''}" data-clinic="${idx}">
+      <div>
+        <div class="clinic-name">
+          ${esc(c.title || 'Clinic')}
+          ${promotedBadge}
+          ${statusBadge}
         </div>
 
-        <div class="clinic-actions">
-          ${c.phone?`<a class="btn btn-ghost btn-sm" href="tel:${esc(c.phone.replace(/[^0-9+]/g,''))}">Call</a>`:''}
-          <button class="btn ${chosen?'btn-primary':'btn-ghost'} btn-sm" onclick="chooseClinic(${idx})">
-            ${chosen?'Selected':'Select'}
-          </button>
+        ${c.program && c.program !== c.title ? `<div class="clinic-meta">${esc(c.program)}</div>` : ''}
+
+        <div class="clinic-meta">
+          ${
+            c.address
+              ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${c.title || ''} ${c.address}`)}" target="_blank" rel="noopener noreferrer">${esc(c.address)}</a>`
+              : 'Address not listed'
+          }<br>
+          ${c.phone ? `📞 ${esc(c.phone)}` : ''}
         </div>
-      </div>`;
+
+        ${
+          c.promoted ? `
+            <button
+              type="button"
+              class="clinic-details-toggle btn btn-ghost btn-sm"
+              onclick="toggleClinicDetails(${idx})"
+              aria-expanded="false"
+              aria-controls="clinic-details-${idx}"
+            >
+              ▾ Clinic details
+            </button>
+
+            <div id="clinic-details-${idx}" class="clinic-details" hidden>
+              <div class="detail-grid">
+                <div>
+                  <div class="detail-label">Services</div>
+                  <div>${c.services ? esc(c.services) : 'Not listed'}</div>
+                </div>
+
+                <div>
+                  <div class="detail-label">Hours</div>
+                  <div>${c.hours ? esc(c.hours) : 'Not listed'}</div>
+                </div>
+
+                <div>
+                  <div class="detail-label">Languages</div>
+                  <div>${c.languages ? esc(c.languages) : 'Not listed'}</div>
+                </div>
+
+                <div>
+                  <div class="detail-label">Website</div>
+                  <div>
+                    ${
+                      c.directInquiry
+                        ? `<a href="${esc(c.directInquiry)}" target="_blank" rel="noopener noreferrer">Contact clinic</a>`
+                        : c.url
+                          ? `<a href="${esc(c.url)}" target="_blank" rel="noopener noreferrer">Visit website</a>`
+                          : c.phone
+                            ? `<a href="tel:${esc(c.phone.replace(/[^0-9+]/g, ''))}">Call clinic</a>`
+                            : 'Not listed'
+                    }
+                  </div>
+                </div>
+
+                <div class="detail-full">
+                  <div class="detail-label">Clinic notes</div>
+                  <div>${c.notes ? esc(c.notes) : 'No additional notes listed.'}</div>
+                </div>
+              </div>
+            </div>
+          ` : ''
+        }
+      </div>
+
+      <div class="clinic-actions">
+        ${c.phone ? `<a class="btn btn-ghost btn-sm" href="tel:${esc(c.phone.replace(/[^0-9+]/g, ''))}">Call</a>` : ''}
+        <button class="btn ${chosen ? 'btn-primary' : 'btn-ghost'} btn-sm" onclick="chooseClinic(${idx})">
+          ${chosen ? 'Selected' : 'Select'}
+        </button>
+      </div>
+    </div>
+  `;
   }).join(''):'<div class="empty">No clinics matched this city/state or search.</div>';
 
   drawMarkers(list);
@@ -714,9 +762,22 @@ function loadClinics(){
         const title=dba||program||street||([city,state].filter(Boolean).join(', '));
         const lat=d['Geocodio Latitude']||'',lng=d['Geocodio Longitude']||'';
         const key=[program,dba,street,city,state,zip].join('|').toLowerCase();
-        return {key,title,program,dba,street,city,state,zip,address,phone:String(d.Phone||'').trim(),
-          status:String(d.Certification||'').trim(),fullCertification:String(d.FullCertification||'').trim(),
-          latitude:lat,longitude:lng,promoted:truthy(d.promoted),url:String(d.url||'').trim()};
+        return {
+  key, title, program, dba, street, city, state, zip, address,
+  phone: String(d.Phone || '').trim(),
+  status: String(d.Certification || '').trim(),
+  fullCertification: String(d.FullCertification || '').trim(),
+  latitude: lat,
+  longitude: lng,
+  promoted: truthy(d.promoted),
+  url: String(d.url || '').trim(),
+
+  services: String(d.Services || '').trim(),
+  hours: String(d.Hours || '').trim(),
+  languages: String(d.Languages || '').trim(),
+  directInquiry: String(d.DirectInquiry || '').trim(),
+  notes: String(d.Notes || '').trim()
+};
       }).filter(c=>c.title||c.city||c.zip);
       renderClinics();
     },
@@ -725,6 +786,17 @@ function loadClinics(){
       el('clinicResults').innerHTML='<div class="empty">Could not load clinics.csv. Put it beside this HTML file and serve the folder through a local or hosted web server (not file://).</div>';
     }
   });
+}
+function toggleClinicDetails(idx) {
+  const panel = el(`clinic-details-${idx}`);
+  const button = document.querySelector(`.clinic[data-clinic="${idx}"] .clinic-details-toggle`);
+
+  if (!panel) return;
+
+  const isOpen = !panel.hidden;
+  panel.hidden = isOpen;
+  button.setAttribute('aria-expanded', String(!isOpen));
+  button.textContent = isOpen ? '▾ Clinic details' : '▴ Hide details';
 }
 el('year').textContent=new Date().getFullYear();
 el('clinicSearch').addEventListener('input',renderClinics);
