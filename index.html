@@ -262,26 +262,26 @@ function showCitySuggestions(stopIndex, query) {
     'district of columbia': 'DC'
   };
 
-  let cityQuery = cleaned;
-  let stateQuery = '';
 
-  // Match full state names first, including names with spaces.
-    // Match full or partial state names and abbreviations.
+let cityQuery = cleaned;
+let stateQuery = '';
+
+const tokens = cleaned.split(/\s+/).filter(Boolean);
+const last = tokens[tokens.length - 1] || '';
+
+if (tokens.length >= 2) {
+  // Handle full and partial state names, including two-word states.
   const stateNamesSorted = Object.keys(stateNames)
     .sort((a, b) => b.length - a.length);
 
-  const tokens = cleaned.split(/\s+/).filter(Boolean);
-  const last = tokens[tokens.length - 1] || '';
-
-  // Try matching the end of the input against a state name.
   for (const name of stateNamesSorted) {
     const parts = name.split(' ');
     const suffix = tokens.slice(-parts.length).join(' ');
 
     if (
-      suffix.length >= 1 &&
+      suffix.length >= 2 &&
       name.startsWith(suffix) &&
-      tokens.length > parts.length - 1
+      tokens.length > parts.length
     ) {
       stateQuery = stateNames[name];
       cityQuery = tokens.slice(0, -parts.length).join(' ');
@@ -289,28 +289,43 @@ function showCitySuggestions(stopIndex, query) {
     }
   }
 
-  // If no state name matched, try a two-letter abbreviation.
+  // If no full state name matched, check abbreviations.
   if (!stateQuery && last.length === 2) {
-    stateQuery = last.toUpperCase();
-    cityQuery = tokens.slice(0, -1).join(' ');
+    const abbreviation = last.toUpperCase();
+
+    if (Object.values(stateNames).includes(abbreviation)) {
+      stateQuery = abbreviation;
+      cityQuery = tokens.slice(0, -1).join(' ');
+    }
   }
 
-  const matches = [...cityMap.values()]
-    .filter(c => {
-      const city = c.city.toLowerCase();
+  // Ignore a single unfinished state letter, but remove it
+  // from the city search so "madison w" still finds Madison.
+  if (
+    !stateQuery &&
+    last.length === 1 &&
+    Object.values(stateNames).some(s => s.startsWith(last.toUpperCase()))
+  ) {
+    cityQuery = tokens.slice(0, -1).join(' ');
+  }
+}
 
-      if (stateQuery) {
-        return city.includes(cityQuery) &&
-               c.state.startsWith(stateQuery);
-      }
+const matches = [...cityMap.values()]
+  .filter(c => {
+    const city = c.city.toLowerCase();
 
-      return city.includes(cityQuery);
-    })
-    .sort((a, b) =>
-      a.state.localeCompare(b.state) ||
-      a.city.localeCompare(b.city)
-    )
-    .slice(0, 12);
+    if (stateQuery) {
+      return city.includes(cityQuery) && c.state === stateQuery;
+    }
+
+    return city.includes(cityQuery);
+  })
+  .sort((a, b) =>
+    a.state.localeCompare(b.state) ||
+    a.city.localeCompare(b.city)
+  )
+  .slice(0, 12);
+
 
   if (!matches.length) {
     box.innerHTML =

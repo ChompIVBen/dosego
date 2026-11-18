@@ -1,7 +1,7 @@
 :root{
   --bg:#f6f8fb; --panel:#fff; --ink:#0f172a; --muted:#5b6676;
   --line:#e3e8ef; --brand:#0b6bcb; --brand-dark:#084f99;
-  --ok:#0f7b55; --warn:#a15c00; --bad:#b42318; --radius:16px;
+  --ok:#0f7b45; --warn:#a15c00; --bad:#b42318; --radius:16px;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
