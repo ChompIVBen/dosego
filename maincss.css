@@ -462,3 +462,79 @@ header .wrap {
   overflow: visible;
   overscroll-behavior: auto;
 }
+/* Promoted badge with animated glint */
+.badge.promoted {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  color: #166534;
+  background: linear-gradient(110deg, #f0fdf4, #bbf7d0 48%, #dcfce7);
+  border: 1px solid #86efac;
+  box-shadow: 0 2px 8px rgba(22, 101, 52, .09);
+}
+
+/* Subtle green badge glint */
+.badge.promoted::after {
+  content: "";
+  position: absolute;
+  top: -30%;
+  bottom: -30%;
+  left: -65%;
+  width: 32%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, .9),
+    transparent
+  );
+  transform: skewX(-22deg);
+  animation: gold-glint 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes gold-glint {
+  0%, 72% {
+    left: -65%;
+  }
+  100% {
+    left: 140%;
+  }
+}
+/* Promoted badge with animated green glint */
+.badge.promoted {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  color: #166534 !important;
+  background: linear-gradient(110deg, #f0fdf4, #bbf7d0 48%, #dcfce7);
+  border: 1px solid #86efac;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.badge.promoted::after {
+  content: "";
+  position: absolute;
+  top: -30%;
+  bottom: -30%;
+  left: -65%;
+  width: 32%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, .9),
+    transparent
+  );
+  transform: skewX(-22deg);
+  animation: gold-glint 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes gold-glint {
+  0%, 72% { left: -65%; }
+  100% { left: 140%; }
+}

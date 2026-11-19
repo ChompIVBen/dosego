@@ -507,7 +507,7 @@ const list = clinics
       : '<span class="badge bad">Status unknown</span>';
 
     const promotedBadge=c.promoted
-      ? '<span class="badge ok" style="margin-left:6px">★ Promoted</span>'
+      ? '<span class="badge promoted" style="margin-left:6px">★ Promoted</span>'
       : '';
   return `
 <div
@@ -726,7 +726,7 @@ markerByKey.set(c.key, marker);
     marker.bindPopup(`
       <div style="min-width:180px;max-width:260px">
         <strong>${esc(c.title||'Clinic')}</strong>
-        ${c.promoted?'<br><span style="color:#0f7b55;font-weight:700">★ Promoted</span>':''}
+        ${c.promoted?'<br><span class="badge promoted">★ Promoted</span>':''}
         ${c.status?`<br><span>${esc(c.status)}</span>`:'<br><span>Status unknown</span>'}
         ${c.program&&c.program!==c.title?`<br><span>${esc(c.program)}</span>`:''}
         <br>
