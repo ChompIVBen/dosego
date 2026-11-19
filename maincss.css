@@ -471,7 +471,6 @@ header .wrap {
   color: #166534;
   background: linear-gradient(110deg, #f0fdf4, #bbf7d0 48%, #dcfce7);
   border: 1px solid #86efac;
-  box-shadow: 0 2px 8px rgba(22, 101, 52, .09);
 }
 
 /* Subtle green badge glint */
@@ -508,7 +507,7 @@ header .wrap {
   align-items: center;
   overflow: hidden;
   color: #166534 !important;
-  background: linear-gradient(110deg, #f0fdf4, #bbf7d0 48%, #dcfce7);
+  background: linear-gradient(110deg, #f0fdf4, #dcfce7 48%, #dcfce7);
   border: 1px solid #86efac;
   border-radius: 999px;
   padding: 4px 8px;
@@ -537,4 +536,39 @@ header .wrap {
 @keyframes gold-glint {
   0%, 72% { left: -65%; }
   100% { left: 140%; }
+}
+/* Promoted map marker */
+.promoted-map-marker {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #15793b;
+  font-size: 19px;
+  font-weight: 800;
+  background: linear-gradient(110deg, #6dff99, #dcfce7 48%, #dcfce7);
+  border: 2px solid #15793b;
+  box-shadow: 0 2px 8px rgba(22, 101, 52, .25);
+}
+
+.promoted-map-marker::after {
+  content: "";
+  position: absolute;
+  top: -30%;
+  bottom: -30%;
+  left: -65%;
+  width: 32%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, .95),
+    transparent
+  );
+  transform: skewX(-22deg);
+  animation: gold-glint 5s ease-in-out infinite;
+  pointer-events: none;
 }
