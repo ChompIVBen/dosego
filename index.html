@@ -172,13 +172,39 @@ let clinics = [];
 let stops = [];
 let selected = {};
 let activeStop = 0;
+let citySuggestionRequest = 0;
+let citySearchTimer;
 let map, markerLayer;
 let markerByKey = new Map();
 let activeClinicCard = null;const el = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt = d => d ? new Date(d+'T00:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}) : '—';
 const truthy = v => ['1','true','yes','y','promoted'].includes(String(v ?? '').trim().toLowerCase());
+const US_STATES = {
+  'alabama':'AL','alaska':'AK','arizona':'AZ','arkansas':'AR',
+  'california':'CA','colorado':'CO','connecticut':'CT','delaware':'DE',
+  'florida':'FL','georgia':'GA','hawaii':'HI','idaho':'ID',
+  'illinois':'IL','indiana':'IN','iowa':'IA','kansas':'KS',
+  'kentucky':'KY','louisiana':'LA','maine':'ME','maryland':'MD',
+  'massachusetts':'MA','michigan':'MI','minnesota':'MN',
+  'mississippi':'MS','missouri':'MO','montana':'MT','nebraska':'NE',
+  'nevada':'NV','new hampshire':'NH','new jersey':'NJ',
+  'new mexico':'NM','new york':'NY','north carolina':'NC',
+  'north dakota':'ND','ohio':'OH','oklahoma':'OK','oregon':'OR',
+  'pennsylvania':'PA','rhode island':'RI','south carolina':'SC',
+  'south dakota':'SD','tennessee':'TN','texas':'TX','utah':'UT',
+  'vermont':'VT','virginia':'VA','washington':'WA',
+  'west virginia':'WV','wisconsin':'WI','wyoming':'WY',
+  'district of columbia':'DC'
+};
 
+
+function getStateCode(result) {
+  const code = String(result.admin1_code || '').replace(/^US-/i, '').toUpperCase();
+  if (Object.values(US_STATES).includes(code)) return code;
+
+  return US_STATES[String(result.admin1 || '').trim().toLowerCase()] || '';
+}
 function toast(msg){
   const t=el('toast'); t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2600);
@@ -212,160 +238,166 @@ function moveStop(i,dir){
 }
 function updateStop(i,k,v){stops[i][k]=v;}
 
-function showCitySuggestions(stopIndex, query) {
+async function showCitySuggestions(stopIndex, query) {
   const box = el(`city-suggestions-${stopIndex}`);
   if (!box) return;
 
   const raw = query.trim();
+
   if (!raw) {
     box.hidden = true;
     box.innerHTML = '';
     return;
   }
 
-  const cityMap = new Map();
+  const cleaned = raw.replace(/\s*,\s*/g, ' ').trim();
+  const tokens = cleaned.split(/\s+/);
+  let cityQuery = cleaned;
+  let stateQuery = '';
 
-  clinics.forEach(c => {
-    const city = String(c.city || '').trim();
-    const state = String(c.state || '').trim().toUpperCase();
+  // Recognize a state abbreviation, e.g. "Wauwatosa WI".
+  const last = tokens[tokens.length - 1];
 
-    if (!city || !state) return;
-
-    const key = `${city.toLowerCase()}|${state}`;
-    if (!cityMap.has(key)) {
-      cityMap.set(key, { city, state });
-    }
-  });
-
-  // Accept:
-  // madison wi
-  // madison, wi
-  // madison,wi
-  // madison
-  const cleaned = raw.replace(/\s*,\s*/g, ' ').trim().toLowerCase();
-
-  const stateNames = {
-    'alabama': 'AL', 'alaska': 'AK', 'arizona': 'AZ',
-    'arkansas': 'AR', 'california': 'CA', 'colorado': 'CO',
-    'connecticut': 'CT', 'delaware': 'DE', 'florida': 'FL',
-    'georgia': 'GA', 'hawaii': 'HI', 'idaho': 'ID',
-    'illinois': 'IL', 'indiana': 'IN', 'iowa': 'IA',
-    'kansas': 'KS', 'kentucky': 'KY', 'louisiana': 'LA',
-    'maine': 'ME', 'maryland': 'MD', 'massachusetts': 'MA',
-    'michigan': 'MI', 'minnesota': 'MN', 'mississippi': 'MS',
-    'missouri': 'MO', 'montana': 'MT', 'nebraska': 'NE',
-    'nevada': 'NV', 'new hampshire': 'NH', 'new jersey': 'NJ',
-    'new mexico': 'NM', 'new york': 'NY',
-    'north carolina': 'NC', 'north dakota': 'ND',
-    'ohio': 'OH', 'oklahoma': 'OK', 'oregon': 'OR',
-    'pennsylvania': 'PA', 'rhode island': 'RI',
-    'south carolina': 'SC', 'south dakota': 'SD',
-    'tennessee': 'TN', 'texas': 'TX', 'utah': 'UT',
-    'vermont': 'VT', 'virginia': 'VA', 'washington': 'WA',
-    'west virginia': 'WV', 'wisconsin': 'WI', 'wyoming': 'WY',
-    'district of columbia': 'DC'
-  };
-
-
-let cityQuery = cleaned;
-let stateQuery = '';
-
-const tokens = cleaned.split(/\s+/).filter(Boolean);
-const last = tokens[tokens.length - 1] || '';
-
-if (tokens.length >= 2) {
-  // Handle full and partial state names, including two-word states.
-  const stateNamesSorted = Object.keys(stateNames)
-    .sort((a, b) => b.length - a.length);
-
-  for (const name of stateNamesSorted) {
-    const parts = name.split(' ');
-    const suffix = tokens.slice(-parts.length).join(' ');
-
-    if (
-      suffix.length >= 2 &&
-      name.startsWith(suffix) &&
-      tokens.length > parts.length
-    ) {
-      stateQuery = stateNames[name];
-      cityQuery = tokens.slice(0, -parts.length).join(' ');
-      break;
-    }
-  }
-
-  // If no full state name matched, check abbreviations.
-  if (!stateQuery && last.length === 2) {
+  if (last && last.length === 2) {
     const abbreviation = last.toUpperCase();
 
-    if (Object.values(stateNames).includes(abbreviation)) {
+    if (Object.values(US_STATES).includes(abbreviation)) {
       stateQuery = abbreviation;
       cityQuery = tokens.slice(0, -1).join(' ');
     }
   }
 
-  // Ignore a single unfinished state letter, but remove it
-  // from the city search so "madison w" still finds Madison.
-  if (
-    !stateQuery &&
-    last.length === 1 &&
-    Object.values(stateNames).some(s => s.startsWith(last.toUpperCase()))
-  ) {
-    cityQuery = tokens.slice(0, -1).join(' ');
-  }
-}
+  // Recognize a full state name, e.g. "Wauwatosa Wisconsin".
+  if (!stateQuery && tokens.length >= 2) {
+    const lower = cleaned.toLowerCase();
 
-const matches = [...cityMap.values()]
-  .filter(c => {
-    const city = c.city.toLowerCase();
+    for (const [stateName, abbreviation] of Object.entries(US_STATES)
+      .sort((a, b) => b[0].length - a[0].length)) {
 
-    if (stateQuery) {
-      return city.includes(cityQuery) && c.state === stateQuery;
+      if (lower.endsWith(' ' + stateName)) {
+        stateQuery = abbreviation;
+        cityQuery = cleaned.slice(0, -(stateName.length + 1)).trim();
+        break;
+      }
     }
+  }
 
-    return city.includes(cityQuery);
-  })
-  .sort((a, b) =>
-    a.state.localeCompare(b.state) ||
-    a.city.localeCompare(b.city)
-  )
-  .slice(0, 12);
-
-
-  if (!matches.length) {
-    box.innerHTML =
-      '<div class="city-no-results">No matching cities in the loaded clinic data.</div>';
-    box.hidden = false;
+  if (cityQuery.length < 2) {
+    box.hidden = true;
+    box.innerHTML = '';
     return;
   }
 
-  box.innerHTML = matches.map((c, index) => `
-    <div class="city-suggestion" data-city-index="${index}">
-      <strong>${esc(c.city)}</strong>
-      <small>${esc(c.state)}</small>
-    </div>
-  `).join('');
+clearTimeout(citySearchTimer);
 
-  box.hidden = false;
+const requestId = ++citySuggestionRequest;
 
-  box.querySelectorAll('.city-suggestion').forEach((item, index) => {
-    item.addEventListener('click', () => {
-      chooseCitySuggestion(stopIndex, matches[index]);
+if (cityQuery.length < 3) {
+  box.hidden = true;
+  box.innerHTML = '';
+  return;
+}
+
+box.innerHTML = '<div class="city-no-results">Searching cities…</div>';
+box.hidden = false;
+
+citySearchTimer = setTimeout(async () => {
+  try {
+    const url =
+      `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityQuery)}&count=30&language=en&format=json`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error('City search failed');
+    }
+
+    const data = await response.json();
+
+    if (requestId !== citySuggestionRequest) return;
+
+    const matches = (data.results || [])
+      .filter(result => result.country_code === 'US')
+      .map(result => ({
+        city: result.name,
+        state: getStateCode(result),
+        latitude: result.latitude,
+        longitude: result.longitude
+      }))
+.filter(city =>
+  city.city &&
+  city.state &&
+  city.city.toLowerCase().startsWith(cityQuery.toLowerCase()) &&
+  (!stateQuery || city.state === stateQuery)
+)
+      .sort((a, b) =>
+        a.city.localeCompare(b.city) ||
+        a.state.localeCompare(b.state)
+      );
+
+    const unique = [
+      ...new Map(
+        matches.map(city => [
+          `${city.city}|${city.state}`,
+          city
+        ])
+      ).values()
+    ].slice(0, 12);
+
+    if (!unique.length) {
+      box.innerHTML =
+        '<div class="city-no-results">No US cities found. Try another spelling or include the state abbreviation.</div>';
+      box.hidden = false;
+      return;
+    }
+
+    box.innerHTML = unique.map(city => `
+      <div class="city-suggestion">
+        <strong>${esc(city.city)}</strong>
+        <small>${esc(city.state)}</small>
+      </div>
+    `).join('');
+
+    box.hidden = false;
+
+    box.querySelectorAll('.city-suggestion').forEach((item, index) => {
+      item.addEventListener('click', () => {
+        chooseCitySuggestion(stopIndex, unique[index]);
+      });
     });
-  });
+
+  } catch (error) {
+    if (requestId === citySuggestionRequest) {
+      box.innerHTML =
+        '<div class="city-no-results">City search unavailable. Please try again.</div>';
+      box.hidden = false;
+    }
+  }
+}, 300);
 }
 
 function chooseCitySuggestion(stopIndex, city) {
+  if (!stops[stopIndex]) return;
+
+  // Update the selected city and its geographic center.
   stops[stopIndex].city = `${city.city}, ${city.state}`;
+  stops[stopIndex].searchCity = `${city.city}, ${city.state}`;
+  stops[stopIndex].latitude = Number(city.latitude);
+  stops[stopIndex].longitude = Number(city.longitude);
 
   const box = el(`city-suggestions-${stopIndex}`);
-  if (box) box.hidden = true;
 
-  // Preserve the rest of the itinerary and refresh the field.
+  if (box) {
+    box.hidden = true;
+    box.innerHTML = '';
+  }
+
+  // Do not modify first or final dose dates.
   renderStops();
 
-  // If the itinerary is already built, refresh the active results.
   if (el('planner').style.display !== 'none') {
     renderCityList();
+
     if (activeStop === stopIndex) {
       selectCity(stopIndex);
     }
@@ -448,42 +480,112 @@ function selectCity(i){
   el('activeCityDates').textContent=`Dosing dates: ${fmt(stops[i].first)} – ${fmt(stops[i].last)}`;
   renderCityList(); renderClinics(); focusMap();
 }
-function stopQuery(){
-  const s=stops[activeStop]||{city:''};
-  return String(s.city||'').trim().toLowerCase();
+function stopQuery() {
+  const s = stops[activeStop] || { city: '' };
+  return String(s.searchCity || s.city || '').trim().toLowerCase();
 }
-function clinicMatches(c){
-  const q=el('clinicSearch').value.trim().toLowerCase();
-  const location=stopQuery();
-  const cityState=(c.city+' '+c.state).trim().toLowerCase();
-  const cityStateComma=(c.city+', '+c.state).trim().toLowerCase();
-  const zip=String(c.zip||'').toLowerCase();
-  // The stop field limits results by city/state/ZIP when it looks like a location.
-  let inStop=true;
-  if(location){
-    const parts=location.split(',').map(x=>x.trim()).filter(Boolean);
-    if(/^\d{5}(?:-\d{4})?$/.test(location)){
-      inStop=zip===location || c.address.toLowerCase().includes(location);
-    } else if(parts.length>=2 && parts[1].length<=3){
-      inStop=c.city.toLowerCase()===parts[0] && c.state.toLowerCase()===parts[1];
-} else {
-  const locWords=location.split(/[\s,]+/).filter(Boolean);
-  const isState=locWords.length===2 && locWords[1].length===2;
 
-  if(isState){
-    inStop=c.city.toLowerCase()===locWords[0] &&
-           c.state.toLowerCase()===locWords[1];
-  } else {
-    inStop=[c.city, c.address, c.zip].some(v=>
-      String(v||'').toLowerCase().includes(location)
-    );
-  }
+function hasCityCoordinates() {
+  const s = stops[activeStop] || {};
+
+  return s.latitude !== null &&
+    s.latitude !== undefined &&
+    s.longitude !== null &&
+    s.longitude !== undefined &&
+    s.latitude !== '' &&
+    s.longitude !== '' &&
+    Number.isFinite(Number(s.latitude)) &&
+    Number.isFinite(Number(s.longitude));
 }
-  }
-  if(!inStop)return false;
-  if(!q)return true;
-  return [c.title,c.program,c.address,c.city,c.state,c.zip,c.phone].some(v=>String(v||'').toLowerCase().includes(q));
+
+function distanceMiles(lat1, lon1, lat2, lon2) {
+  const rad = x => x * Math.PI / 180;
+
+  const dLat = rad(lat2 - lat1);
+  const dLon = rad(lon2 - lon1);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(rad(lat1)) *
+    Math.cos(rad(lat2)) *
+    Math.sin(dLon / 2) ** 2;
+
+  return 3958.8 * 2 * Math.atan2(
+    Math.sqrt(a),
+    Math.sqrt(1 - a)
+  );
 }
+
+function clinicDistance(c) {
+  if (!hasCityCoordinates()) return null;
+
+  const s = stops[activeStop] || {};
+
+  const lat = Number(s.latitude);
+  const lng = Number(s.longitude);
+  const clinicLat = Number(c.latitude);
+  const clinicLng = Number(c.longitude);
+
+  if (
+    !Number.isFinite(clinicLat) ||
+    !Number.isFinite(clinicLng)
+  ) {
+    return null;
+  }
+
+  return distanceMiles(lat, lng, clinicLat, clinicLng);
+}
+
+function clinicMatches(c) {
+  const q = el('clinicSearch').value.trim().toLowerCase();
+  const location = stopQuery();
+
+  let inStop = true;
+
+  if (location) {
+    const s = stops[activeStop] || {};
+    const parts = location.split(',').map(x => x.trim());
+
+    if (hasCityCoordinates()) {
+      const distance = clinicDistance(c);
+
+      // Show clinics within 15 miles of the selected city center.
+      inStop = distance !== null && distance <= 9;
+
+    } else if (parts.length >= 2) {
+      // Fallback when the city has no saved coordinates.
+      inStop =
+        String(c.city || '').toLowerCase() === parts[0] &&
+        String(c.state || '').toLowerCase() === parts[1];
+
+    } else {
+      inStop = [
+        c.city,
+        c.address,
+        c.zip
+      ].some(value =>
+        String(value || '').toLowerCase().includes(location)
+      );
+    }
+  }
+
+  if (!inStop) return false;
+
+  if (!q) return true;
+
+  return [
+    c.title,
+    c.program,
+    c.address,
+    c.city,
+    c.state,
+    c.zip,
+    c.phone
+  ].some(value =>
+    String(value || '').toLowerCase().includes(q)
+  );
+}
+
 function renderClinics(){
   if(!el('clinicResults'))return;
 
@@ -599,10 +701,24 @@ const list = clinics
 
   drawMarkers(list);
 }
-function chooseClinic(i){
-  if(!clinics[i])return;
-  selected[activeStop]=clinics[i];
-  renderCityList();renderClinics();toast(`Clinic selected for ${stops[activeStop].city}`);
+function chooseClinic(i) {
+  if (!clinics[i]) return;
+
+  const chosen = clinics[i];
+
+  selected[activeStop] = chosen;
+
+  // Update only the itinerary's displayed/destination city.
+  // Keep searchCity and the original city coordinates unchanged.
+  if (chosen.city && chosen.state) {
+    stops[activeStop].city = `${chosen.city}, ${chosen.state}`;
+  }
+
+  renderStops();
+  renderCityList();
+  renderClinics();
+
+  toast(`Clinic selected for ${stops[activeStop].city}`);
 }
 function initMap(){
   if(map)return;
@@ -610,10 +726,39 @@ function initMap(){
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
   markerLayer=L.layerGroup().addTo(map);
 }
-function focusMap(){
-  if(!map)return;
-  const pts=clinics.filter(clinicMatches).map(c=>[parseFloat(c.latitude),parseFloat(c.longitude)]).filter(p=>Number.isFinite(p[0])&&Number.isFinite(p[1]));
-  if(pts.length)map.fitBounds(pts,{padding:[40,40],maxZoom:13});
+function focusMap() {
+  if (!map) return;
+
+  const points = clinics
+    .filter(clinicMatches)
+    .map(c => [
+      Number(c.latitude),
+      Number(c.longitude)
+    ])
+    .filter(point =>
+      Number.isFinite(point[0]) &&
+      Number.isFinite(point[1])
+    );
+
+  // Include the searched city center so the map shows
+  // the relationship between the city and nearby clinics.
+  if (hasCityCoordinates()) {
+    const s = stops[activeStop];
+
+    points.push([
+      Number(s.latitude),
+      Number(s.longitude)
+    ]);
+  }
+
+  if (points.length > 1) {
+    map.fitBounds(points, {
+      padding: [40, 40],
+      maxZoom: 13
+    });
+  } else if (points.length === 1) {
+    map.setView(points[0], 13);
+  }
 }
 function highlightClinicCard(idx) {
   // Remove previous highlight
