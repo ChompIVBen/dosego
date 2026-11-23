@@ -549,8 +549,8 @@ function clinicMatches(c) {
     if (hasCityCoordinates()) {
       const distance = clinicDistance(c);
 
-      // Show clinics within 15 miles of the selected city center.
-      inStop = distance !== null && distance <= 9;
+      // Show clinics within a certain number miles of the selected city center.
+      inStop = distance !== null && distance <= 10;
 
     } else if (parts.length >= 2) {
       // Fallback when the city has no saved coordinates.
