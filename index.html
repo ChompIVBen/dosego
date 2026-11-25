@@ -535,6 +535,32 @@ function clinicDistance(c) {
 
   return distanceMiles(lat, lng, clinicLat, clinicLng);
 }
+let clinicRadiusCacheKey = '';
+let clinicRadiusCache = 10;
+
+function getClinicRadius() {
+if (!hasCityCoordinates()) return 10;
+
+const s = stops[activeStop] || {};
+const key = `${s.latitude}|${s.longitude}|${clinics.length}`;
+
+// Reuse the result when the same city is selected.
+if (key === clinicRadiusCacheKey) return clinicRadiusCache;
+
+const distances = clinics
+.filter(c => !c.cityOnly)
+.map(c => clinicDistance(c))
+.filter(d => d !== null && Number.isFinite(d));
+
+if (!distances.length) {
+clinicRadiusCache = 10;
+} else {
+clinicRadiusCache = Math.max(10, Math.min(...distances) + 10);
+}
+
+clinicRadiusCacheKey = key;
+return clinicRadiusCache;
+}
 
 function clinicMatches(c) {
   const q = el('clinicSearch').value.trim().toLowerCase();
@@ -546,11 +572,13 @@ function clinicMatches(c) {
     const s = stops[activeStop] || {};
     const parts = location.split(',').map(x => x.trim());
 
-    if (hasCityCoordinates()) {
-      const distance = clinicDistance(c);
+if (hasCityCoordinates()) {
+  const distance = clinicDistance(c);
+  const radius = getClinicRadius();
 
-      // Show clinics within a certain number miles of the selected city center.
-      inStop = distance !== null && distance <= 10;
+  // Expand the search radius to include the closest clinic,
+  // with an additional 10-mile buffer.
+  inStop = distance !== null && distance <= radius;
 
     } else if (parts.length >= 2) {
       // Fallback when the city has no saved coordinates.
